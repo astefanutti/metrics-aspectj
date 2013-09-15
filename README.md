@@ -71,7 +71,7 @@ public class TimedMethodWithRegistryFromProperty {
 
     private final MetricRegistry registry;
 
-    public TimedMethodWithRegistryFromExpression(MetricRegistry registry) {
+    public TimedMethodWithRegistryFromProperty(MetricRegistry registry) {
         this.registry = registry;
     }
 
@@ -79,8 +79,8 @@ public class TimedMethodWithRegistryFromProperty {
         return registry;
     }
 
-    @Timed(name = "'singleTimedMethod'")
-    public void singleTimedMethod() {
+    @Timed(name = "'timerName'")
+    public void timedMethod() {
     }
 }
 ```
