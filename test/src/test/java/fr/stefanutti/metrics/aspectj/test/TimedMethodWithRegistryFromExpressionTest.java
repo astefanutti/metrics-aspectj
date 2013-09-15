@@ -2,22 +2,18 @@ package fr.stefanutti.metrics.aspectj.test;
 
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class SingleTimedMethodTest {
+public class TimedMethodWithRegistryFromExpressionTest {
 
     @Test
-    public void timedPublicMethodWithStaticSharedRegistry() {
-        SingleTimedMethod instance = new SingleTimedMethod();
-        assertThat(SharedMetricRegistries.names(), contains("singleTimerRegistry"));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("singleTimerRegistry");
+    public void timedMethodWithRegistryFromExpression() {
+        MetricRegistry registry = new MetricRegistry();
+        TimedMethodWithRegistryFromExpression instance = new TimedMethodWithRegistryFromExpression(registry);
         assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
         Timer timer = registry.getTimers().get("singleTimedMethod");
 

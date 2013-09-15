@@ -29,6 +29,7 @@
 
     <dependencyManagement>
         <dependencies>
+
             <!-- compile dependencies -->
 
             <dependency>

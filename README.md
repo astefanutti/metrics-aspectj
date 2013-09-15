@@ -1,7 +1,7 @@
 metrics-aspectj
 ===============
 
-AspectJ integration for [Yammer's Metrics](http://metrics.codahale.com/)
+[AspectJ](http://eclipse.org/aspectj/) integration for [Yammer's Metrics](http://metrics.codahale.com/)
 with [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) support.
 
 ## Getting Started
@@ -18,7 +18,7 @@ Add the `metrics-library` library as a dependency:
     </dependency>
 </dependencies>
 ```
-And configure the `maven-aspectj-plugin` to weave the `metrics-aspectj` aspects into your project:
+And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metrics-aspectj` aspects into your project:
 ```xml
 <build>
     <plugins>
@@ -46,16 +46,41 @@ And configure the `maven-aspectj-plugin` to weave the `metrics-aspectj` aspects 
 </build>
 ```
 ### Basic Usage
-
+The `MetricsRegistry` can be resolved by using `SharedMetricRegistries.getOrCreate(String name)` when the `@Metrics.registry` is declared as a `String`:
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 
 @Metrics(registry = "'registryName'")
-public class SingleTimedMethod {
+public class TimedMethodWithRegistryByName {
 
     @Timed(name = "'timerName'")
     public void timedMethod() {
+    }
+}
+```
+
+The `MetricsRegistry` can be resolved as a bean property:
+```java
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Timed;
+import fr.stefanutti.metrics.aspectj.Metrics;
+
+@Metrics(registry = "this.registry")
+public class TimedMethodWithRegistryFromProperty {
+
+    private final MetricRegistry registry;
+
+    public TimedMethodWithRegistryFromExpression(MetricRegistry registry) {
+        this.registry = registry;
+    }
+
+    public MetricRegistry getRegistry() {
+        return registry;
+    }
+
+    @Timed(name = "'singleTimedMethod'")
+    public void singleTimedMethod() {
     }
 }
 ```
