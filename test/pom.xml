@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.stefanutti</groupId>
+        <artifactId>metrics-aspectj-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>metrics-aspectj-test</artifactId>
+    <name>Metrics AspectJ Test</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <complianceLevel>1.6</complianceLevel>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>fr.stefanutti</groupId>
+                            <artifactId>metrics-aspectj</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!-- compile dependencies -->
+
+        <dependency>
+            <groupId>fr.stefanutti</groupId>
+            <artifactId>metrics-aspectj</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- runtime dependencies -->
+
+        <!-- test dependencies -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+        </dependency>
+
+    </dependencies>
+</project>

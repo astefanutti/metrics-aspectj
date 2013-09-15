@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.stefanutti</groupId>
+    <artifactId>metrics-aspectj-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Metrics AspectJ Parent</name>
+
+    <scm>
+        <connection>scm:git:git@github.com:astefanutti/metrics-aspectj.git</connection>
+        <developerConnection>scm:git:git@github.com:astefanutti/metrics-aspectj.git</developerConnection>
+        <url>scm:git:git@github.com:astefanutti/metrics-aspectj.git</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <metrics.version>3.0.1</metrics.version>
+        <aspectj.version>1.7.3</aspectj.version>
+    </properties>
+
+    <modules>
+        <module>core</module>
+        <module>test</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- compile dependencies -->
+
+            <dependency>
+                <groupId>com.codahale.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${metrics.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.codahale.metrics</groupId>
+                <artifactId>metrics-annotation</artifactId>
+                <version>${metrics.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.el</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+
+            <!-- runtime dependencies -->
+
+            <!-- test dependencies -->
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>1.9.5</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-library</artifactId>
+                <version>1.3</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
