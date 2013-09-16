@@ -107,3 +107,10 @@ public class TimedMethodWithSharedMetricRegistry {
     }
 }
 ```
+
+License
+-------
+
+Copyright (c) 2013 Antonin Stefanutti
+
+Published under Apache Software License 2.0, see LICENSE
