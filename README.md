@@ -45,8 +45,16 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     </plugins>
 </build>
 ```
-### Basic Usage
-The `MetricsRegistry` can be resolved by using `SharedMetricRegistries.getOrCreate(String name)` when the `@Metrics.registry` is declared as a `String`:
+### `@Metrics` Annotation and Registry Resolution
+
+The `@Metrics` annotation has to be added for the aspects to be weaved into the class code.
+The `@Metrics.registry` mandatory attribute must be a valid EL expression that evaluates either to
+the registry name or registry instance. The result of that EL expression evaluation is a `MetricRegistry`
+that is used to register the `Metric` created each time a Metrics annotation
+is present on that class methods into.
+
+The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
+In that case the registry is resolved using `SharedMetricRegistries.getOrCreate(String name)`:
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
@@ -60,7 +68,7 @@ public class TimedMethodWithRegistryByName {
 }
 ```
 
-The `MetricsRegistry` can be resolved as a bean property:
+The `MetricRegistry` can be resolved with an EL expression that evaluates to a bean property of type `MetricRegistry`:
 ```java
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
@@ -78,6 +86,21 @@ public class TimedMethodWithRegistryFromProperty {
     public MetricRegistry getRegistry() {
         return registry;
     }
+
+    @Timed(name = "'timerName'")
+    public void timedMethod() {
+    }
+}
+```
+
+Or the `MetricRegistry` can be resolved with an EL expression that directly accesses to the `SharedMetricRegistries` class:
+```java
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Timed;
+import fr.stefanutti.metrics.aspectj.Metrics;
+
+@Metrics(registry = "SharedMetricRegistries.getOrCreate('staticRegistry')")
+public class TimedMethodWithSharedMetricRegistry {
 
     @Timed(name = "'timerName'")
     public void timedMethod() {

@@ -14,7 +14,7 @@ public class TimedMethodWithRegistryFromStaticExpressionTest {
     @Test
     public void timedMethodWithRegistryFromExpression() {
         TimedMethodWithRegistryFromStaticExpression instance = new TimedMethodWithRegistryFromStaticExpression();
-        assertThat(SharedMetricRegistries.names(), contains("staticRegistry"));
+        assertThat(SharedMetricRegistries.names(), hasItem("staticRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("staticRegistry");
         assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
         Timer timer = registry.getTimers().get("singleTimedMethod");

@@ -16,7 +16,7 @@ public class SingleTimedMethodTest {
     @Test
     public void timedPublicMethodWithStaticSharedRegistry() {
         SingleTimedMethod instance = new SingleTimedMethod();
-        assertThat(SharedMetricRegistries.names(), contains("singleTimerRegistry"));
+        assertThat(SharedMetricRegistries.names(), hasItem("singleTimerRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("singleTimerRegistry");
         assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
         Timer timer = registry.getTimers().get("singleTimedMethod");

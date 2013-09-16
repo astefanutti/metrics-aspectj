@@ -23,19 +23,20 @@ public aspect TimedAspect {
         for (Method method : object.getClass().getDeclaredMethods()) {
             Timed timed = method.getAnnotation(Timed.class);
             if (timed != null) {
-                ELProcessor processor = new ELProcessor();
-                processor.defineBean("this", object);
+                ELProcessor elp = new ELProcessor();
+                elp.defineBean("this", object);
+                elp.getELManager().importClass(SharedMetricRegistries.class.getName());
                 Metrics metrics = object.getClass().getAnnotation(Metrics.class);
-                Object expression = processor.eval(metrics.registry());
+                Object eval = elp.eval(metrics.registry());
                 MetricRegistry registry = null;
-                if (expression instanceof String) {
-                    registry = SharedMetricRegistries.getOrCreate((String) expression);
-                } else if (expression instanceof MetricRegistry) {
-                    registry = (MetricRegistry) expression;
+                if (eval instanceof String) {
+                    registry = SharedMetricRegistries.getOrCreate((String) eval);
+                } else if (eval instanceof MetricRegistry) {
+                    registry = (MetricRegistry) eval;
                 } else {
                     throw new IllegalStateException("Unable to resolve metrics registry from expression [" + metrics.registry() + "]");
                 }
-                Timer timer = registry.timer((String) processor.eval(timed.name()));
+                Timer timer = registry.timer((String) elp.eval(timed.name()));
                 // TODO: be more specific for the key to avoid clashes
                 object.timers.put(method.getName(), timer);
             }
