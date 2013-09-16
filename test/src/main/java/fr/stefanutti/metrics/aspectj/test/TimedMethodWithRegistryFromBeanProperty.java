@@ -5,11 +5,11 @@ import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 
 @Metrics(registry = "this.registry")
-public class TimedMethodWithRegistryFromExpression {
+public class TimedMethodWithRegistryFromBeanProperty {
 
     private final MetricRegistry registry;
 
-    public TimedMethodWithRegistryFromExpression(MetricRegistry registry) {
+    public TimedMethodWithRegistryFromBeanProperty(MetricRegistry registry) {
         this.registry = registry;
     }
 
