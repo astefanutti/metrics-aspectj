@@ -33,7 +33,7 @@ public class TimedMethodWithVisibilityModifierTest {
     public void assertFourTimersWithZeroCount() {
         assertThat(SharedMetricRegistries.names(), hasItem("visibilityTimerRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("visibilityTimerRegistry");
-        assertThat(registry.getTimers(), allOf(hasKey("publicTimedMethod"), hasKey("packagePrivateTimedMethod"), hasKey("protectedTimedMethod"), hasKey("privateTimedMethod")));
+        assertThat(registry.getTimers().keySet(), containsInAnyOrder("publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"));
 
         // Make sure that all the timers haven't been called yet
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
