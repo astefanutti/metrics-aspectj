@@ -8,7 +8,7 @@ with [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) su
 
 ### Setting Up Maven
 
-Add the `metrics-library` library as a dependency:
+Add the `metrics-aspectj` library as a dependency:
 ```xml
 <dependencies>
     <dependency>
@@ -45,7 +45,7 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     </plugins>
 </build>
 ```
-### `@Metrics` Annotation and Registry Resolution
+### The `@Metrics` Annotation and Registry Resolution
 
 The `@Metrics` annotation has to be added for the aspects to be weaved into the class code.
 The `@Metrics.registry` mandatory attribute must be a valid EL expression that evaluates either to
