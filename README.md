@@ -114,17 +114,16 @@ Spring AOP and AspectJ provides Aspect Oriented Programming in two very differen
 + AspectJ provides a full-fledged aspect definition and support both compile time waving (CTW)
   and load time waving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
 + Spring AOP does not support the whole AspectJ aspect definition and does not support compile time waving
-+ Spring AOP implements AOP either using (see [Spring proxying mechanisms][1]):
-++ JDK dynamic proxies, which add little runtime overhead, increase stack traces,
-   and can sometime be incompatible with other Spring functionality like Spring JMX
-   (for dynamic MBean exportation for example)
-++ Or CGLib (byte code manipulation), that has to be added as a runtime dependency:
-+++ It dynamically extends classes thus it is incompatible with final classes
-+++ CGLib support has been deprecated (see Deprecated CGLib support) in favor of Javassist
+  + Spring AOP implements AOP either using (see [Spring proxying mechanisms][1]):
+  + JDK dynamic proxies, which add little runtime overhead, increase stack traces,
+    and can sometime be incompatible with other Spring functionality like Spring JMX (for dynamic MBean exportation for example)
+  + Or CGLIB (byte code manipulation), that has to be added as a runtime dependency:
+    + It dynamically extends classes thus it is incompatible with final classes
+    + CGLIB support has been deprecated (see Deprecated CGLIB support) in favor of Javassist
 + AJDT (AspectJ Development Tools) provides deep integration between AspectJ and the Eclipse platform
   which is not possible with Spring AOP due to the runtime / dynamic nature of the AOP implementation
 
-[1]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying "Spring proxying mechanisms"
+[1]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying
 
 License
 -------
