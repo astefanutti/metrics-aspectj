@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.Timed;
+import org.aspectj.lang.JoinPoint;
 
 import javax.el.ELProcessor;
 import java.lang.reflect.Method;
@@ -21,7 +22,7 @@ public aspect TimedAspect {
     after(Profiled object) : profiled(object)  {
         for (Method method : object.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(Timed.class)) {
-                Timer timer = newTimerFromAnnotation(object, object.getClass().getAnnotation(Metrics.class), method.getAnnotation(Timed.class));
+                Timer timer = timerFromAnnotation(object, object.getClass().getAnnotation(Metrics.class), method.getAnnotation(Timed.class));
                 // TODO: be more specific for the key to avoid clashes
                 object.timers.put(method.getName(), timer);
             } else {
@@ -30,7 +31,7 @@ public aspect TimedAspect {
                         try {
                             Method override = itf.getDeclaredMethod(method.getName(), method.getParameterTypes());
                             if (override.isAnnotationPresent(Timed.class)) {
-                                Timer timer = newTimerFromAnnotation(object, itf.getAnnotation(Metrics.class), override.getAnnotation(Timed.class));
+                                Timer timer = timerFromAnnotation(object, itf.getAnnotation(Metrics.class), override.getAnnotation(Timed.class));
                                 // TODO: be more specific for the key to avoid clashes
                                 object.timers.put(method.getName(), timer);
                             }
@@ -43,7 +44,7 @@ public aspect TimedAspect {
         }
     }
 
-    private Timer newTimerFromAnnotation(Profiled object, Metrics metrics, Timed timed) {
+    private Timer timerFromAnnotation(Profiled object, Metrics metrics, Timed timed) {
         ELProcessor elp = new ELProcessor();
         elp.defineBean("this", object);
         elp.getELManager().importClass(SharedMetricRegistries.class.getName());
@@ -59,7 +60,7 @@ public aspect TimedAspect {
         return registry.timer((String) elp.eval(timed.name()));
     }
 
-    pointcut timed(Profiled object) : execution(@Timed * Profiled+.*(..)) && this(object);
+    pointcut timed(Profiled object) : execution(* Profiled+.*(..)) && if(isTimedMethod(thisJoinPoint)) && this(object);
 
     Object around(Profiled object) : timed(object) {
         Timer timer = object.timers.get(thisJoinPoint.getSignature().getName());
@@ -69,5 +70,30 @@ public aspect TimedAspect {
         } finally {
             context.stop();
         }
+    }
+
+    private static boolean isTimedMethod(JoinPoint joinPoint) {
+        if (isTimedMethod(joinPoint.getTarget().getClass(), joinPoint))
+            return true;
+
+        for (Class<?> itf : joinPoint.getTarget().getClass().getInterfaces()) {
+            if (isTimedMethod(itf, joinPoint))
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean isTimedMethod(Class<?> clazz, JoinPoint joinPoint) {
+        if (clazz.isAnnotationPresent(Metrics.class)) {
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.isAnnotationPresent(Timed.class)) {
+                    // TODO: should take the arguments into consideration for the comparison
+                    if (method.getName().equals(joinPoint.getSignature().getName()))
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

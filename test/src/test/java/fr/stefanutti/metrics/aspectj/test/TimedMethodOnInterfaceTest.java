@@ -40,5 +40,7 @@ public class TimedMethodOnInterfaceTest {
         // Call the timed method and assert it's been timed
         instance.interfaceTimedMethod();
         assertThat(timer.getCount(), is(equalTo(1L)));
+        System.out.println(timer.getSnapshot().getMin());
+
     }
 }
