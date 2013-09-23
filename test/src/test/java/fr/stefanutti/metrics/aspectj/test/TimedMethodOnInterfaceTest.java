@@ -3,6 +3,7 @@ package fr.stefanutti.metrics.aspectj.test;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,8 +20,13 @@ public class TimedMethodOnInterfaceTest {
         instance = new TimedMethodOnInterfaceImpl();
     }
 
+    @After
+    public void clearSharedMetricRegistries() {
+        SharedMetricRegistries.clear();
+    }
+
     @Test
-    public void assertTimerWithZeroCount() {
+    public void timedMethodOnInterfaceNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem("interfaceTimerRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("interfaceTimerRegistry");
         assertThat(registry.getTimers(), hasKey("interfaceTimedMethod"));
@@ -31,7 +37,7 @@ public class TimedMethodOnInterfaceTest {
     }
 
     @Test
-    public void assertTimerWithOneCountAfterMethodInvocation() {
+    public void callTimedMethodOnInterfaceOnce() {
         assertThat(SharedMetricRegistries.names(), hasItem("interfaceTimerRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("interfaceTimerRegistry");
         assertThat(registry.getTimers(), hasKey("interfaceTimedMethod"));

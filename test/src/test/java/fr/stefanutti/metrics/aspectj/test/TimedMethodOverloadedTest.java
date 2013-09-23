@@ -11,17 +11,16 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.fest.reflect.core.Reflection.method;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class TimedMethodWithMultipleSignaturesTest {
+public class TimedMethodOverloadedTest {
 
-    private TimedMethodWithMultipleSignatures instance;
+    private TimedMethodOverloaded instance;
 
     @Before
     public void createAtMetricsInstance() {
-        instance = new TimedMethodWithMultipleSignatures();
+        instance = new TimedMethodOverloaded();
     }
 
     @After
@@ -30,7 +29,7 @@ public class TimedMethodWithMultipleSignaturesTest {
     }
 
     @Test
-    public void assertTimersWithZeroCount() {
+    public void overloadedTimedMethodNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem("signatureTimerRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("signatureTimerRegistry");
         assertThat(registry.getTimers().keySet(), containsInAnyOrder("signatureTimedMethodWithNoArguments", "signatureTimedMethodWithStringArgument", "signatureTimedMethodWithListOfStringArgument", "signatureTimedMethodWithObjectArgument"));
@@ -40,7 +39,7 @@ public class TimedMethodWithMultipleSignaturesTest {
     }
 
     @Test
-    public void assertTimersWithOneCountAfterMethodInvocations() {
+    public void callOverloadedTimedMethodOnce() {
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("signatureTimerRegistry");
 
         // Call the timed methods and assert they've all been timed once

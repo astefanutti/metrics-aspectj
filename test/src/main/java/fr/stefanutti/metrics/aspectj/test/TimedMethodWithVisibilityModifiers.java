@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 
 @Metrics(registry = "'visibilityTimerRegistry'")
-public class TimedMethodWithVisibilityModifier {
+public class TimedMethodWithVisibilityModifiers {
 
     @Timed(name = "'publicTimedMethod'")
     public void publicTimedMethod() {

@@ -6,7 +6,7 @@ import fr.stefanutti.metrics.aspectj.Metrics;
 import java.util.List;
 
 @Metrics(registry = "'signatureTimerRegistry'")
-public class TimedMethodWithMultipleSignatures {
+public class TimedMethodOverloaded {
 
     @Timed(name = "'signatureTimedMethodWithNoArguments'")
     public void signatureTimedMethod() {

@@ -4,7 +4,6 @@ package fr.stefanutti.metrics.aspectj.test;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
-import com.codahale.metrics.annotation.Timed;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -15,13 +14,13 @@ import static org.junit.Assert.assertThat;
 
 import static org.fest.reflect.core.Reflection.method;
 
-public class TimedMethodWithVisibilityModifierTest {
+public class TimedMethodWithVisibilityModifiersTest {
 
-    private TimedMethodWithVisibilityModifier instance;
+    private TimedMethodWithVisibilityModifiers instance;
 
     @Before
     public void createAtMetricsInstance() {
-        instance = new TimedMethodWithVisibilityModifier();
+        instance = new TimedMethodWithVisibilityModifiers();
     }
 
     @After
@@ -30,7 +29,7 @@ public class TimedMethodWithVisibilityModifierTest {
     }
 
     @Test
-    public void assertFourTimersWithZeroCount() {
+    public void timedMethodsNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem("visibilityTimerRegistry"));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("visibilityTimerRegistry");
         assertThat(registry.getTimers().keySet(), containsInAnyOrder("publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"));
@@ -40,7 +39,7 @@ public class TimedMethodWithVisibilityModifierTest {
     }
 
     @Test
-    public void assertTimersWithOneCountAfterMethodInvocations() {
+    public void callTimedMethodsOnce() {
         MetricRegistry registry = SharedMetricRegistries.getOrCreate("visibilityTimerRegistry");
 
         // Call the timed methods and assert they've all been timed once

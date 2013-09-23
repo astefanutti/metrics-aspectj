@@ -21,7 +21,7 @@ public class TimedMethodWithRegistryFromBeanPropertyTest {
     }
 
     @Test
-    public void assertTimerWithZeroCount() {
+    public void timedMethodNotCalledYet() {
         MetricRegistry registry = instance.getRegistry();
         assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
         Timer timer = registry.getTimers().get("singleTimedMethod");
@@ -31,7 +31,7 @@ public class TimedMethodWithRegistryFromBeanPropertyTest {
     }
 
     @Test
-    public void assertTimerWithOneCountAfterMethodInvocation() {
+    public void callTimedMethodOnce() {
         MetricRegistry registry = instance.getRegistry();
         assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
         Timer timer = registry.getTimers().get("singleTimedMethod");
