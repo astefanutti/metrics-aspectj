@@ -30,9 +30,9 @@ public class TimedMethodOverloadedTest {
 
     @Test
     public void overloadedTimedMethodNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem("signatureTimerRegistry"));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("signatureTimerRegistry");
-        assertThat(registry.getTimers().keySet(), containsInAnyOrder("signatureTimedMethodWithNoArguments", "signatureTimedMethodWithStringArgument", "signatureTimedMethodWithListOfStringArgument", "signatureTimedMethodWithObjectArgument"));
+        assertThat(SharedMetricRegistries.names(), hasItem("overloadedTimerRegistry"));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate("overloadedTimerRegistry");
+        assertThat(registry.getTimers().keySet(), containsInAnyOrder("overloadedTimedMethodWithNoArguments", "overloadedTimedMethodWithStringArgument", "overloadedTimedMethodWithListOfStringArgument", "overloadedTimedMethodWithObjectArgument"));
 
         // Make sure that all the timers haven't been called yet
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
@@ -40,13 +40,13 @@ public class TimedMethodOverloadedTest {
 
     @Test
     public void callOverloadedTimedMethodOnce() {
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("signatureTimerRegistry");
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate("overloadedTimerRegistry");
 
         // Call the timed methods and assert they've all been timed once
-        instance.signatureTimedMethod();
-        instance.signatureTimedMethod("string");
-        instance.signatureTimedMethod(new Object());
-        instance.signatureTimedMethod(Arrays.asList("string", "string"));
+        instance.overloadedTimedMethod();
+        instance.overloadedTimedMethod("string");
+        instance.overloadedTimedMethod(new Object());
+        instance.overloadedTimedMethod(Arrays.asList("string", "string"));
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
     }
 }
