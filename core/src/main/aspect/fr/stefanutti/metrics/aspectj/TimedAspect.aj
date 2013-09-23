@@ -23,8 +23,7 @@ public aspect TimedAspect {
         for (Method method : object.getClass().getDeclaredMethods()) {
             if (method.isAnnotationPresent(Timed.class)) {
                 Timer timer = timerFromAnnotation(object, object.getClass().getAnnotation(Metrics.class), method.getAnnotation(Timed.class));
-                // TODO: be more specific for the key to avoid clashes
-                object.timers.put(method.getName(), timer);
+                object.timers.put(method.toString(), timer);
             } else {
                 for (Class<?> itf : object.getClass().getInterfaces()) {
                     if (itf.isAnnotationPresent(Metrics.class)) {
@@ -32,8 +31,7 @@ public aspect TimedAspect {
                             Method override = itf.getDeclaredMethod(method.getName(), method.getParameterTypes());
                             if (override.isAnnotationPresent(Timed.class)) {
                                 Timer timer = timerFromAnnotation(object, itf.getAnnotation(Metrics.class), override.getAnnotation(Timed.class));
-                                // TODO: be more specific for the key to avoid clashes
-                                object.timers.put(method.getName(), timer);
+                                object.timers.put(method.toString(), timer);
                             }
                         } catch (NoSuchMethodException cause) {
                             // Swallow as there is no overridden for that method
@@ -63,7 +61,7 @@ public aspect TimedAspect {
     pointcut timed(Profiled object) : execution(* Profiled+.*(..)) && if(isTimedMethod(thisJoinPoint)) && this(object);
 
     Object around(Profiled object) : timed(object) {
-        Timer timer = object.timers.get(thisJoinPoint.getSignature().getName());
+        Timer timer = object.timers.get(thisJoinPoint.getSignature().toLongString());
         Timer.Context context = timer.time();
         try {
             return proceed(object);
@@ -93,7 +91,6 @@ public aspect TimedAspect {
                 }
             }
         }
-
         return false;
     }
 }
