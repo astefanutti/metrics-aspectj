@@ -28,6 +28,8 @@
                             <artifactId>metrics-aspectj</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
+                    <!-- Do not inline the around advise to ease debugging -->
+                    <XnoInline>true</XnoInline>
                 </configuration>
                 <executions>
                     <execution>
