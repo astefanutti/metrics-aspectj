@@ -5,11 +5,13 @@ import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.Timed;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
 
 import javax.el.ELProcessor;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 public aspect TimedAspect {
 
@@ -58,10 +60,12 @@ public aspect TimedAspect {
         return registry.timer((String) elp.eval(timed.name()));
     }
 
-    pointcut timed(Profiled object) : execution(* Profiled+.*(..)) && if(isTimedMethod(thisJoinPoint)) && this(object);
+    pointcut timed(Profiled object) : execution(@Timed * Profiled+.*(..)) && this(object);
 
-    Object around(Profiled object) : timed(object) {
-        Timer timer = object.timers.get(thisJoinPoint.getSignature().toLongString());
+    pointcut timedInherited(Profiled object) : execution(!@Timed * Profiled+.*(..)) && if(isTimedMethod(thisJoinPoint)) && this(object);
+
+    Object around(Profiled object) : timed(object) || timedInherited(object) {
+        Timer timer = object.timers.get(thisJoinPointStaticPart.getSignature().toLongString());
         Timer.Context context = timer.time();
         try {
             return proceed(object);
@@ -71,26 +75,50 @@ public aspect TimedAspect {
     }
 
     private static boolean isTimedMethod(JoinPoint joinPoint) {
-        if (isTimedMethod(joinPoint.getTarget().getClass(), joinPoint))
-            return true;
+        if (!(joinPoint.getSignature() instanceof MethodSignature))
+            return false;
+
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 
         for (Class<?> itf : joinPoint.getTarget().getClass().getInterfaces()) {
-            if (isTimedMethod(itf, joinPoint))
+            if (isTimedMethod(itf, method))
                 return true;
         }
+
+        // TODO: support inheritance and iterate over parent classes
+
         return false;
     }
 
-    private static boolean isTimedMethod(Class<?> clazz, JoinPoint joinPoint) {
+    private static boolean isTimedMethod(Class<?> clazz, Method method) {
         if (clazz.isAnnotationPresent(Metrics.class)) {
-            for (Method method : clazz.getDeclaredMethods()) {
-                if (method.isAnnotationPresent(Timed.class)) {
-                    // TODO: should take the arguments into consideration for the comparison
-                    if (method.getName().equals(joinPoint.getSignature().getName()))
+            for (Method declared : clazz.getDeclaredMethods()) {
+                if (declared.isAnnotationPresent(Timed.class)) {
+                    if (isOverriddenMethod(declared, method))
                         return true;
                 }
             }
         }
+
+        return false;
+    }
+
+    private static boolean isOverriddenMethod(Method method1, Method method2) {
+        if (!method1.getName().equals(method2.getName()))
+            return false;
+        if (!method1.getReturnType().equals(method2.getReturnType()))
+            return false;
+
+        Class<?>[] params1 = method1.getParameterTypes();
+        Class<?>[] params2 = method2.getParameterTypes();
+        if (params1.length == params2.length) {
+            for (int i = 0; i < params1.length; i++) {
+                if (params1[i] != params2[i])
+                    return false;
+            }
+            return true;
+        }
+
         return false;
     }
 }
