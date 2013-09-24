@@ -108,6 +108,37 @@ public class TimedMethodWithSharedMetricRegistry {
 }
 ```
 
+## Limitations
+
+The Metrics annotations are not inherited whether these are declared on a parent class or on an implemented
+interface.
+
+The root causes of that limitation, according to the Java language specification, are:
++ Non-type annotations are not inherited
++ Annotations on types are only inherited if they have the `@Inherited` meta-annotation
++ Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation
+
+See the [`@Inherited`](http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html) Javadoc
+and [Annotation types](http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6) from the
+Java language specification.
+
+AspectJ is following the Java language specification and has documented to what extent it's impacted
+in [Annotation inheritance][1] and [Annotation inheritance and pointcut matching][2].
+
+There would have been ways of working around that though:
++ That would have been working around the Java language specification in the first place
++ Plus that would have required to rely on a combination of [Expression-based pointcuts][3], [Runtime type matching][4]
+  and [Reflective access][5] to define conditional pointcut expressions which:
+    + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient
+    + Would have been evaluated at runtime for each candidate join point relying on the Java Reflection API
+      thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP
+
+[1]: http://eclipse.org/aspectj/doc/next/adk15notebook/printable.html#annotation-inheritance
+[2]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#annotation-inheritance-and-pointcut-matching
+[3]: http://eclipse.org/aspectj/doc/released/progguide/semantics-pointcuts.html#d0e5549
+[4]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#runtime-type-matching-and-context-exposure
+[5]: http://eclipse.org/aspectj/doc/released/progguide/semantics-advice.html#reflective-access-to-the-join-point
+
 ## Spring AOP vs. AspectJ
 
 Spring AOP and AspectJ provides Aspect Oriented Programming in two very different ways:
@@ -123,8 +154,11 @@ Spring AOP and AspectJ provides Aspect Oriented Programming in two very differen
 + AJDT (AspectJ Development Tools) provides deep integration between AspectJ and the Eclipse platform
   which is not possible with Spring AOP due to the runtime / dynamic nature of the AOP implementation
 
+Further details can be found in [Choosing which AOP declaration style to use][3] from the Spring documentation.
+
 [1]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying
 [2]: http://relation.to/16658.lace
+[3]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-choosing
 
 License
 -------
