@@ -197,11 +197,12 @@ Spring AOP and AspectJ provides Aspect Oriented Programming in two very differen
     + Or CGLIB (byte code manipulation), that has to be added as a runtime dependency:
         + It dynamically extends classes thus it is incompatible with `final` classes or methods
         + CGLIB development isn't active, Hibernate has been deprecating it in favor of Javassist (see [Deprecated CGLIB support][])
-+ AJDT (AspectJ Development Tools) provides deep integration between AspectJ and the Eclipse platform
++ [AJDT (AspectJ Development Tools)][AJDT] provides deep integration between AspectJ and the Eclipse platform
   which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation
 
 Further details can be found in [Choosing which AOP declaration style to use][] from the Spring documentation.
 
+[AJDT]: http://www.eclipse.org/ajdt/
 [Spring proxying mechanisms]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying
 [Deprecated CGLIB support]: http://relation.to/16658.lace
 [Choosing which AOP declaration style to use]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-choosing
