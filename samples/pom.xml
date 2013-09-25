@@ -51,9 +51,12 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- runtime dependencies -->
-
         <!-- test dependencies -->
+
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
