@@ -187,7 +187,7 @@ There would have been ways of working around that though:
 
 ## Spring AOP vs. AspectJ
 
-Spring AOP and AspectJ provides Aspect Oriented Programming in two very different ways:
+[Spring AOP][] and [AspectJ][] provides Aspect Oriented Programming in two very different ways:
 + AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW)
   and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
 + Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving
@@ -202,6 +202,8 @@ Spring AOP and AspectJ provides Aspect Oriented Programming in two very differen
 
 Further details can be found in [Choosing which AOP declaration style to use][] from the Spring documentation.
 
+[Spring AOP]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html
+[AspectJ]: http://eclipse.org/aspectj/
 [CGLIB]: http://cglib.sourceforge.net/
 [Javassist]: http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/
 [AJDT]: http://www.eclipse.org/ajdt/
