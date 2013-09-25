@@ -169,20 +169,20 @@ and [Annotation types](http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.ht
 Java language specification for more details.
 
 AspectJ is following the Java language specification and has documented to what extent it's impacted
-in [Annotation inheritance][1] and [Annotation inheritance and pointcut matching][2].
+in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][].
 There would have been ways of working around that though:
 + That would have been working around the Java language specification in the first place
-+ Plus that would have required to rely on a combination of [Expression-based pointcuts][3], [Runtime type matching][4]
-  and [Reflective access][5] to define conditional pointcut expressions which:
++ Plus that would have required to rely on a combination of [Expression-based pointcuts][], [Runtime type matching][]
+  and [Reflective access][] to define conditional pointcut expressions which:
     + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient
     + Would have been evaluated at runtime for each candidate join point relying on the Java Reflection API
       thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP
 
-[1]: http://eclipse.org/aspectj/doc/next/adk15notebook/printable.html#annotation-inheritance
-[2]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#annotation-inheritance-and-pointcut-matching
-[3]: http://eclipse.org/aspectj/doc/released/progguide/semantics-pointcuts.html#d0e5549
-[4]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#runtime-type-matching-and-context-exposure
-[5]: http://eclipse.org/aspectj/doc/released/progguide/semantics-advice.html#reflective-access-to-the-join-point
+[Annotation inheritance]: http://eclipse.org/aspectj/doc/next/adk15notebook/printable.html#annotation-inheritance
+[Annotation inheritance and pointcut matching]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#annotation-inheritance-and-pointcut-matching
+[Expression-based pointcuts]: http://eclipse.org/aspectj/doc/released/progguide/semantics-pointcuts.html#d0e5549
+[Runtime type matching]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#runtime-type-matching-and-context-exposure
+[Reflective access]: http://eclipse.org/aspectj/doc/released/progguide/semantics-advice.html#reflective-access-to-the-join-point
 
 ## Spring AOP vs. AspectJ
 
@@ -190,20 +190,20 @@ Spring AOP and AspectJ provides Aspect Oriented Programming in two very differen
 + AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW)
   and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
 + Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving
-+ Spring AOP implements AOP either using (see [Spring proxying mechanisms][1]):
++ Spring AOP implements AOP either using (see [Spring proxying mechanisms][]):
     + JDK dynamic proxies, which add little runtime overhead, clutter stack traces,
       and can be incompatible with other Spring functionality like Spring JMX (for dynamic MBean export for example)
     + Or CGLIB (byte code manipulation), that has to be added as a runtime dependency:
         + It dynamically extends classes thus it is incompatible with `final` classes or methods
-        + CGLIB development isn't active, Hibernate has been deprecating it in favor of Javassist (see [Deprecated CGLIB support][2])
+        + CGLIB development isn't active, Hibernate has been deprecating it in favor of Javassist (see [Deprecated CGLIB support][])
 + AJDT (AspectJ Development Tools) provides deep integration between AspectJ and the Eclipse platform
   which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation
 
-Further details can be found in [Choosing which AOP declaration style to use][3] from the Spring documentation.
+Further details can be found in [Choosing which AOP declaration style to use][] from the Spring documentation.
 
-[1]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying
-[2]: http://relation.to/16658.lace
-[3]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-choosing
+[Spring proxying mechanisms]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying
+[Deprecated CGLIB support]: http://relation.to/16658.lace
+[Choosing which AOP declaration style to use]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-choosing
 
 License
 -------
