@@ -6,8 +6,6 @@ with [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) su
 
 ## Getting Started
 
-### Build Setup
-
 #### Setting Up Maven
 
 Add the `metrics-aspectj` library as a dependency:
@@ -27,7 +25,6 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
         <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>aspectj-maven-plugin</artifactId>
-            <version>1.5</version>
             <configuration>
                 <aspectLibraries>
                     <aspectLibrary>
@@ -51,7 +48,7 @@ More information can be found in the [Maven AspectJ plugin documentation](http:/
 
 #### Setting Up Ant
 
-Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html) (`iajc`) Ant task:
+Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html) `iajc` Ant task:
 ```xml
 <target name="{target}" >
     <iajc {attributes..} >
@@ -65,7 +62,7 @@ Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc
 ```
 Other options are detailed in the [AspectJ Ant tasks documentation](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html).
 
-#### Using AspectJ Compiler
+#### Using the AspectJ Compiler
 
 The AspectJ compiler can be used directly by executing the following command:
 ```
@@ -73,13 +70,37 @@ ajc -aspectpath metrics-aspectj.jar [Options] [file...]
 ```
 More information can be found in the [AspectJ compiler / weaver documentation](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html).
 
-### The `@Metrics` Annotation and Registry Resolution
+## Usage
 
-The `@Metrics` annotation has to be added for the aspects to be weaved into the class code.
+#### Metrics Annotations
+
+_Metrics_ comes with the [`metrics-annotation`](https://github.com/codahale/metrics/tree/master/metrics-annotation)
+module that contains a series of annotations: `@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`.
+These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
+
+For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
+```java
+import com.codahale.metrics.annotation.Timed;
+
+public class TimedMethod {
+
+    @Timed(name = "'timerName'")
+    public void timedMethod() {
+    }
+}
+```
+
+In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
+and inline around the method invocation the needed code to time the method execution using that `Timer` instance.
+
+#### Registry Resolution and the `@Metrics` Annotation
+
+The `@Metrics` annotation and provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
+It targets classes and is ultimately used to create the `Metric`s and weave the _Metrics AspectJ_ aspects into the annotated class.
+
 The `@Metrics.registry` mandatory attribute must be a valid EL expression that evaluates either to
-the registry name or registry instance. The result of that EL expression evaluation is a `MetricRegistry`
-that is used to register the `Metric` created each time a Metrics annotation
-is present on that class methods into.
+the registry name or the registry instance. The result of that EL expression evaluation is the `MetricRegistry`
+used to register the `Metric` generated each time a _Metrics_ annotation is present on that class methods into.
 
 The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
 In that case the registry is resolved using `SharedMetricRegistries.getOrCreate(String name)`:
@@ -138,21 +159,17 @@ public class TimedMethodWithSharedMetricRegistry {
 
 ## Limitations
 
-The Metrics annotations are not inherited whether these are declared on a parent class or on an implemented
-interface.
-
-The root causes of that limitation, according to the Java language specification, are:
+The _Metrics_ annotations are not inherited whether these are declared on a parent class or on an implemented
+interface. The root causes of that limitation, according to the Java language specification, are:
 + Non-type annotations are not inherited
 + Annotations on types are only inherited if they have the `@Inherited` meta-annotation
 + Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation
-
 See the [`@Inherited`](http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html) Javadoc
 and [Annotation types](http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6) from the
-Java language specification.
+Java language specification for more details.
 
 AspectJ is following the Java language specification and has documented to what extent it's impacted
 in [Annotation inheritance][1] and [Annotation inheritance and pointcut matching][2].
-
 There would have been ways of working around that though:
 + That would have been working around the Java language specification in the first place
 + Plus that would have required to rely on a combination of [Expression-based pointcuts][3], [Runtime type matching][4]
@@ -170,17 +187,17 @@ There would have been ways of working around that though:
 ## Spring AOP vs. AspectJ
 
 Spring AOP and AspectJ provides Aspect Oriented Programming in two very different ways:
-+ AspectJ provides a full-fledged aspect definition and support both compile time waving (CTW)
-  and load time waving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
-+ Spring AOP does not support the whole AspectJ aspect definition and does not support compile time waving
++ AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW)
+  and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
++ Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving
 + Spring AOP implements AOP either using (see [Spring proxying mechanisms][1]):
-    + JDK dynamic proxies, which add little runtime overhead, increase stack traces,
+    + JDK dynamic proxies, which add little runtime overhead, clutter stack traces,
       and can be incompatible with other Spring functionality like Spring JMX (for dynamic MBean export for example)
     + Or CGLIB (byte code manipulation), that has to be added as a runtime dependency:
         + It dynamically extends classes thus it is incompatible with `final` classes or methods
         + CGLIB development isn't active, Hibernate has been deprecating it in favor of Javassist (see [Deprecated CGLIB support][2])
 + AJDT (AspectJ Development Tools) provides deep integration between AspectJ and the Eclipse platform
-  which is not possible with Spring AOP due to the runtime / dynamic nature of the AOP implementation
+  which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation
 
 Further details can be found in [Choosing which AOP declaration style to use][3] from the Spring documentation.
 
