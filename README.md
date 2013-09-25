@@ -200,7 +200,7 @@ There would have been ways of working around that though:
 + [AJDT (AspectJ Development Tools)][AJDT] provides deep integration between AspectJ and the Eclipse platform
   which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation
 
-Further details can be found in [Choosing which AOP declaration style to use][] from the Spring documentation.
+Further details can be found in [Choosing which AOP declaration style to use][] from the Spring framework documentation.
 
 [Spring AOP]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html
 [AspectJ]: http://eclipse.org/aspectj/
