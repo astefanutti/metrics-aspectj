@@ -6,7 +6,9 @@ with [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) su
 
 ## Getting Started
 
-### Setting Up Maven
+### Build Setup
+
+#### Setting Up Maven
 
 Add the `metrics-aspectj` library as a dependency:
 ```xml
@@ -45,6 +47,32 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     </plugins>
 </build>
 ```
+More information can be found in the [Maven AspectJ plugin documentation](http://mojo.codehaus.org/aspectj-maven-plugin/).
+
+#### Setting Up Ant
+
+Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html) (`iajc`) Ant task:
+```xml
+<target name="{target}" >
+    <iajc {attributes..} >
+        ...
+        <aspectpath>
+            <pathelement location="${home.dir}/metrics-aspectj.jar"/>
+        </aspectpath>
+        ...
+    </iajc>
+</target>
+```
+Other options are detailed in the [AspectJ Ant tasks documentation](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html).
+
+#### Using AspectJ Compiler
+
+The AspectJ compiler can be used directly by executing the following command:
+```
+ajc -aspectpath metrics-aspectj.jar [Options] [file...]
+```
+More information can be found in the [AspectJ compiler / weaver documentation](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html).
+
 ### The `@Metrics` Annotation and Registry Resolution
 
 The `@Metrics` annotation has to be added for the aspects to be weaved into the class code.
