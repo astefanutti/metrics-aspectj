@@ -1,4 +1,4 @@
-metrics-aspectj
+AspectJ for Metrics
 ===============
 
 [AspectJ](http://eclipse.org/aspectj/) integration for [Yammer's Metrics](http://metrics.codahale.com/)
@@ -6,7 +6,7 @@ with [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) su
 
 ## Getting Started
 
-#### Setting Up Maven
+### Setting Up Maven
 
 Add the `metrics-aspectj` library as a dependency:
 ```xml
@@ -46,7 +46,7 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
 ```
 More information can be found in the [Maven AspectJ plugin](http://mojo.codehaus.org/aspectj-maven-plugin/) documentation.
 
-#### Setting Up Ant
+### Setting Up Ant
 
 Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html) `iajc` Ant task:
 ```xml
@@ -62,7 +62,7 @@ Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc
 ```
 Other options are detailed in the [AspectJ Ant tasks](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html) documentation.
 
-#### Using the AspectJ Compiler
+### Using the AspectJ Compiler
 
 The AspectJ compiler can be used directly by executing the following command:
 ```
@@ -72,7 +72,7 @@ More information can be found in the [AspectJ compiler / weaver](http://www.ecli
 
 ## Usage
 
-#### The Metrics Annotations
+### The Metrics Annotations
 
 _Metrics_ comes with the [`metrics-annotation`](https://github.com/codahale/metrics/tree/master/metrics-annotation)
 module that contains a series of annotations - `@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`.
@@ -93,7 +93,7 @@ public class TimedMethod {
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
 and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
 
-#### Registry Resolution and the `@Metrics` Annotation
+### Registry Resolution and the `@Metrics` Annotation
 
 The `@Metrics` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
 It targets classes and is ultimately used to create the `Metric`s and weave the _Metrics AspectJ_ aspects into the annotated class.
