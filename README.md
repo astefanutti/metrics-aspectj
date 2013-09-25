@@ -72,7 +72,7 @@ More information can be found in the [AspectJ compiler / weaver](http://www.ecli
 
 ### Metrics AspectJ Dependencies
 
-Besides depending on _Metrics_ - `metrics-core` and `metrics-annotation` - _Metrics AspectJ_ requires
+Besides depending on _Metrics_ (`metrics-core` and `metrics-annotation` modules), _Metrics AspectJ_ requires
 the AspectJ `aspectjrt` module:
 ```xml
 <dependency>
