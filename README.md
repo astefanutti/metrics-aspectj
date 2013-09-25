@@ -44,7 +44,7 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     </plugins>
 </build>
 ```
-More information can be found in the [Maven AspectJ plugin documentation](http://mojo.codehaus.org/aspectj-maven-plugin/).
+More information can be found in the [Maven AspectJ plugin](http://mojo.codehaus.org/aspectj-maven-plugin/) documentation.
 
 #### Setting Up Ant
 
@@ -60,7 +60,7 @@ Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc
     </iajc>
 </target>
 ```
-Other options are detailed in the [AspectJ Ant tasks documentation](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html).
+Other options are detailed in the [AspectJ Ant tasks](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html) documentation.
 
 #### Using the AspectJ Compiler
 
@@ -68,14 +68,14 @@ The AspectJ compiler can be used directly by executing the following command:
 ```
 ajc -aspectpath metrics-aspectj.jar [Options] [file...]
 ```
-More information can be found in the [AspectJ compiler / weaver documentation](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html).
+More information can be found in the [AspectJ compiler / weaver](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) documentation.
 
 ## Usage
 
-#### Metrics Annotations
+#### The Metrics Annotations
 
 _Metrics_ comes with the [`metrics-annotation`](https://github.com/codahale/metrics/tree/master/metrics-annotation)
-module that contains a series of annotations: `@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`.
+module that contains a series of annotations - `@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`.
 These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
@@ -91,11 +91,11 @@ public class TimedMethod {
 ```
 
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
-and inline around the method invocation the needed code to time the method execution using that `Timer` instance.
+and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
 
 #### Registry Resolution and the `@Metrics` Annotation
 
-The `@Metrics` annotation and provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
+The `@Metrics` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
 It targets classes and is ultimately used to create the `Metric`s and weave the _Metrics AspectJ_ aspects into the annotated class.
 
 The `@Metrics.registry` mandatory attribute must be a valid EL expression that evaluates either to
@@ -164,6 +164,7 @@ interface. The root causes of that limitation, according to the Java language sp
 + Non-type annotations are not inherited
 + Annotations on types are only inherited if they have the `@Inherited` meta-annotation
 + Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation
+
 See the [`@Inherited`](http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html) Javadoc
 and [Annotation types](http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6) from the
 Java language specification for more details.
