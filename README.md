@@ -70,6 +70,30 @@ ajc -aspectpath metrics-aspectj.jar [Options] [file...]
 ```
 More information can be found in the [AspectJ compiler / weaver](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) documentation.
 
+### Dependencies
+
+Besides depending on _Metrics_ - `metrics-core` and `metrics-annotation` - _Metrics AspectJ_ requires
+the AspectJ `aspectjrt` module:
+```xml
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjrt</artifactId>
+    <version>${aspectj.version}</version>
+</dependency>
+```
+These three modules are transitive dependencies of the `metrics-aspectj` Maven module.
+
+In addition to that, `Metrics AspectJ` requires an implementation of the [Expression Language 3.0 API (JSR-341)](http://jcp.org/en/jsr/detail?id=341)
+to be present at runtime. For example, the [`metrics-aspectj-samples`](https://github.com/astefanutti/metrics-aspectj/tree/master/samples)
+module is using the [GlassFish reference implementation](https://glassfish.java.net/downloads/ri/) as `test` dependency for its unit tests execution:
+```xml
+<dependency>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.el</artifactId>
+    <version>${el.version}</version>
+</dependency>
+```
+
 ## Usage
 
 ### The Metrics Annotations
