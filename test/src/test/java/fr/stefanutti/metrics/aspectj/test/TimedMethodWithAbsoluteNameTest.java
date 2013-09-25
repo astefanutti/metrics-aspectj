@@ -36,7 +36,7 @@ public class TimedMethodWithAbsoluteNameTest {
     private TimedMethodWithAbsoluteName instance;
 
     @Before
-    public void createAtMetricsInstance() {
+    public void createTimedInstance() {
         instance = new TimedMethodWithAbsoluteName();
     }
 

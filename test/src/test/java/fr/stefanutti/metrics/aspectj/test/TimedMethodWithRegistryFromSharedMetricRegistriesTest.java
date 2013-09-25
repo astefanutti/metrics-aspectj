@@ -34,7 +34,7 @@ public class TimedMethodWithRegistryFromSharedMetricRegistriesTest {
     private TimedMethodWithRegistryFromSharedMetricRegistries instance;
 
     @Before
-    public void createAtMetricsInstance() {
+    public void createTimedInstance() {
         instance = new TimedMethodWithRegistryFromSharedMetricRegistries();
     }
 

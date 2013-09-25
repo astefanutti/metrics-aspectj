@@ -39,7 +39,7 @@ public class TimedMethodWithVisibilityModifiersTest {
     private TimedMethodWithVisibilityModifiers instance;
 
     @Before
-    public void createAtMetricsInstance() {
+    public void createTimedInstance() {
         instance = new TimedMethodWithVisibilityModifiers();
     }
 

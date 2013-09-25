@@ -39,7 +39,7 @@ public class TimedMethodOverloadedTest {
     private TimedMethodOverloaded instance;
 
     @Before
-    public void createAtMetricsInstance() {
+    public void createTimedInstance() {
         instance = new TimedMethodOverloaded();
     }
 

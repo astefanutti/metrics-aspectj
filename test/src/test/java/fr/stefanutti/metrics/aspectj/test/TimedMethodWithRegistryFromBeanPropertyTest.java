@@ -30,7 +30,7 @@ public class TimedMethodWithRegistryFromBeanPropertyTest {
     private TimedMethodWithRegistryFromBeanProperty instance;
 
     @Before
-    public void createAtMetricsInstance() {
+    public void createTimedInstance() {
         MetricRegistry registry = new MetricRegistry();
         instance = new TimedMethodWithRegistryFromBeanProperty(registry);
     }

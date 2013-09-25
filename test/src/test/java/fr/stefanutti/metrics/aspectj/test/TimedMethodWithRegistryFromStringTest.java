@@ -34,7 +34,7 @@ public class TimedMethodWithRegistryFromStringTest {
     private TimedMethodWithRegistryFromString instance;
 
     @Before
-    public void createAtMetricsInstance() {
+    public void createTimedInstance() {
         instance = new TimedMethodWithRegistryFromString();
     }
 
