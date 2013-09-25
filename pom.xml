@@ -31,8 +31,8 @@
     </properties>
 
     <modules>
-        <module>core</module>
-        <module>test</module>
+        <module>lib</module>
+        <module>samples</module>
     </modules>
 
     <build>
