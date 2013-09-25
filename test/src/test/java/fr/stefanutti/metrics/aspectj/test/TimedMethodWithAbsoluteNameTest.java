@@ -15,6 +15,7 @@
  */
 package fr.stefanutti.metrics.aspectj.test;
 
+
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
@@ -23,19 +24,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class TimedMethodWithRegistryFromSharedMetricRegistriesTest {
+public class TimedMethodWithAbsoluteNameTest {
 
-    private final static String REGISTRY_NAME = "staticRegistry";
+    private final static String REGISTRY_NAME = "timerRegistryForAbsoluteNamedTimer";
 
-    private final static String TIMER_NAME = TimedMethodWithRegistryFromSharedMetricRegistries.class.getName() + "." + "singleTimedMethod";
+    private final static String TIMER_NAME = "absolutelyTimedMethod";
 
-    private TimedMethodWithRegistryFromSharedMetricRegistries instance;
+    private TimedMethodWithAbsoluteName instance;
 
     @Before
     public void createAtMetricsInstance() {
-        instance = new TimedMethodWithRegistryFromSharedMetricRegistries();
+        instance = new TimedMethodWithAbsoluteName();
     }
 
     @After
@@ -62,7 +64,7 @@ public class TimedMethodWithRegistryFromSharedMetricRegistriesTest {
         Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Call the timed method and assert it's been timed
-        instance.singleTimedMethod();
+        instance.absolutelyTimedMethod();
         assertThat(timer.getCount(), is(equalTo(1L)));
     }
 }

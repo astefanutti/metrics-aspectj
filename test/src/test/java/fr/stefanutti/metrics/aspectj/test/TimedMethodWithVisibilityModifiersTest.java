@@ -28,7 +28,13 @@ import static org.junit.Assert.assertThat;
 
 import static org.fest.reflect.core.Reflection.method;
 
+import static fr.stefanutti.metrics.aspectj.test.util.MetricsUtil.absoluteMetricsNameSet;
+
 public class TimedMethodWithVisibilityModifiersTest {
+
+    private final static String REGISTRY_NAME = "visibilityTimerRegistry";
+
+    private final static String[] TIMER_NAMES = {"publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"};
 
     private TimedMethodWithVisibilityModifiers instance;
 
@@ -44,9 +50,9 @@ public class TimedMethodWithVisibilityModifiersTest {
 
     @Test
     public void timedMethodsNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem("visibilityTimerRegistry"));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("visibilityTimerRegistry");
-        assertThat(registry.getTimers().keySet(), containsInAnyOrder("publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"));
+        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricsNameSet(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES))));
 
         // Make sure that all the timers haven't been called yet
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
@@ -54,7 +60,7 @@ public class TimedMethodWithVisibilityModifiersTest {
 
     @Test
     public void callTimedMethodsOnce() {
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("visibilityTimerRegistry");
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
         // Call the timed methods and assert they've all been timed once
         instance.publicTimedMethod();

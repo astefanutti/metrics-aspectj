@@ -28,7 +28,13 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
+import static fr.stefanutti.metrics.aspectj.test.util.MetricsUtil.absoluteMetricsNameSet;
+
 public class TimedMethodOverloadedTest {
+
+    private final static String REGISTRY_NAME = "overloadedTimerRegistry";
+
+    private final static String[] TIMER_NAMES = {"overloadedTimedMethodWithNoArguments", "overloadedTimedMethodWithStringArgument", "overloadedTimedMethodWithListOfStringArgument", "overloadedTimedMethodWithObjectArgument"};
 
     private TimedMethodOverloaded instance;
 
@@ -44,9 +50,9 @@ public class TimedMethodOverloadedTest {
 
     @Test
     public void overloadedTimedMethodNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem("overloadedTimerRegistry"));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("overloadedTimerRegistry");
-        assertThat(registry.getTimers().keySet(), containsInAnyOrder("overloadedTimedMethodWithNoArguments", "overloadedTimedMethodWithStringArgument", "overloadedTimedMethodWithListOfStringArgument", "overloadedTimedMethodWithObjectArgument"));
+        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricsNameSet(TimedMethodOverloaded.class, TIMER_NAMES))));
 
         // Make sure that all the timers haven't been called yet
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
@@ -54,13 +60,13 @@ public class TimedMethodOverloadedTest {
 
     @Test
     public void callOverloadedTimedMethodOnce() {
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("overloadedTimerRegistry");
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
         // Call the timed methods and assert they've all been timed once
         instance.overloadedTimedMethod();
         instance.overloadedTimedMethod("string");
         instance.overloadedTimedMethod(new Object());
-        instance.overloadedTimedMethod(Arrays.asList("string", "string"));
+        instance.overloadedTimedMethod(Arrays.asList("string1", "string2"));
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
     }
 }

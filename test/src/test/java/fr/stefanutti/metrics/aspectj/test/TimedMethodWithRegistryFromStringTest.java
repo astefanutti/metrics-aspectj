@@ -27,6 +27,10 @@ import static org.junit.Assert.assertThat;
 
 public class TimedMethodWithRegistryFromStringTest {
 
+    private final static String REGISTRY_NAME = "singleTimerRegistry";
+
+    private final static String TIMER_NAME = TimedMethodWithRegistryFromString.class.getName() + "." + "singleTimedMethod";
+
     private TimedMethodWithRegistryFromString instance;
 
     @Before
@@ -41,10 +45,10 @@ public class TimedMethodWithRegistryFromStringTest {
 
     @Test
     public void timedMethodNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem("singleTimerRegistry"));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("singleTimerRegistry");
-        assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
-        Timer timer = registry.getTimers().get("singleTimedMethod");
+        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Make sure that the timer hasn't been called yet
         assertThat(timer.getCount(), is(equalTo(0L)));
@@ -52,10 +56,10 @@ public class TimedMethodWithRegistryFromStringTest {
 
     @Test
     public void callTimedMethodOnce() {
-        assertThat(SharedMetricRegistries.names(), hasItem("singleTimerRegistry"));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate("singleTimerRegistry");
-        assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
-        Timer timer = registry.getTimers().get("singleTimedMethod");
+        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Call the timed method and assert it's been timed
         instance.singleTimedMethod();

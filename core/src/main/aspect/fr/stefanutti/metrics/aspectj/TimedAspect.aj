@@ -55,7 +55,8 @@ public aspect TimedAspect {
         } else {
             throw new IllegalStateException("Unable to resolve metrics registry from expression [" + metrics.registry() + "]");
         }
-        return registry.timer((String) elp.eval(timed.name()));
+        String name = (String) elp.eval(timed.name());
+        return registry.timer(timed.absolute() ? name : MetricRegistry.name(object.getClass(), name));
     }
 
     pointcut timed(Profiled object) : execution(@Timed * Profiled+.*(..)) && this(object);

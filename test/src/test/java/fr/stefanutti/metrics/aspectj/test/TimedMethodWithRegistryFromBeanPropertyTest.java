@@ -25,6 +25,8 @@ import static org.junit.Assert.assertThat;
 
 public class TimedMethodWithRegistryFromBeanPropertyTest {
 
+    private final static String TIMER_NAME = TimedMethodWithRegistryFromBeanProperty.class.getName() + "." + "singleTimedMethod";
+
     private TimedMethodWithRegistryFromBeanProperty instance;
 
     @Before
@@ -36,8 +38,8 @@ public class TimedMethodWithRegistryFromBeanPropertyTest {
     @Test
     public void timedMethodNotCalledYet() {
         MetricRegistry registry = instance.getRegistry();
-        assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
-        Timer timer = registry.getTimers().get("singleTimedMethod");
+        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Make sure that the timer hasn't been called yet
         assertThat(timer.getCount(), is(equalTo(0L)));
@@ -46,8 +48,8 @@ public class TimedMethodWithRegistryFromBeanPropertyTest {
     @Test
     public void callTimedMethodOnce() {
         MetricRegistry registry = instance.getRegistry();
-        assertThat(registry.getTimers(), hasKey("singleTimedMethod"));
-        Timer timer = registry.getTimers().get("singleTimedMethod");
+        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Call the timed method and assert it's been timed
         instance.singleTimedMethod();
