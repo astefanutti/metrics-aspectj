@@ -25,12 +25,13 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final aspect MetricAspect {
+final aspect MetricAspect {
 
     declare precedence: MetricAspect, *;
 
     declare parents : (@Metrics *) implements Profiled;
 
+    /* packaged-protected */
     final Map<String, Metric> Profiled.metrics = new ConcurrentHashMap<String, Metric>();
 
     pointcut profiled(Profiled object) : execution(Profiled+.new(..)) && this(object);

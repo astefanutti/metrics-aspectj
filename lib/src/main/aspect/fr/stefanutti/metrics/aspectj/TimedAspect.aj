@@ -18,7 +18,7 @@ package fr.stefanutti.metrics.aspectj;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.Timed;
 
-public final aspect TimedAspect {
+final aspect TimedAspect {
 
     pointcut timed(Profiled object) : execution(@Timed * Profiled+.*(..)) && this(object);
 
