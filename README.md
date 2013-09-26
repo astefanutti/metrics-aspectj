@@ -70,7 +70,7 @@ ajc -aspectpath metrics-aspectj.jar [Options] [file...]
 ```
 More information can be found in the [AspectJ compiler / weaver](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) documentation.
 
-### Metrics AspectJ Dependencies
+### Required Dependencies
 
 Besides depending on _Metrics_ (`metrics-core` and `metrics-annotation` modules), _Metrics AspectJ_ requires
 the AspectJ `aspectjrt` module:
