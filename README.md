@@ -211,7 +211,7 @@ There would have been ways of working around that though:
 
 ## Spring AOP vs. AspectJ
 
-[Spring AOP][] and [AspectJ][] provides Aspect Oriented Programming in two very different ways:
+[Spring AOP][] and [AspectJ][] provides Aspect Oriented Programming (AOP) in two very different ways:
 + AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW)
   and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
 + Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving
