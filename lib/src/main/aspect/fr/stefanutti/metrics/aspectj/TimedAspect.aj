@@ -20,7 +20,7 @@ import com.codahale.metrics.annotation.Timed;
 
 final aspect TimedAspect {
 
-    pointcut timed(Profiled object) : execution(@Timed * Profiled+.*(..)) && this(object);
+    pointcut timed(Profiled object) : execution(@Timed * (@Metrics Profiled+).*(..)) && this(object);
 
     Object around(Profiled object) : timed(object) {
         Timer timer = (Timer) object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString());

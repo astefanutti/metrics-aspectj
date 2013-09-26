@@ -35,12 +35,13 @@ final aspect MetricAspect {
     /* packaged-protected */
     final Map<String, Metric> Profiled.metrics = new ConcurrentHashMap<String, Metric>();
 
-    pointcut profiled(Profiled object) : execution(Profiled+.new(..)) && this(object);
+    pointcut profiled(Profiled object) : execution((@Metrics Profiled+).new(..)) && this(object);
 
     after(Profiled object) : profiled(object) {
         ELProcessor elp = newELProcessor(object);
         for (Method method : object.getClass().getDeclaredMethods()) {
             Metric metric;
+            // TODO: handle the case when name is equal to empty String according to Metrics Javadoc
             if (method.isAnnotationPresent(Timed.class)) {
                 MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Metrics.class), elp);
                 Timed timed = method.getAnnotation(Timed.class);
