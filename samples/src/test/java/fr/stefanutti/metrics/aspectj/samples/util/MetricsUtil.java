@@ -17,7 +17,8 @@ package fr.stefanutti.metrics.aspectj.samples.util;
 
 import com.codahale.metrics.MetricRegistry;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class MetricsUtil {
 
