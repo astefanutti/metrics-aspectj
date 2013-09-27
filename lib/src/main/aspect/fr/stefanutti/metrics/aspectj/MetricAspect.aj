@@ -15,9 +15,8 @@
  */
 package fr.stefanutti.metrics.aspectj;
 
-import com.codahale.metrics.Metric;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.SharedMetricRegistries;
+import com.codahale.metrics.*;
+import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 
@@ -26,6 +25,8 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static fr.stefanutti.metrics.aspectj.AnnotatedMetric.newAnnotatedMetric;
+
 final aspect MetricAspect {
 
     declare precedence: MetricAspect, *;
@@ -33,30 +34,36 @@ final aspect MetricAspect {
     declare parents : (@Metrics *) implements Profiled;
 
     /* packaged-protected */
-    final Map<String, Metric> Profiled.metrics = new ConcurrentHashMap<String, Metric>();
+    final Map<String, AnnotatedMetric> Profiled.metrics = new ConcurrentHashMap<String, AnnotatedMetric>();
 
     pointcut profiled(Profiled object) : execution((@Metrics Profiled+).new(..)) && this(object);
 
     after(Profiled object) : profiled(object) {
         ELProcessor elp = newELProcessor(object);
         for (Method method : object.getClass().getDeclaredMethods()) {
-            Metric metric;
             // TODO: handle the case when name is equal to empty String according to Metrics Javadoc
+            // TODO: factorize the repeating logic
             if (method.isAnnotationPresent(Timed.class)) {
                 MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Metrics.class), elp);
                 Timed timed = method.getAnnotation(Timed.class);
                 String name = (String) elp.eval(timed.name());
-                metric = registry.timer(timed.absolute() ? name : MetricRegistry.name(object.getClass(), name));
-            } else if (method.isAnnotationPresent(Metered.class)) {
+                Timer timer = registry.timer(timed.absolute() ? name : MetricRegistry.name(object.getClass(), name));
+                object.metrics.put(method.toString(), newAnnotatedMetric(timer, timed));
+            }
+            if (method.isAnnotationPresent(Metered.class)) {
                 MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Metrics.class), elp);
                 Metered metered = method.getAnnotation(Metered.class);
                 String name = (String) elp.eval(metered.name());
-                metric = registry.meter(metered.absolute() ? name : MetricRegistry.name(object.getClass(), name));
-            } else {
-                continue;
+                Meter meter = registry.meter(metered.absolute() ? name : MetricRegistry.name(object.getClass(), name));
+                object.metrics.put(method.toString(), newAnnotatedMetric(meter, metered));
             }
-
-            object.metrics.put(method.toString(), metric);
+            if (method.isAnnotationPresent(ExceptionMetered.class)) {
+                MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Metrics.class), elp);
+                ExceptionMetered metered = method.getAnnotation(ExceptionMetered.class);
+                String name = (String) elp.eval(metered.name());
+                Meter meter = registry.meter(metered.absolute() ? name : MetricRegistry.name(object.getClass(), name));
+                object.metrics.put(method.toString(), newAnnotatedMetric(meter, metered));
+            }
         }
     }
 

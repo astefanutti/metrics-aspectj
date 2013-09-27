@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.util;
+package fr.stefanutti.metrics.aspectj;
 
-import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.annotation.ExceptionMetered;
 
-import java.util.HashSet;
-import java.util.Set;
+final aspect ExceptionMeteredAspect {
 
-public final class MetricsUtil {
+    pointcut exceptionMetered(Profiled object) : execution(@ExceptionMetered * (@Metrics Profiled+).*(..)) && this(object);
 
-    private MetricsUtil() {
-    }
-
-    public static Set<String> absoluteMetricNameSet(Class<?> clazz, String... names) {
-        Set<String> set = new HashSet<String>(names.length);
-        for (String name : names) {
-            set.add(absoluteMetricName(clazz, name));
+    after(Profiled object) throwing (Throwable throwable) : exceptionMetered(object) {
+        AnnotatedMetric metric = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString());
+        if (metric.getAnnotation(ExceptionMetered.class).cause().isInstance(throwable)) {
+            metric.getMetric(Meter.class).mark();
         }
-
-        return set;
-    }
-
-    public static String absoluteMetricName(Class<?> clazz, String name) {
-        return MetricRegistry.name(clazz, name);
     }
 }

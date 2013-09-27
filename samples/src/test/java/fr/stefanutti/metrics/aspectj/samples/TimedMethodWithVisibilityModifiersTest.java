@@ -18,17 +18,18 @@ package fr.stefanutti.metrics.aspectj.samples;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
+import fr.stefanutti.metrics.aspectj.samples.util.MetricsUtil;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Set;
+
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 import static org.fest.reflect.core.Reflection.method;
-
-import static fr.stefanutti.metrics.aspectj.samples.util.MetricsUtil.absoluteMetricsNameSet;
 
 public class TimedMethodWithVisibilityModifiersTest {
 
@@ -37,6 +38,10 @@ public class TimedMethodWithVisibilityModifiersTest {
     private final static String[] TIMER_NAMES = {"publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"};
 
     private TimedMethodWithVisibilityModifiers instance;
+
+    private Set<String> absoluteMetricNames() {
+        return MetricsUtil.absoluteMetricNameSet(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES);
+    }
 
     @Before
     public void createTimedInstance() {
@@ -52,7 +57,7 @@ public class TimedMethodWithVisibilityModifiersTest {
     public void timedMethodsNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricsNameSet(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES))));
+        assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
 
         // Make sure that all the timers haven't been called yet
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
@@ -60,6 +65,7 @@ public class TimedMethodWithVisibilityModifiersTest {
 
     @Test
     public void callTimedMethodsOnce() {
+        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
         // Call the timed methods and assert they've all been timed once

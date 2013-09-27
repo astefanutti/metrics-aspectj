@@ -23,7 +23,7 @@ final aspect TimedAspect {
     pointcut timed(Profiled object) : execution(@Timed * (@Metrics Profiled+).*(..)) && this(object);
 
     Object around(Profiled object) : timed(object) {
-        Timer timer = (Timer) object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString());
+        Timer timer = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Timer.class);
         Timer.Context context = timer.time();
         try {
             return proceed(object);

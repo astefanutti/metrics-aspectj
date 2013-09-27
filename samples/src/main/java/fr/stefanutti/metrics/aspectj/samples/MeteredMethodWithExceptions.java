@@ -13,17 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj;
+package fr.stefanutti.metrics.aspectj.samples;
 
-import com.codahale.metrics.Meter;
+import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
+import fr.stefanutti.metrics.aspectj.Metrics;
 
-final aspect MeteredAspect {
+import java.util.concurrent.Callable;
 
-    pointcut metered(Profiled object) : execution(@Metered * (@Metrics Profiled+).*(..)) && this(object);
+@Metrics(registry = "'exceptionMeterRegistry'")
+public class MeteredMethodWithExceptions {
 
-    before(Profiled object) : metered(object) {
-        Meter meter = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Meter.class);
-        meter.mark();
+    @ExceptionMetered(name = "'illegalArgumentExceptionMeteredMethod'", cause = IllegalArgumentException.class)
+    public void illegalArgumentExceptionMeteredMethod(Runnable runnable) {
+        runnable.run();
+    }
+
+    @ExceptionMetered(name = "'exceptionMeteredMethod'", cause = Exception.class)
+    public void exceptionMeteredMethod(Runnable runnable) {
+        runnable.run();
     }
 }
