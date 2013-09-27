@@ -17,8 +17,9 @@ package fr.stefanutti.metrics.aspectj.samples;
 
 import com.codahale.metrics.annotation.Metered;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics(registry = "'singleMeterRegistry'")
+@Metrics @Registry("'singleMeterRegistry'")
 public class MeteredMethodWithRegistryFromString {
 
     @Metered(name = "'singleMeteredMethod'")

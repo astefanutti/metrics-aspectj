@@ -18,8 +18,9 @@ package fr.stefanutti.metrics.aspectj.samples;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics(registry = "this.registry")
+@Metrics @Registry("this.registry")
 public class TimedMethodWithRegistryFromBeanProperty {
 
     private final MetricRegistry registry;

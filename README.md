@@ -106,6 +106,27 @@ For example, a method can be annotated with the `@Timed` annotation so that its 
 ```java
 import com.codahale.metrics.annotation.Timed;
 
+...
+public class TimedMethod {
+
+    @Timed(name = "'timerName'")
+    public void timedMethod() {
+    }
+}
+...
+```
+
+In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
+and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
+
+### Metrics activation and the `@Metrics` annotation
+
+In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
+```java
+import com.codahale.metrics.annotation.Timed;
+import fr.stefanutti.metrics.aspectj.Metrics;
+
+@Metrics
 public class TimedMethod {
 
     @Timed(name = "'timerName'")
@@ -114,15 +135,17 @@ public class TimedMethod {
 }
 ```
 
-In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
-and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
+At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan all the declared methods of the target class
+that are annotated with the _Metrics_ annotations, then create and register the corresponding `Metric`s and finally
+weave its aspects around these methods so that at runtime, these generated `Metric`s get called according
+to the `Metrics` annotations specification.
 
-### Registry Resolution and the `@Metrics` Annotation
+### Registry Resolution and the `@Registry` Annotation
 
-The `@Metrics` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
+The `@Registry` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
 It targets classes and is ultimately used to create the `Metric`s and weave the _Metrics AspectJ_ aspects into the annotated class.
 
-The `@Metrics.registry` mandatory attribute must be a valid EL expression that evaluates either to
+The `@Registry.value` mandatory `String` attribute must be a valid EL expression that evaluates either to
 the registry name or the registry instance. The result of that EL expression evaluation is the `MetricRegistry`
 used to register the `Metric` generated each time a _Metrics_ annotation is present on that class methods into.
 
@@ -131,8 +154,10 @@ In that case the registry is resolved using `SharedMetricRegistries.getOrCreate(
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics(registry = "'registryName'")
+@Metrics
+@Registry("'registryName'")
 public class TimedMethodWithRegistryByName {
 
     @Timed(name = "'timerName'")
@@ -146,8 +171,10 @@ The `MetricRegistry` can be resolved with an EL expression that evaluates to a b
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics(registry = "this.registry")
+@Metrics
+@Registry("this.registry")
 public class TimedMethodWithRegistryFromProperty {
 
     private final MetricRegistry registry;
@@ -168,11 +195,12 @@ public class TimedMethodWithRegistryFromProperty {
 
 Or the `MetricRegistry` can be resolved with an EL expression that directly accesses to the `SharedMetricRegistries` class:
 ```java
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics(registry = "SharedMetricRegistries.getOrCreate('staticRegistry')")
+@Metrics
+@Registry("SharedMetricRegistries.getOrCreate('staticRegistry')")
 public class TimedMethodWithSharedMetricRegistry {
 
     @Timed(name = "'timerName'")

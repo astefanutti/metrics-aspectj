@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples;
+package fr.stefanutti.metrics.aspectj;
 
-import com.codahale.metrics.annotation.Timed;
-import fr.stefanutti.metrics.aspectj.Metrics;
-import fr.stefanutti.metrics.aspectj.Registry;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Metrics @Registry("SharedMetricRegistries.getOrCreate('staticRegistry')")
-public class TimedMethodWithRegistryFromSharedMetricRegistries {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface Registry {
 
-    @Timed(name = "'singleTimedMethod'")
-    public void singleTimedMethod() {
-    }
+    String value();
 }

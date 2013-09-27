@@ -17,8 +17,9 @@ package fr.stefanutti.metrics.aspectj.samples;
 
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics(registry = "'timerRegistryForAbsoluteNamedTimer'")
+@Metrics @Registry("'timerRegistryForAbsoluteNamedTimer'")
 public class TimedMethodWithAbsoluteName {
 
     @Timed(name = "'absolutelyTimedMethod'", absolute = true)

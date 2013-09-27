@@ -17,10 +17,11 @@ package fr.stefanutti.metrics.aspectj.samples;
 
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
 import java.util.List;
 
-@Metrics(registry = "'overloadedTimerRegistry'")
+@Metrics @Registry("'overloadedTimerRegistry'")
 public class TimedMethodOverloaded {
 
     @Timed(name = "'overloadedTimedMethodWithNoArguments'")
