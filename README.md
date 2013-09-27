@@ -96,10 +96,10 @@ module is using the [GlassFish reference implementation](https://glassfish.java.
 
 ## Usage
 
-### The Metrics Annotations
+### The _Metrics_ Annotations
 
 _Metrics_ comes with the [`metrics-annotation`](https://github.com/codahale/metrics/tree/master/metrics-annotation)
-module that contains a series of annotations - `@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`.
+module that contains a series of annotations (`@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`).
 These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
@@ -119,7 +119,7 @@ public class TimedMethod {
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
 and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
 
-### Metrics activation and the `@Metrics` annotation
+### _Metrics_ activation and the `@Metrics` Annotation
 
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
 ```java
@@ -136,11 +136,11 @@ public class TimedMethod {
 ```
 
 At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan all the declared methods of the target class
-that are annotated with the _Metrics_ annotations, then create and register the corresponding `Metric`s and finally
-weave its aspects around these methods so that at runtime, these generated `Metric`s get called according
-to the `Metrics` annotations specification.
+that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric`s and finally
+weave its aspects around these methods, so that at runtime, these generated `Metric`s get called according
+to the _Metrics_ annotations specification.
 
-### Registry Resolution and the `@Registry` Annotation
+### _Metrics_ Registry Resolution and the `@Registry` Annotation
 
 The `@Registry` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric`s into.
 It targets classes and is ultimately used to create the `Metric`s and weave the _Metrics AspectJ_ aspects into the annotated class.
@@ -150,7 +150,7 @@ the registry name or the registry instance. The result of that EL expression eva
 used to register the `Metric` generated each time a _Metrics_ annotation is present on that class methods into.
 
 The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
-In that case the registry is resolved using `SharedMetricRegistries.getOrCreate(String name)`:
+In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate(java.lang.String)) method:
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
@@ -193,7 +193,7 @@ public class TimedMethodWithRegistryFromProperty {
 }
 ```
 
-Or the `MetricRegistry` can be resolved with an EL expression that directly accesses to the `SharedMetricRegistries` class:
+Or the `MetricRegistry` can be resolved with an EL expression that directly accesses to the [`SharedMetricRegistries`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html) class:
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
