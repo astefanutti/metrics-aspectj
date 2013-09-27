@@ -99,7 +99,11 @@ module is using the [GlassFish reference implementation](https://glassfish.java.
 ### The _Metrics_ Annotations
 
 _Metrics_ comes with the [`metrics-annotation`](https://github.com/codahale/metrics/tree/master/metrics-annotation)
-module that contains a series of annotations (`@ExceptionMetered`, `@Gauge`, `@Metered` and `@Timed`).
+module that contains a series of annotations (
+[`@ExceptionMetered`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html),
+[`@Gauge`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html),
+[`@Metered`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html) and
+[`@Timed`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html)).
 These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
@@ -119,7 +123,7 @@ public class TimedMethod {
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
 and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
 
-### _Metrics_ activation and the `@Metrics` Annotation
+### _Metrics_ Activation and the `@Metrics` Annotation
 
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
 ```java
@@ -150,7 +154,7 @@ the registry name or the registry instance. The result of that EL expression eva
 used to register the `Metric` generated each time a _Metrics_ annotation is present on that class methods into.
 
 The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
-In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate(java.lang.String)) method:
+In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29) method:
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
