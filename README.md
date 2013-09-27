@@ -202,6 +202,7 @@ There would have been ways of working around that though:
     + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient
     + Would have been evaluated at runtime for each candidate join point relying on the Java Reflection API
       thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP
+      in a larger sense
 
 [Annotation inheritance]: http://eclipse.org/aspectj/doc/next/adk15notebook/printable.html#annotation-inheritance
 [Annotation inheritance and pointcut matching]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#annotation-inheritance-and-pointcut-matching
