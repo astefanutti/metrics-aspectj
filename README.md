@@ -125,7 +125,7 @@ and inline around the method invocation with the needed code to time the method 
 
 Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
 Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
-in more details in the [Limitations][] section.
+in more details in the [Limitations](#limitations) section.
 
 ### _Metrics_ Activation and the `@Metrics` Annotation
 
@@ -149,7 +149,7 @@ weave its aspects around these methods, so that at runtime, these generated `Met
 to the _Metrics_ annotations specification.
 
 Note that this annotation won't be inherited if it's placed on an interface or a parent class.
-More details are available in the [Limitations][] section.
+More details are available in the [Limitations](#limitations) section.
 
 ### _Metrics_ Registry Resolution and the `@Registry` Annotation
 
