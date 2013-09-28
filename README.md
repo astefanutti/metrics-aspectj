@@ -123,6 +123,10 @@ public class TimedMethod {
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
 and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
 
+Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
+Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
+in more details in the [Limitations][] section.
+
 ### _Metrics_ Activation and the `@Metrics` Annotation
 
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
@@ -143,6 +147,9 @@ At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan a
 that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric`s and finally
 weave its aspects around these methods, so that at runtime, these generated `Metric`s get called according
 to the _Metrics_ annotations specification.
+
+Note that this annotation won't be inherited if it's placed on an interface or a parent class.
+More details are available in the [Limitations][] section.
 
 ### _Metrics_ Registry Resolution and the `@Registry` Annotation
 
