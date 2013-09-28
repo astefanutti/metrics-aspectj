@@ -25,13 +25,9 @@ import java.lang.annotation.Annotation;
 
     private final Annotation annotation;
 
-    private AnnotatedMetric(Metric metric, Annotation annotation) {
+    AnnotatedMetric(Metric metric, Annotation annotation) {
         this.metric = metric;
         this.annotation = annotation;
-    }
-
-    static AnnotatedMetric newAnnotatedMetric(Metric metric, Annotation annotation) {
-        return new AnnotatedMetric(metric, annotation);
     }
 
     @SuppressWarnings("unchecked")

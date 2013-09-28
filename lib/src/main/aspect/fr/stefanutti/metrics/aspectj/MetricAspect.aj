@@ -15,20 +15,19 @@
  */
 package fr.stefanutti.metrics.aspectj;
 
-import com.codahale.metrics.Meter;
+import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
-import com.codahale.metrics.Timer;
+import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 
 import javax.el.ELProcessor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static fr.stefanutti.metrics.aspectj.AnnotatedMetric.newAnnotatedMetric;
 
 final aspect MetricAspect {
 
@@ -44,29 +43,35 @@ final aspect MetricAspect {
     after(Profiled object) : profiled(object) {
         ELProcessor elp = newELProcessor(object);
         for (Method method : object.getClass().getDeclaredMethods()) {
+            metricAnnotation(object, method, elp, ExceptionMetered.class, new MetricFactory() {
+                @Override
+                public Metric metric(MetricRegistry registry, String name) {
+                    return registry.meter(name);
+                }
+            });
+            metricAnnotation(object, method, elp, Metered.class, new MetricFactory() {
+                @Override
+                public Metric metric(MetricRegistry registry, String name) {
+                    return registry.meter(name);
+                }
+            });
+            metricAnnotation(object, method, elp, Timed.class, new MetricFactory() {
+                @Override
+                public Metric metric(MetricRegistry registry, String name) {
+                    return registry.timer(name);
+                }
+            });
+        }
+    }
+
+    private void metricAnnotation(Profiled object, Method method, ELProcessor elp, Class<? extends Annotation> clazz, MetricFactory factory) {
+        if (method.isAnnotationPresent(clazz)) {
+            MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Registry.class), elp);
+            Annotation annotation = method.getAnnotation(clazz);
             // TODO: handle the case when name is equal to empty String according to Metrics Javadoc
-            // TODO: factorize the repeating logic
-            if (method.isAnnotationPresent(Timed.class)) {
-                MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Registry.class), elp);
-                Timed timed = method.getAnnotation(Timed.class);
-                String name = (String) elp.eval(timed.name());
-                Timer timer = registry.timer(timed.absolute() ? name : MetricRegistry.name(object.getClass(), name));
-                object.metrics.put(method.toString(), newAnnotatedMetric(timer, timed));
-            }
-            if (method.isAnnotationPresent(Metered.class)) {
-                MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Registry.class), elp);
-                Metered metered = method.getAnnotation(Metered.class);
-                String name = (String) elp.eval(metered.name());
-                Meter meter = registry.meter(metered.absolute() ? name : MetricRegistry.name(object.getClass(), name));
-                object.metrics.put(method.toString(), newAnnotatedMetric(meter, metered));
-            }
-            if (method.isAnnotationPresent(ExceptionMetered.class)) {
-                MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Registry.class), elp);
-                ExceptionMetered metered = method.getAnnotation(ExceptionMetered.class);
-                String name = (String) elp.eval(metered.name());
-                Meter meter = registry.meter(metered.absolute() ? name : MetricRegistry.name(object.getClass(), name));
-                object.metrics.put(method.toString(), newAnnotatedMetric(meter, metered));
-            }
+            String name = (String) elp.eval(metricAnnotationName(annotation));
+            Metric metric = factory.metric(registry, metricAnnotationAbsolute(annotation) ? name : MetricRegistry.name(object.getClass(), name));
+            object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));
         }
     }
 
@@ -86,5 +91,35 @@ final aspect MetricAspect {
         elp.defineBean("this", object);
         elp.getELManager().importClass(SharedMetricRegistries.class.getName());
         return elp;
+    }
+
+    private interface MetricFactory {
+        Metric metric(MetricRegistry registry, String name);
+    }
+
+    private static String metricAnnotationName(Annotation annotation) {
+        if (Gauge.class.isInstance(annotation))
+           return ((Gauge) annotation).name();
+        else if (ExceptionMetered.class.isInstance(annotation))
+           return ((ExceptionMetered) annotation).name();
+        else if (Metered.class.isInstance(annotation))
+            return ((Metered) annotation).name();
+        else if (Timed.class.isInstance(annotation))
+            return ((Timed) annotation).name();
+        else
+            throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
+    }
+
+    private static boolean metricAnnotationAbsolute(Annotation annotation) {
+        if (Gauge.class.isInstance(annotation))
+            return ((Gauge) annotation).absolute();
+        else if (ExceptionMetered.class.isInstance(annotation))
+            return ((ExceptionMetered) annotation).absolute();
+        else if (Metered.class.isInstance(annotation))
+            return ((Metered) annotation).absolute();
+        else if (Timed.class.isInstance(annotation))
+            return ((Timed) annotation).absolute();
+        else
+            throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
     }
 }
