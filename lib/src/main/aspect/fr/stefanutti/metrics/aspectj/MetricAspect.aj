@@ -40,25 +40,28 @@ final aspect MetricAspect {
 
     pointcut profiled(Profiled object) : execution((@Metrics Profiled+).new(..)) && this(object);
 
-    after(Profiled object) : profiled(object) {
-        ELProcessor elp = newELProcessor(object);
-        for (Method method : object.getClass().getDeclaredMethods()) {
+    after(final Profiled object) : profiled(object) {
+        final ELProcessor elp = newELProcessor(object);
+        for (final Method method : object.getClass().getDeclaredMethods()) {
             metricAnnotation(object, method, elp, ExceptionMetered.class, new MetricFactory() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name) {
-                    return registry.meter(name);
+                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                    String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : (String) elp.eval(name);
+                    return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
             metricAnnotation(object, method, elp, Metered.class, new MetricFactory() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name) {
-                    return registry.meter(name);
+                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                    String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
+                    return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
             metricAnnotation(object, method, elp, Timed.class, new MetricFactory() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name) {
-                    return registry.timer(name);
+                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                    String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
+                    return registry.timer(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
         }
@@ -68,9 +71,7 @@ final aspect MetricAspect {
         if (method.isAnnotationPresent(clazz)) {
             MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Registry.class), elp);
             Annotation annotation = method.getAnnotation(clazz);
-            // TODO: handle the case when name is equal to empty String according to Metrics Javadoc
-            String name = (String) elp.eval(metricAnnotationName(annotation));
-            Metric metric = factory.metric(registry, metricAnnotationAbsolute(annotation) ? name : MetricRegistry.name(object.getClass(), name));
+            Metric metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
             object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));
         }
     }
@@ -94,7 +95,7 @@ final aspect MetricAspect {
     }
 
     private interface MetricFactory {
-        Metric metric(MetricRegistry registry, String name);
+        Metric metric(MetricRegistry registry, String name, boolean absolute);
     }
 
     private static String metricAnnotationName(Annotation annotation) {
