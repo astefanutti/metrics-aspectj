@@ -25,6 +25,7 @@ import com.codahale.metrics.annotation.Timed;
 
 import javax.el.ELProcessor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,6 +49,19 @@ final aspect MetricAspect {
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : (String) elp.eval(name);
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
+                }
+            });
+            metricAnnotation(object, method, elp, Gauge.class, new MetricFactory() {
+                @Override
+                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                    String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
+                    return registry.register(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName), new com.codahale.metrics.Gauge<Object>() {
+                        @Override
+                        public Object getValue() {
+                            // TODO: use more efficient technique than reflection
+                            return invokeMethod(method, object);
+                        }
+                    });
                 }
             });
             metricAnnotation(object, method, elp, Metered.class, new MetricFactory() {
@@ -122,5 +136,15 @@ final aspect MetricAspect {
             return ((Timed) annotation).absolute();
         else
             throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
+    }
+
+    private static Object invokeMethod(Method method, Object object) {
+        try {
+            return method.invoke(object);
+        } catch (IllegalAccessException cause) {
+            throw new IllegalStateException("Error while calling method [" + method + "]");
+        } catch (InvocationTargetException cause) {
+            throw new IllegalStateException("Error while calling method [" + method + "]");
+        }
     }
 }
