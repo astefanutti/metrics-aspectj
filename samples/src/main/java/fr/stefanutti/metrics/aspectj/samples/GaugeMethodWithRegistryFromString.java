@@ -16,21 +16,20 @@
 package fr.stefanutti.metrics.aspectj.samples;
 
 import com.codahale.metrics.annotation.Gauge;
-import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
 @Metrics @Registry("'singleGaugeRegistry'")
 public class GaugeMethodWithRegistryFromString {
 
-    private int gauge;
+    private int singleGauge;
 
     @Gauge(name = "'singleGaugeMethod'")
-    public int singleGaugeMethod() {
-        return gauge;
+    public int getSingleGauge() {
+        return singleGauge;
     }
 
-    public void setGauge(int gauge) {
-        this.gauge = gauge;
+    public void setSingleGauge(int gauge) {
+        this.singleGauge = gauge;
     }
 }

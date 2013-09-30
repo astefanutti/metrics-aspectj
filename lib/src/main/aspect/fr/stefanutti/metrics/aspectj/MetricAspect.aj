@@ -55,13 +55,7 @@ final aspect MetricAspect {
                 @Override
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
-                    return registry.register(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName), new com.codahale.metrics.Gauge<Object>() {
-                        @Override
-                        public Object getValue() {
-                            // TODO: use more efficient technique than reflection
-                            return invokeMethod(method, object);
-                        }
-                    });
+                    return registry.register(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName), new ForwardingGauge(method, object));
                 }
             });
             metricAnnotation(object, method, elp, Metered.class, new MetricFactory() {
@@ -92,13 +86,12 @@ final aspect MetricAspect {
 
     private MetricRegistry metricRegistry(Registry registry, ELProcessor elp) {
         Object evaluation = elp.eval(registry.value());
-        if (evaluation instanceof String) {
+        if (evaluation instanceof String)
             return SharedMetricRegistries.getOrCreate((String) evaluation);
-        } else if (evaluation instanceof MetricRegistry) {
+        else if (evaluation instanceof MetricRegistry)
             return (MetricRegistry) evaluation;
-        } else {
+        else
             throw new IllegalStateException("Unable to resolve metrics registry from expression [" + registry.value() + "]");
-        }
     }
 
     private ELProcessor newELProcessor(Profiled object) {
@@ -138,13 +131,31 @@ final aspect MetricAspect {
             throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
     }
 
+    public static class ForwardingGauge implements com.codahale.metrics.Gauge<Object> {
+
+        final Method method;
+        final Object object;
+
+        private ForwardingGauge(Method method, Object object) {
+            this.method = method;
+            this.object = object;
+            method.setAccessible(true);
+        }
+
+        @Override
+        public Object getValue() {
+            // TODO: use more efficient technique than reflection
+            return invokeMethod(method, object);
+        }
+    }
+
     private static Object invokeMethod(Method method, Object object) {
         try {
             return method.invoke(object);
         } catch (IllegalAccessException cause) {
-            throw new IllegalStateException("Error while calling method [" + method + "]");
+            throw new IllegalStateException("Error while calling method [" + method + "]", cause);
         } catch (InvocationTargetException cause) {
-            throw new IllegalStateException("Error while calling method [" + method + "]");
+            throw new IllegalStateException("Error while calling method [" + method + "]", cause);
         }
     }
 }

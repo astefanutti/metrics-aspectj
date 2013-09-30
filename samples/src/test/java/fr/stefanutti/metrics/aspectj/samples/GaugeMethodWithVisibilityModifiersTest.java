@@ -19,24 +19,33 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
+import fr.stefanutti.metrics.aspectj.samples.util.MetricsUtil;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Set;
+
+import static org.fest.reflect.core.Reflection.method;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class GaugeMethodWithRegistryFromStringTest {
+public class GaugeMethodWithVisibilityModifiersTest {
 
-    private final static String REGISTRY_NAME = "singleGaugeRegistry";
+    private final static String REGISTRY_NAME = "visibilityGaugeRegistry";
 
-    private final static String GAUGE_NAME = GaugeMethodWithRegistryFromString.class.getName() + "." + "singleGaugeMethod";
+    private final static String[] GAUGE_NAMES = {"publicGaugeMethod", "packagePrivateGaugeMethod", "protectedGaugeMethod", "privateGaugeMethod"};
 
-    private GaugeMethodWithRegistryFromString instance;
+    private GaugeMethodWithVisibilityModifiers instance;
+
+    private Set<String> absoluteMetricNames() {
+        return MetricsUtil.absoluteMetricNameSet(GaugeMethodWithVisibilityModifiers.class, GAUGE_NAMES);
+    }
 
     @Before
     public void createGaugeInstance() {
-        instance = new GaugeMethodWithRegistryFromString();
+        instance = new GaugeMethodWithVisibilityModifiers();
     }
 
     @After
@@ -45,27 +54,27 @@ public class GaugeMethodWithRegistryFromStringTest {
     }
 
     @Test
-    public void gaugeCalledWithDefaultValue() {
+    public void gaugesCalledWithDefaultValues() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getGauges(), hasKey(GAUGE_NAME));
-        @SuppressWarnings("unchecked")
-        Gauge<Integer> gauge = registry.getGauges().get(GAUGE_NAME);
+        assertThat(registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
 
-        // Make sure that the gauge has the expected value
-        assertThat(gauge.getValue(), is(equalTo(0)));
+        // Make sure that the gauges have the expected values
+        assertThat(registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(0))));
     }
 
     @Test
-    public void callGaugeAfterSetterCall() {
+    public void callGaugesAfterSetterCalls() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getGauges(), hasKey(GAUGE_NAME));
-        @SuppressWarnings("unchecked")
-        Gauge<Integer> gauge = registry.getGauges().get(GAUGE_NAME);
 
-        // Call the setter method and assert the gauge is up-to-date
-        instance.setSingleGauge(1);
-        assertThat(gauge.getValue(), is(equalTo(1)));
+        // Call the setter methods
+        instance.setPublicGauge(1);
+        instance.setPackagePrivateGauge(1);
+        instance.setProtectedGauge(1);
+        method("setPrivateGauge").withParameterTypes(int.class).in(instance).invoke(1);
+
+        // And assert the gauges are up-to-date
+        assertThat(registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(1))));
     }
 }
