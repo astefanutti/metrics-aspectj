@@ -11,12 +11,25 @@
     <name>Metrics AspectJ Parent</name>
     <inceptionYear>2013</inceptionYear>
 
+    <developers>
+        <developer>
+            <name>Antonin Stefanutti</name>
+            <email>antonin.stefanutti@gmail.com</email>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
         </license>
     </licenses>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/astefanutti/metrics-aspectj/issues</url>
+    </issueManagement>
 
     <scm>
         <connection>scm:git:git@github.com:astefanutti/metrics-aspectj.git</connection>
