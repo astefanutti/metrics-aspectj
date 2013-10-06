@@ -17,13 +17,11 @@ package fr.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 
-import javax.el.ELProcessor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,63 +40,46 @@ final aspect MetricAspect {
     pointcut profiled(Profiled object) : execution((@Metrics Profiled+).new(..)) && this(object);
 
     after(final Profiled object) : profiled(object) {
-        final ELProcessor elp = newELProcessor(object);
+        final MetricStrategy strategy = MetricStrategyFactory.newInstance(object);
         for (final Method method : object.getClass().getDeclaredMethods()) {
-            metricAnnotation(object, method, elp, ExceptionMetered.class, new MetricFactory() {
+            metricAnnotation(object, method, strategy, ExceptionMetered.class, new MetricFactory() {
                 @Override
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
-                    String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : (String) elp.eval(name);
+                    String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : strategy.resolveMetricName(name);
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
-            metricAnnotation(object, method, elp, Gauge.class, new MetricFactory() {
+            metricAnnotation(object, method, strategy, Gauge.class, new MetricFactory() {
                 @Override
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
-                    String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
+                    String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
                     return registry.register(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName), new ForwardingGauge(method, object));
                 }
             });
-            metricAnnotation(object, method, elp, Metered.class, new MetricFactory() {
+            metricAnnotation(object, method, strategy, Metered.class, new MetricFactory() {
                 @Override
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
-                    String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
+                    String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
-            metricAnnotation(object, method, elp, Timed.class, new MetricFactory() {
+            metricAnnotation(object, method, strategy, Timed.class, new MetricFactory() {
                 @Override
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
-                    String finalName = name.isEmpty() ? method.getName() : (String) elp.eval(name);
+                    String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
                     return registry.timer(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
         }
     }
 
-    private void metricAnnotation(Profiled object, Method method, ELProcessor elp, Class<? extends Annotation> clazz, MetricFactory factory) {
+    private void metricAnnotation(Profiled object, Method method, MetricStrategy strategy, Class<? extends Annotation> clazz, MetricFactory factory) {
         if (method.isAnnotationPresent(clazz)) {
-            MetricRegistry registry = metricRegistry(object.getClass().getAnnotation(Registry.class), elp);
+            MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Registry.class).value());
             Annotation annotation = method.getAnnotation(clazz);
             Metric metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
             object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));
         }
-    }
-
-    private MetricRegistry metricRegistry(Registry registry, ELProcessor elp) {
-        Object evaluation = elp.eval(registry.value());
-        if (evaluation instanceof String)
-            return SharedMetricRegistries.getOrCreate((String) evaluation);
-        else if (evaluation instanceof MetricRegistry)
-            return (MetricRegistry) evaluation;
-        else
-            throw new IllegalStateException("Unable to resolve metrics registry from expression [" + registry.value() + "]");
-    }
-
-    private ELProcessor newELProcessor(Profiled object) {
-        ELProcessor elp = new ELProcessor();
-        elp.defineBean("this", object);
-        elp.getELManager().importClass(SharedMetricRegistries.class.getName());
-        return elp;
     }
 
     private interface MetricFactory {
@@ -131,6 +112,7 @@ final aspect MetricAspect {
             throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
     }
 
+    // TODO: should be made private (impact unit tests that use reflection to call the getValue() method)
     public static class ForwardingGauge implements com.codahale.metrics.Gauge<Object> {
 
         final Method method;

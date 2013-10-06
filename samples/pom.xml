@@ -11,6 +11,12 @@
 
     <artifactId>metrics-aspectj-samples</artifactId>
     <name>Metrics AspectJ Samples</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>el</module>
+        <module>se</module>
+    </modules>
 
     <build>
         <plugins>
@@ -52,11 +58,6 @@
         </dependency>
 
         <!-- test dependencies -->
-
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.el</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
