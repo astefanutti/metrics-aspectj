@@ -120,7 +120,6 @@ public class TimedMethod {
     public void timedMethod() {
     }
 }
-...
 ```
 
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
@@ -128,8 +127,10 @@ Optionally, the `Metric` name can be resolved with an EL expression that evaluat
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 
-@Metrics
+...
 public class TimedMethod {
+
+    private long id;
 
     public long getId() {
         return id;
