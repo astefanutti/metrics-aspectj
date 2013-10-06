@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("${this.registry}")
-public class TimedMethodWithRegistryFromBeanProperty {
+@Metrics @Registry("timerWithElRegistry")
+public class TimedMethodWithNameFromElExpression {
 
-    private final MetricRegistry registry;
+    private final String timerName;
 
-    public TimedMethodWithRegistryFromBeanProperty(MetricRegistry registry) {
-        this.registry = registry;
+    public TimedMethodWithNameFromElExpression(String timerName) {
+        this.timerName = timerName;
     }
 
-    public MetricRegistry getRegistry() {
-        return registry;
+    public String getTimerName() {
+        return timerName;
     }
 
-    @Timed(name = "singleTimedMethod")
-    public void singleTimedMethod() {
+    @Timed(name = "${this.timerName}")
+    public void expressionTimedMethod() {
     }
 }

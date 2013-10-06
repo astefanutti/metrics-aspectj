@@ -15,32 +15,35 @@
  */
 package fr.stefanutti.metrics.aspectj;
 
+
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.SharedMetricRegistries;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.el.ELProcessor;
 
-public class JavaSeMetricStrategy implements MetricStrategy {
+/* packaged-protected */ class JavaxElMetricStrategyDelegate implements MetricStrategy {
 
-    private static final Pattern expression = Pattern.compile("[#|$]\\{(.*)\\}");
+    private final ELProcessor processor;
 
-    private final MetricStrategy seDelegate = new JavaSeMetricStrategyDelegate();
+    JavaxElMetricStrategyDelegate(Object object) {
+        processor = new ELProcessor();
+        processor.defineBean("this", object);
+        processor.getELManager().importClass(SharedMetricRegistries.class.getName());
+    }
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
-        Matcher matcher = expression.matcher(registry);
-        if (matcher.matches())
-            throw new UnsupportedOperationException("Unsupported EL expression [" + registry + "] evaluation as no EL implementation is available");
+        Object evaluation = processor.eval(registry);
+        if (evaluation instanceof String)
+            return SharedMetricRegistries.getOrCreate((String) evaluation);
+        else if (evaluation instanceof MetricRegistry)
+            return (MetricRegistry) evaluation;
         else
-            return seDelegate.resolveMetricRegistry(registry);
+            throw new IllegalStateException("Unable to resolve metrics registry from expression [" + registry + "]");
     }
 
     @Override
     public String resolveMetricName(String name) {
-        Matcher matcher = expression.matcher(name);
-        if (matcher.matches())
-            throw new UnsupportedOperationException("Unsupported EL expression [" + name + "] evaluation as no EL implementation is available");
-        else
-            return seDelegate.resolveMetricName(name);
+        return (String) processor.eval(name);
     }
 }

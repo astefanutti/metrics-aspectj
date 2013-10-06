@@ -13,27 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Timed;
-import fr.stefanutti.metrics.aspectj.Metrics;
-import fr.stefanutti.metrics.aspectj.Registry;
+import com.codahale.metrics.SharedMetricRegistries;
 
-@Metrics @Registry("${this.registry}")
-public class TimedMethodWithRegistryFromBeanProperty {
+/* packaged-protected */ class JavaSeMetricStrategyDelegate implements MetricStrategy {
 
-    private final MetricRegistry registry;
-
-    public TimedMethodWithRegistryFromBeanProperty(MetricRegistry registry) {
-        this.registry = registry;
+    @Override
+    public MetricRegistry resolveMetricRegistry(String registry) {
+        return SharedMetricRegistries.getOrCreate(registry);
     }
 
-    public MetricRegistry getRegistry() {
-        return registry;
-    }
-
-    @Timed(name = "singleTimedMethod")
-    public void singleTimedMethod() {
+    @Override
+    public String resolveMetricName(String name) {
+        return name;
     }
 }

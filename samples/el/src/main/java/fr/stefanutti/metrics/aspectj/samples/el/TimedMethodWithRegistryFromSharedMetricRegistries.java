@@ -19,10 +19,10 @@ import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("SharedMetricRegistries.getOrCreate('staticRegistry')")
+@Metrics @Registry("${SharedMetricRegistries.getOrCreate('staticRegistry')}")
 public class TimedMethodWithRegistryFromSharedMetricRegistries {
 
-    @Timed(name = "'singleTimedMethod'")
+    @Timed(name = "singleTimedMethod")
     public void singleTimedMethod() {
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
@@ -21,11 +21,11 @@ import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
 @Metrics @Registry("${this.registry}")
-public class TimedMethodWithRegistryFromBeanProperty {
+public class TimedMethodWithRegistryFromElExpression {
 
     private final MetricRegistry registry;
 
-    public TimedMethodWithRegistryFromBeanProperty(MetricRegistry registry) {
+    public TimedMethodWithRegistryFromElExpression(MetricRegistry registry) {
         this.registry = registry;
     }
 

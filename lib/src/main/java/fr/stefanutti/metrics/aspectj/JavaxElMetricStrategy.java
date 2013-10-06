@@ -15,35 +15,38 @@
  */
 package fr.stefanutti.metrics.aspectj;
 
-
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.SharedMetricRegistries;
 
-import javax.el.ELProcessor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/* packaged-protected */ class JavaxElMetricStrategy implements MetricStrategy {
+public class JavaxElMetricStrategy implements MetricStrategy {
 
-    private final ELProcessor processor;
+    private static final Pattern expression = Pattern.compile("[#|$]\\{(.*)\\}");
+
+    private final MetricStrategy seDelegate;
+    private final MetricStrategy elDelegate;
 
     JavaxElMetricStrategy(Object object) {
-        processor = new ELProcessor();
-        processor.defineBean("this", object);
-        processor.getELManager().importClass(SharedMetricRegistries.class.getName());
+        seDelegate = new JavaSeMetricStrategyDelegate();
+        elDelegate = new JavaxElMetricStrategyDelegate(object);
     }
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
-        Object evaluation = processor.eval(registry);
-        if (evaluation instanceof String)
-            return SharedMetricRegistries.getOrCreate((String) evaluation);
-        else if (evaluation instanceof MetricRegistry)
-            return (MetricRegistry) evaluation;
+        Matcher matcher = expression.matcher(registry);
+        if (matcher.matches())
+            return elDelegate.resolveMetricRegistry(matcher.group(1));
         else
-            throw new IllegalStateException("Unable to resolve metrics registry from expression [" + registry + "]");
+            return seDelegate.resolveMetricRegistry(registry);
     }
 
     @Override
     public String resolveMetricName(String name) {
-        return (String) processor.eval(name);
+        Matcher matcher = expression.matcher(name);
+        if (matcher.matches())
+            return elDelegate.resolveMetricName(matcher.group(1));
+        else
+            return seDelegate.resolveMetricName(name);
     }
 }

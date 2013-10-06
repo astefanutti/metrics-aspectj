@@ -15,25 +15,24 @@
  */
 package fr.stefanutti.metrics.aspectj.samples.el;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("${this.registry}")
-public class TimedMethodWithRegistryFromBeanProperty {
+@Metrics @Registry("timerWithElRegistry")
+public class TimedMethodWithNameFromElExpression {
 
-    private final MetricRegistry registry;
+    private final long id;
 
-    public TimedMethodWithRegistryFromBeanProperty(MetricRegistry registry) {
-        this.registry = registry;
+    public TimedMethodWithNameFromElExpression(long id) {
+        this.id = id;
     }
 
-    public MetricRegistry getRegistry() {
-        return registry;
+    public long getId() {
+        return id;
     }
 
-    @Timed(name = "singleTimedMethod")
-    public void singleTimedMethod() {
+    @Timed(name = "${'timer'.concat(this.id)}")
+    public void expressionTimedMethod() {
     }
 }
