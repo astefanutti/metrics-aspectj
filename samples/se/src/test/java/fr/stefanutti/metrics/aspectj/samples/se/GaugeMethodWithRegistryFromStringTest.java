@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
+import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
-import com.codahale.metrics.Timer;
-import fr.stefanutti.metrics.aspectj.samples.el.TimedMethodWithRegistryFromString;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,17 +25,17 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class TimedMethodWithRegistryFromStringTest {
+public class GaugeMethodWithRegistryFromStringTest {
 
-    private final static String REGISTRY_NAME = "singleTimerRegistry";
+    private final static String REGISTRY_NAME = "singleGaugeRegistry";
 
-    private final static String TIMER_NAME = TimedMethodWithRegistryFromString.class.getName() + "." + "singleTimedMethod";
+    private final static String GAUGE_NAME = GaugeMethodWithRegistryFromString.class.getName() + "." + "singleGaugeMethod";
 
-    private TimedMethodWithRegistryFromString instance;
+    private GaugeMethodWithRegistryFromString instance;
 
     @Before
-    public void createTimedInstance() {
-        instance = new TimedMethodWithRegistryFromString();
+    public void createGaugeInstance() {
+        instance = new GaugeMethodWithRegistryFromString();
     }
 
     @After
@@ -45,25 +44,27 @@ public class TimedMethodWithRegistryFromStringTest {
     }
 
     @Test
-    public void timedMethodNotCalledYet() {
+    public void gaugeCalledWithDefaultValue() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
-        Timer timer = registry.getTimers().get(TIMER_NAME);
+        assertThat(registry.getGauges(), hasKey(GAUGE_NAME));
+        @SuppressWarnings("unchecked")
+        Gauge<Integer> gauge = registry.getGauges().get(GAUGE_NAME);
 
-        // Make sure that the timer hasn't been called yet
-        assertThat(timer.getCount(), is(equalTo(0L)));
+        // Make sure that the gauge has the expected value
+        assertThat(gauge.getValue(), is(equalTo(0)));
     }
 
     @Test
-    public void callTimedMethodOnce() {
+    public void callGaugeAfterSetterCall() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
-        Timer timer = registry.getTimers().get(TIMER_NAME);
+        assertThat(registry.getGauges(), hasKey(GAUGE_NAME));
+        @SuppressWarnings("unchecked")
+        Gauge<Integer> gauge = registry.getGauges().get(GAUGE_NAME);
 
-        // Call the timed method and assert it's been timed
-        instance.singleTimedMethod();
-        assertThat(timer.getCount(), is(equalTo(1L)));
+        // Call the setter method and assert the gauge is up-to-date
+        instance.setSingleGauge(1);
+        assertThat(gauge.getValue(), is(equalTo(1)));
     }
 }

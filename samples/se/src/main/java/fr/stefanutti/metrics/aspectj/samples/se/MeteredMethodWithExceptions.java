@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
-import com.codahale.metrics.annotation.Timed;
+import com.codahale.metrics.annotation.ExceptionMetered;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("'timerRegistryForAbsoluteNamedTimer'")
-public class TimedMethodWithAbsoluteName {
+@Metrics @Registry("exceptionMeterRegistry")
+public class MeteredMethodWithExceptions {
 
-    @Timed(name = "'absolutelyTimedMethod'", absolute = true)
-    public void absolutelyTimedMethod() {
+    @ExceptionMetered(name = "illegalArgumentExceptionMeteredMethod", cause = IllegalArgumentException.class)
+    public void illegalArgumentExceptionMeteredMethod(Runnable runnable) {
+        runnable.run();
+    }
+
+    @ExceptionMetered(name = "exceptionMeteredMethod", cause = Exception.class)
+    public void exceptionMeteredMethod(Runnable runnable) {
+        runnable.run();
     }
 }

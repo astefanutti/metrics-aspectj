@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.annotation.Metered;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("'singleMeterRegistry'")
+@Metrics @Registry("singleMeterRegistry")
 public class MeteredMethodWithRegistryFromString {
 
-    @Metered(name = "'singleMeteredMethod'")
+    @Metered(name = "singleMeteredMethod")
     public void singleMeteredMethod() {
     }
 }

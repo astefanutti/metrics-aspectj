@@ -17,7 +17,6 @@ package fr.stefanutti.metrics.aspectj.samples.el;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
-import fr.stefanutti.metrics.aspectj.samples.el.TimedMethodWithRegistryFromBeanProperty;
 import org.junit.Before;
 import org.junit.Test;
 

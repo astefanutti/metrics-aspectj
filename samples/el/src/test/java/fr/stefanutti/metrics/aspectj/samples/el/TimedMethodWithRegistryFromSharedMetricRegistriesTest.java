@@ -18,7 +18,6 @@ package fr.stefanutti.metrics.aspectj.samples.el;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
-import fr.stefanutti.metrics.aspectj.samples.el.TimedMethodWithRegistryFromSharedMetricRegistries;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

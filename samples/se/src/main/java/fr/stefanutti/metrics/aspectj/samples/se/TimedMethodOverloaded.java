@@ -13,16 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("'singleTimerRegistry'")
-public class TimedMethodWithRegistryFromString {
+import java.util.List;
 
-    @Timed(name = "'singleTimedMethod'")
-    public void singleTimedMethod() {
+@Metrics @Registry("overloadedTimerRegistry")
+public class TimedMethodOverloaded {
+
+    @Timed(name = "overloadedTimedMethodWithNoArguments")
+    public void overloadedTimedMethod() {
+    }
+
+    @Timed(name = "overloadedTimedMethodWithStringArgument")
+    public void overloadedTimedMethod(String string) {
+    }
+
+    @Timed(name = "overloadedTimedMethodWithListOfStringArgument")
+    public void overloadedTimedMethod(List<String> strings) {
+    }
+
+    @Timed(name = "overloadedTimedMethodWithObjectArgument")
+    public void overloadedTimedMethod(Object object) {
     }
 }

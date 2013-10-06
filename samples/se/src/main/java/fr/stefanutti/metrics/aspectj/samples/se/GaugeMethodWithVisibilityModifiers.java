@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.annotation.Gauge;
-import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("'visibilityGaugeRegistry'")
+@Metrics @Registry("visibilityGaugeRegistry")
 public class GaugeMethodWithVisibilityModifiers {
 
     private int publicGauge;
@@ -31,7 +30,7 @@ public class GaugeMethodWithVisibilityModifiers {
 
     private int privateGauge;
 
-    @Gauge(name = "'publicGaugeMethod'")
+    @Gauge(name = "publicGaugeMethod")
     public int getPublicGaugeMethod() {
         return publicGauge;
     }
@@ -40,7 +39,7 @@ public class GaugeMethodWithVisibilityModifiers {
         publicGauge = gauge;
     }
 
-    @Gauge(name = "'packagePrivateGaugeMethod'")
+    @Gauge(name = "packagePrivateGaugeMethod")
     int getPackagePrivateGauge() {
         return packagePrivateGauge;
     }
@@ -49,7 +48,7 @@ public class GaugeMethodWithVisibilityModifiers {
         packagePrivateGauge = gauge;
     }
 
-    @Gauge(name = "'protectedGaugeMethod'")
+    @Gauge(name = "protectedGaugeMethod")
     protected int getProtectedGauge() {
         return protectedGauge;
     }
@@ -58,7 +57,7 @@ public class GaugeMethodWithVisibilityModifiers {
         protectedGauge = gauge;
     }
 
-    @Gauge(name = "'privateGaugeMethod'")
+    @Gauge(name = "privateGaugeMethod")
     private int getPrivateGauge() {
         return privateGauge;
     }

@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
-import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
-import fr.stefanutti.metrics.aspectj.samples.el.MeteredMethodWithRegistryFromString;
+import com.codahale.metrics.Timer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,17 +25,17 @@ import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class MeteredMethodWithRegistryFromStringTest {
+public class TimedMethodWithRegistryFromStringTest {
 
-    private final static String REGISTRY_NAME = "singleMeterRegistry";
+    private final static String REGISTRY_NAME = "singleTimerRegistry";
 
-    private final static String METER_NAME = MeteredMethodWithRegistryFromString.class.getName() + "." + "singleMeteredMethod";
+    private final static String TIMER_NAME = TimedMethodWithRegistryFromString.class.getName() + "." + "singleTimedMethod";
 
-    private MeteredMethodWithRegistryFromString instance;
+    private TimedMethodWithRegistryFromString instance;
 
     @Before
-    public void createMeteredInstance() {
-        instance = new MeteredMethodWithRegistryFromString();
+    public void createTimedInstance() {
+        instance = new TimedMethodWithRegistryFromString();
     }
 
     @After
@@ -45,25 +44,25 @@ public class MeteredMethodWithRegistryFromStringTest {
     }
 
     @Test
-    public void meteredMethodNotCalledYet() {
+    public void timedMethodNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getMeters(), hasKey(METER_NAME));
-        Meter meter = registry.getMeters().get(METER_NAME);
+        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
 
-        // Make sure that the meter hasn't been called yet
-        assertThat(meter.getCount(), is(equalTo(0L)));
+        // Make sure that the timer hasn't been called yet
+        assertThat(timer.getCount(), is(equalTo(0L)));
     }
 
     @Test
-    public void callMeteredMethodOnce() {
+    public void callTimedMethodOnce() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getMeters(), hasKey(METER_NAME));
-        Meter meter = registry.getMeters().get(METER_NAME);
+        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
 
-        // Call the metered method and assert it's been marked
-        instance.singleMeteredMethod();
-        assertThat(meter.getCount(), is(equalTo(1L)));
+        // Call the timed method and assert it's been timed
+        instance.singleTimedMethod();
+        assertThat(timer.getCount(), is(equalTo(1L)));
     }
 }

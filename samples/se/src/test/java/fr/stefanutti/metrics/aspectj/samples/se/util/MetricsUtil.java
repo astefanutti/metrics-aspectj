@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se.util;
 
-import com.codahale.metrics.annotation.Gauge;
-import fr.stefanutti.metrics.aspectj.Metrics;
-import fr.stefanutti.metrics.aspectj.Registry;
+import com.codahale.metrics.MetricRegistry;
 
-@Metrics @Registry("'singleGaugeRegistry'")
-public class GaugeMethodWithRegistryFromString {
+import java.util.HashSet;
+import java.util.Set;
 
-    private int singleGauge;
+public final class MetricsUtil {
 
-    @Gauge(name = "'singleGaugeMethod'")
-    public int getSingleGauge() {
-        return singleGauge;
+    private MetricsUtil() {
     }
 
-    public void setSingleGauge(int gauge) {
-        this.singleGauge = gauge;
+    public static Set<String> absoluteMetricNameSet(Class<?> clazz, String... names) {
+        Set<String> set = new HashSet<String>(names.length);
+        for (String name : names) {
+            set.add(absoluteMetricName(clazz, name));
+        }
+
+        return set;
+    }
+
+    public static String absoluteMetricName(Class<?> clazz, String name) {
+        return MetricRegistry.name(clazz, name);
     }
 }

@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("'visibilityTimerRegistry'")
-public class TimedMethodWithVisibilityModifiers {
+@Metrics @Registry("singleTimerRegistry")
+public class TimedMethodWithRegistryFromString {
 
-    @Timed(name = "'publicTimedMethod'")
-    public void publicTimedMethod() {
-    }
-
-    @Timed(name = "'packagePrivateTimedMethod'")
-    void packagePrivateTimedMethod() {
-    }
-
-    @Timed(name = "'protectedTimedMethod'")
-    protected void protectedTimedMethod() {
-    }
-
-    @Timed(name = "'privateTimedMethod'")
-    private void privateTimedMethod() {
+    @Timed(name = "singleTimedMethod")
+    public void singleTimedMethod() {
     }
 }

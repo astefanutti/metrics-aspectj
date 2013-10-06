@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
-import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Gauge;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("'exceptionMeterRegistry'")
-public class MeteredMethodWithExceptions {
+@Metrics @Registry("singleGaugeRegistry")
+public class GaugeMethodWithRegistryFromString {
 
-    @ExceptionMetered(name = "'illegalArgumentExceptionMeteredMethod'", cause = IllegalArgumentException.class)
-    public void illegalArgumentExceptionMeteredMethod(Runnable runnable) {
-        runnable.run();
+    private int singleGauge;
+
+    @Gauge(name = "singleGaugeMethod")
+    public int getSingleGauge() {
+        return singleGauge;
     }
 
-    @ExceptionMetered(name = "'exceptionMeteredMethod'", cause = Exception.class)
-    public void exceptionMeteredMethod(Runnable runnable) {
-        runnable.run();
+    public void setSingleGauge(int gauge) {
+        this.singleGauge = gauge;
     }
 }

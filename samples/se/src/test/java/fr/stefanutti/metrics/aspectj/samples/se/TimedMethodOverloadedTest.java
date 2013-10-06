@@ -13,39 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
-import fr.stefanutti.metrics.aspectj.samples.el.util.MetricsUtil;
+import fr.stefanutti.metrics.aspectj.samples.se.util.MetricsUtil;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-import static org.fest.reflect.core.Reflection.method;
+public class TimedMethodOverloadedTest {
 
-public class TimedMethodWithVisibilityModifiersTest {
+    private final static String REGISTRY_NAME = "overloadedTimerRegistry";
 
-    private final static String REGISTRY_NAME = "visibilityTimerRegistry";
+    private final static String[] TIMER_NAMES = {"overloadedTimedMethodWithNoArguments", "overloadedTimedMethodWithStringArgument", "overloadedTimedMethodWithListOfStringArgument", "overloadedTimedMethodWithObjectArgument"};
 
-    private final static String[] TIMER_NAMES = {"publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"};
-
-    private TimedMethodWithVisibilityModifiers instance;
+    private TimedMethodOverloaded instance;
 
     private Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES);
+        return MetricsUtil.absoluteMetricNameSet(TimedMethodOverloaded.class, TIMER_NAMES);
     }
 
     @Before
     public void createTimedInstance() {
-        instance = new TimedMethodWithVisibilityModifiers();
+        instance = new TimedMethodOverloaded();
     }
 
     @After
@@ -54,7 +53,7 @@ public class TimedMethodWithVisibilityModifiersTest {
     }
 
     @Test
-    public void timedMethodsNotCalledYet() {
+    public void overloadedTimedMethodNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
         assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
@@ -64,15 +63,15 @@ public class TimedMethodWithVisibilityModifiersTest {
     }
 
     @Test
-    public void callTimedMethodsOnce() {
+    public void callOverloadedTimedMethodOnce() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
         // Call the timed methods and assert they've all been timed once
-        instance.publicTimedMethod();
-        instance.protectedTimedMethod();
-        instance.packagePrivateTimedMethod();
-        method("privateTimedMethod").in(instance).invoke();
+        instance.overloadedTimedMethod();
+        instance.overloadedTimedMethod("string");
+        instance.overloadedTimedMethod(new Object());
+        instance.overloadedTimedMethod(Arrays.asList("string1", "string2"));
         assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
     }
 }

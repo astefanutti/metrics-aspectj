@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
-import fr.stefanutti.metrics.aspectj.samples.el.util.MetricsUtil;
+import fr.stefanutti.metrics.aspectj.samples.se.util.MetricsUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
-import com.codahale.metrics.Gauge;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
-import fr.stefanutti.metrics.aspectj.samples.el.util.MetricsUtil;
+import com.codahale.metrics.Timer;
+import fr.stefanutti.metrics.aspectj.samples.se.util.MetricsUtil;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -30,21 +30,21 @@ import static org.fest.reflect.core.Reflection.method;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class GaugeMethodWithVisibilityModifiersTest {
+public class TimedMethodWithVisibilityModifiersTest {
 
-    private final static String REGISTRY_NAME = "visibilityGaugeRegistry";
+    private final static String REGISTRY_NAME = "visibilityTimerRegistry";
 
-    private final static String[] GAUGE_NAMES = {"publicGaugeMethod", "packagePrivateGaugeMethod", "protectedGaugeMethod", "privateGaugeMethod"};
+    private final static String[] TIMER_NAMES = {"publicTimedMethod", "packagePrivateTimedMethod", "protectedTimedMethod", "privateTimedMethod"};
 
-    private GaugeMethodWithVisibilityModifiers instance;
+    private TimedMethodWithVisibilityModifiers instance;
 
     private Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(GaugeMethodWithVisibilityModifiers.class, GAUGE_NAMES);
+        return MetricsUtil.absoluteMetricNameSet(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES);
     }
 
     @Before
-    public void createGaugeInstance() {
-        instance = new GaugeMethodWithVisibilityModifiers();
+    public void createTimedInstance() {
+        instance = new TimedMethodWithVisibilityModifiers();
     }
 
     @After
@@ -53,27 +53,25 @@ public class GaugeMethodWithVisibilityModifiersTest {
     }
 
     @Test
-    public void gaugesCalledWithDefaultValues() {
+    public void timedMethodsNotCalledYet() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
+        assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
 
-        // Make sure that the gauges have the expected values
-        assertThat(registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(0))));
+        // Make sure that all the timers haven't been called yet
+        assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
     }
 
     @Test
-    public void callGaugesAfterSetterCalls() {
+    public void callTimedMethodsOnce() {
         assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
-        // Call the setter methods
-        instance.setPublicGauge(1);
-        instance.setPackagePrivateGauge(1);
-        instance.setProtectedGauge(1);
-        method("setPrivateGauge").withParameterTypes(int.class).in(instance).invoke(1);
-
-        // And assert the gauges are up-to-date
-        assertThat(registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(1))));
+        // Call the timed methods and assert they've all been timed once
+        instance.publicTimedMethod();
+        instance.protectedTimedMethod();
+        instance.packagePrivateTimedMethod();
+        method("privateTimedMethod").in(instance).invoke();
+        assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
     }
 }

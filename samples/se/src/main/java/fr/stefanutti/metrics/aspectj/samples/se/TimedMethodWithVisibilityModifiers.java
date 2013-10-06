@@ -13,28 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.el.util;
+package fr.stefanutti.metrics.aspectj.samples.se;
 
-import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Timed;
+import fr.stefanutti.metrics.aspectj.Metrics;
+import fr.stefanutti.metrics.aspectj.Registry;
 
-import java.util.HashSet;
-import java.util.Set;
+@Metrics @Registry("visibilityTimerRegistry")
+public class TimedMethodWithVisibilityModifiers {
 
-public final class MetricsUtil {
-
-    private MetricsUtil() {
+    @Timed(name = "publicTimedMethod")
+    public void publicTimedMethod() {
     }
 
-    public static Set<String> absoluteMetricNameSet(Class<?> clazz, String... names) {
-        Set<String> set = new HashSet<String>(names.length);
-        for (String name : names) {
-            set.add(absoluteMetricName(clazz, name));
-        }
-
-        return set;
+    @Timed(name = "packagePrivateTimedMethod")
+    void packagePrivateTimedMethod() {
     }
 
-    public static String absoluteMetricName(Class<?> clazz, String name) {
-        return MetricRegistry.name(clazz, name);
+    @Timed(name = "protectedTimedMethod")
+    protected void protectedTimedMethod() {
+    }
+
+    @Timed(name = "privateTimedMethod")
+    private void privateTimedMethod() {
     }
 }
