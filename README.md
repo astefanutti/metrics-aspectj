@@ -122,6 +122,9 @@ public class TimedMethod {
 }
 ```
 
+In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
+and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
+
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
 ```java
 import com.codahale.metrics.annotation.Timed;
@@ -141,9 +144,6 @@ public class TimedMethod {
     }
 }
 ```
-
-In these examples, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
-and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
 
 Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
 Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
