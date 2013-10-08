@@ -166,8 +166,8 @@ public class TimedMethod {
 ```
 
 At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan all the declared methods of the target class
-that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric`s and finally
-weave its aspects around these methods, so that at runtime, these generated `Metric`s get called according
+that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric` instances and finally
+weave its aspects around these methods, so that at runtime, these `Metric` instances get called according
 to the _Metrics_ annotations specification.
 
 Note that this annotation won't be inherited if it's placed on an interface or a parent class.
