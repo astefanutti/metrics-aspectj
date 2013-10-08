@@ -123,7 +123,7 @@ public class TimedMethod {
 ```
 
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
-and inline around the method invocation with the needed code to time the method execution using that `Timer` instance.
+and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
 ```java
@@ -176,7 +176,7 @@ More details are available in the [Limitations](#limitations) section.
 ### _Metrics_ Registry Resolution and the `@Registry` Annotation
 
 The `@Registry` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric` instances into.
-It targets classes and is ultimately used to create the `Metric instances and weave the _Metrics AspectJ_ aspects into the annotated class.
+It targets classes and is ultimately used to create the `Metric` instances and weave the _Metrics AspectJ_ aspects into the annotated class.
 
 The `@Registry.value` mandatory `String` attribute can either be the registry name or a valid EL expression that evaluates to
 the registry name or the registry instance. The resultant `MetricRegistry` is used to register the `Metric` instantiated into
