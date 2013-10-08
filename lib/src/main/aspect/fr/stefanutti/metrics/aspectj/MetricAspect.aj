@@ -25,12 +25,13 @@ import com.codahale.metrics.annotation.Timed;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-final aspect MetricAspect {
+final aspect MetricAspect extends AbstractMetricAspect {
 
-    declare precedence: MetricAspect, *;
+    declare precedence: MetricStaticAspect, MetricAspect, *;
 
     declare parents : (@Metrics *) implements Profiled;
 
@@ -42,6 +43,10 @@ final aspect MetricAspect {
     after(final Profiled object) : profiled(object) {
         final MetricStrategy strategy = MetricStrategyFactory.newInstance(object);
         for (final Method method : object.getClass().getDeclaredMethods()) {
+            // Skip advising static methods
+            if (Modifier.isStatic(method.getModifiers()))
+                continue;
+
             metricAnnotation(object, method, strategy, ExceptionMetered.class, new MetricFactory() {
                 @Override
                 public Metric metric(MetricRegistry registry, String name, boolean absolute) {
@@ -80,36 +85,6 @@ final aspect MetricAspect {
             Metric metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
             object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));
         }
-    }
-
-    private interface MetricFactory {
-        Metric metric(MetricRegistry registry, String name, boolean absolute);
-    }
-
-    private static String metricAnnotationName(Annotation annotation) {
-        if (Gauge.class.isInstance(annotation))
-           return ((Gauge) annotation).name();
-        else if (ExceptionMetered.class.isInstance(annotation))
-           return ((ExceptionMetered) annotation).name();
-        else if (Metered.class.isInstance(annotation))
-            return ((Metered) annotation).name();
-        else if (Timed.class.isInstance(annotation))
-            return ((Timed) annotation).name();
-        else
-            throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
-    }
-
-    private static boolean metricAnnotationAbsolute(Annotation annotation) {
-        if (Gauge.class.isInstance(annotation))
-            return ((Gauge) annotation).absolute();
-        else if (ExceptionMetered.class.isInstance(annotation))
-            return ((ExceptionMetered) annotation).absolute();
-        else if (Metered.class.isInstance(annotation))
-            return ((Metered) annotation).absolute();
-        else if (Timed.class.isInstance(annotation))
-            return ((Timed) annotation).absolute();
-        else
-            throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
     }
 
     // TODO: should be made private (impact unit tests that use reflection to call the getValue() method)

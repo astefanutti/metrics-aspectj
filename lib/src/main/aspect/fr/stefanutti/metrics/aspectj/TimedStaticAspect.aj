@@ -18,15 +18,15 @@ package fr.stefanutti.metrics.aspectj;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.Timed;
 
-final aspect TimedAspect {
+final aspect TimedStaticAspect {
 
-    pointcut timed(Profiled object) : execution(@Timed !static * (@Metrics Profiled+).*(..)) && this(object);
+    pointcut timed() : execution(@Timed static * (@Metrics *).*(..));
 
-    Object around(Profiled object) : timed(object) {
-        Timer timer = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Timer.class);
+    Object around() : timed() {
+        Timer timer = MetricStaticAspect.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Timer.class);
         Timer.Context context = timer.time();
         try {
-            return proceed(object);
+            return proceed();
         } finally {
             context.stop();
         }

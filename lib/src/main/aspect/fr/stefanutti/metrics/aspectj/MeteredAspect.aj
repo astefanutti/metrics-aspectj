@@ -20,7 +20,7 @@ import com.codahale.metrics.annotation.Metered;
 
 final aspect MeteredAspect {
 
-    pointcut metered(Profiled object) : execution(@Metered * (@Metrics Profiled+).*(..)) && this(object);
+    pointcut metered(Profiled object) : execution(@Metered !static * (@Metrics Profiled+).*(..)) && this(object);
 
     before(Profiled object) : metered(object) {
         Meter meter = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Meter.class);

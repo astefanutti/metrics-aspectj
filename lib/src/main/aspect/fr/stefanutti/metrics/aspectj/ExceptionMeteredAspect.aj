@@ -20,7 +20,7 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 
 final aspect ExceptionMeteredAspect {
 
-    pointcut exceptionMetered(Profiled object) : execution(@ExceptionMetered * (@Metrics Profiled+).*(..)) && this(object);
+    pointcut exceptionMetered(Profiled object) : execution(@ExceptionMetered !static * (@Metrics Profiled+).*(..)) && this(object);
 
     after(Profiled object) throwing (Throwable throwable) : exceptionMetered(object) {
         AnnotatedMetric metric = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString());
