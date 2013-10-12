@@ -128,6 +128,7 @@ with the same `name` already registered in the `MetricRegistry`) right after the
 and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
 Static methods can also be annotated:
+```java
 ...
 public class TimedMethod {
 
