@@ -13,30 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.stefanutti.metrics.aspectj.samples.se;
+package fr.stefanutti.metrics.aspectj.samples.el;
 
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
 import fr.stefanutti.metrics.aspectj.Registry;
 
-@Metrics @Registry("visibilityTimerStaticRegistry")
-public class TimedStaticMethodWithVisibilityModifiers {
+@Metrics @Registry("timerStaticWithElRegistry")
+public class TimedStaticMethodWithNameFromElExpression {
 
-    private TimedStaticMethodWithVisibilityModifiers(){}
+    public final static long ID = Math.round(Math.random() * Long.MAX_VALUE);
 
-    @Timed(name = "publicTimedStaticMethod")
-    public static void publicTimedStaticMethod() {
-    }
-
-    @Timed(name = "packagePrivateTimedStaticMethod")
-    static void packagePrivateTimedStaticMethod() {
-    }
-
-    @Timed(name = "protectedTimedStaticMethod")
-    protected static void protectedTimedStaticMethod() {
-    }
-
-    @Timed(name = "privateTimedStaticMethod")
-    private static void privateTimedStaticMethod() {
+    @Timed(name = "${'timer' += TimedStaticMethodWithNameFromElExpression.ID}")
+    public static void expressionStaticTimedMethod() {
     }
 }

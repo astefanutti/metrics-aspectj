@@ -31,6 +31,11 @@ import javax.el.ELProcessor;
         processor.getELManager().importClass(SharedMetricRegistries.class.getName());
     }
 
+    JavaxElMetricStrategyDelegate(Class<?> clazz) {
+        processor = new ELProcessor();
+        processor.getELManager().importClass(clazz.getName());
+    }
+
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
         Object evaluation = processor.eval(registry);

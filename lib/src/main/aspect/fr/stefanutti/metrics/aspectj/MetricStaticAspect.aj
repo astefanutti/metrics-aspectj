@@ -28,11 +28,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 final aspect MetricStaticAspect extends AbstractMetricAspect {
 
     /* packaged-protected */
-    final static Map<String, AnnotatedMetric> metrics = new ConcurrentHashMap<String, AnnotatedMetric>();
+    final static ConcurrentMap<String, AnnotatedMetric> metrics = new ConcurrentHashMap<String, AnnotatedMetric>();
 
     pointcut profiled() : staticinitialization(@Metrics *);
 

@@ -18,23 +18,19 @@ package fr.stefanutti.metrics.aspectj;
 /* packaged-protected */ class MetricStrategyFactory {
 
     static MetricStrategy newInstance(Object object) {
-        try {
-            getClassLoader(object.getClass()).loadClass("javax.el.ELProcessor");
-        } catch (ClassNotFoundException cause) {
+        if (isElAvailable(object.getClass()))
+            return new JavaxElMetricStrategy(object);
+        else
             // Expression Language 3.0 is not available, fall back to SE implementation
             return new JavaSeMetricStrategy();
-        }
-        return new JavaxElMetricStrategy(object);
     }
 
     static MetricStrategy newInstance(Class<?> clazz) {
-        try {
-            getClassLoader(clazz).loadClass("javax.el.ELProcessor");
-        } catch (ClassNotFoundException cause) {
+        if (isElAvailable(clazz))
+            return new JavaxElMetricStrategy(clazz);
+        else
             // Expression Language 3.0 is not available, fall back to SE implementation
             return new JavaSeMetricStrategy();
-        }
-        return new JavaSeMetricStrategy();
     }
 
     private static ClassLoader getClassLoader(Class<?> clazz) {
@@ -42,5 +38,14 @@ package fr.stefanutti.metrics.aspectj;
             return Thread.currentThread().getContextClassLoader();
         else
             return clazz.getClassLoader();
+    }
+
+    private static boolean isElAvailable(Class<?> clazz) {
+        try {
+            getClassLoader(clazz).loadClass("javax.el.ELProcessor");
+            return true;
+        } catch (ClassNotFoundException cause) {
+            return false;
+        }
     }
 }

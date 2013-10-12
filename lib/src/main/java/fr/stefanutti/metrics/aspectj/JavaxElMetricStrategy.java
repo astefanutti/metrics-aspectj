@@ -32,6 +32,11 @@ public class JavaxElMetricStrategy implements MetricStrategy {
         elDelegate = new JavaxElMetricStrategyDelegate(object);
     }
 
+    JavaxElMetricStrategy(Class<?> clazz) {
+        seDelegate = new JavaSeMetricStrategyDelegate();
+        elDelegate = new JavaxElMetricStrategyDelegate(clazz);
+    }
+
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
         Matcher matcher = expression.matcher(registry);

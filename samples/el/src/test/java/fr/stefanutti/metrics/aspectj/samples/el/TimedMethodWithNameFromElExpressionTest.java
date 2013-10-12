@@ -36,7 +36,7 @@ public class TimedMethodWithNameFromElExpressionTest {
 
     @Before
     public void createTimedInstance() {
-        long id = Math.round(Math.random() * 10);
+        long id = Math.round(Math.random() * Long.MAX_VALUE);
         instance = new TimedMethodWithNameFromElExpression(id);
         timerName = TimedMethodWithNameFromElExpression.class.getName() + "." + "timer" + id;
     }

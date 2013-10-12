@@ -39,37 +39,19 @@ public class TimedStaticMethodWithVisibilityModifiersTest {
         return MetricsUtil.absoluteMetricNameSet(TimedStaticMethodWithVisibilityModifiers.class, TIMER_NAMES);
     }
 
-    @After
-    public void clearSharedMetricRegistries() {
-//        SharedMetricRegistries.clear();
-    }
-
-    @Test
-    public void timedStaticMethodsNotCalledYet() {
-        // Call a method to trigger the class initialization
-        TimedStaticMethodWithVisibilityModifiers.name();
-
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
-
-        // Make sure that all the timers haven't been called yet
-        assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(0L))));
-    }
-
     @Test
     public void callTimedStaticMethodsOnce() {
-        // Call a method to trigger the class initialization
-        TimedStaticMethodWithVisibilityModifiers.name();
-
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
-        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-
         // Call the timed methods and assert they've all been timed once
         TimedStaticMethodWithVisibilityModifiers.publicTimedStaticMethod();
         TimedStaticMethodWithVisibilityModifiers.protectedTimedStaticMethod();
         TimedStaticMethodWithVisibilityModifiers.packagePrivateTimedStaticMethod();
         staticMethod("privateTimedStaticMethod").in(TimedStaticMethodWithVisibilityModifiers.class).invoke();
-        assertThat(registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
+
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+
+        assertThat("Timers are not registered", registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
+
+        assertThat("Timer counts are incorrect", registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
     }
 }

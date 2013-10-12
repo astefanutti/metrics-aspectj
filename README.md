@@ -127,6 +127,21 @@ Java bytecode that will automatically create a `Timer` instance with the provide
 with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
 and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
+Static methods can also be annotated:
+...
+public class TimedMethod {
+
+    @Timed(name = "timerName")
+    public static void timedStaticMethod() {
+    }
+}
+```
+
+In that example, _Metrics AspectJ_ will instrument the `TimedMethod` class so that, when it's loaded,
+a `Timer` instance with the provided `name` will be created (or an existing `Timer` with the same `name`
+already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around with the needed code
+to time the method execution using that `Timer` instance.
+
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
 ```java
 import com.codahale.metrics.annotation.Timed;
