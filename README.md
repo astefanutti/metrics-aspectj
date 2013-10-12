@@ -127,7 +127,7 @@ Java bytecode that will automatically create a `Timer` instance with the provide
 with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
 and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
-Static methods can also be annotated:
+A `static` method can also be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 ```java
 ...
 public class TimedMethod {
