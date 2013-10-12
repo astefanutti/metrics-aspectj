@@ -139,7 +139,7 @@ public class TimedMethod {
         return id;
     }
 
-    @Timed(name = "${'timerName'.concat(this.id)}")
+    @Timed(name = "${'timerName' += this.id}")
     public void timedMethod() {
     }
 }

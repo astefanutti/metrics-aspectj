@@ -32,7 +32,7 @@ public class TimedMethodWithNameFromElExpression {
         return id;
     }
 
-    @Timed(name = "${'timer'.concat(this.id)}")
+    @Timed(name = "${'timer' += this.id}")
     public void expressionTimedMethod() {
     }
 }
