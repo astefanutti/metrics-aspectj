@@ -122,7 +122,9 @@ public class TimedMethod {
 }
 ```
 
-In that example, _Metrics AspectJ_ will automatically create a `Timer` instance with the provided `name`
+In that example, _Metrics AspectJ_ will instrument all the constructors of the `TimedMethod` class by injecting
+Java bytecode that will automatically create a `Timer` instance with the provided `name` (or retrieve an existing `Timer`
+with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
 and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
@@ -144,6 +146,12 @@ public class TimedMethod {
     }
 }
 ```
+
+In that example, _Metrics AspectJ_ will automatically create a `Timer` instance (respectively retrieve an existing `Timer` instance
+with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
+and evaluate the EL expression based on the value of the `id` attribute of that newly created `TimedMethod` instance
+to name the `Timer` instance (respectively resolve the `Timer` instance registered in the `MetricRegistry`).
+If the value of the `id` attribute changes over time, the `name` of the `Timer` instance won't be re-evaluated.
 
 Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
 Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
