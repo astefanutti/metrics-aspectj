@@ -83,6 +83,18 @@ the AspectJ `aspectjrt` module:
 ```
 These three modules are transitive dependencies of the `metrics-aspectj` Maven module.
 
+Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation` and the `aspectjrt` modules
+can be used so that the only required dependency is `metrics-core`:
+```xml
+<dependencies>
+    <dependency>
+        <groupId>fr.stefanutti</groupId>
+        <artifactId>metrics-aspectj-deps</artifactId>
+        <version>${metrics.aspectj.version}</version>
+    </dependency>
+</dependencies>
+```
+
 ### Optional Dependencies
 
 In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` and `Metric` name evaluation

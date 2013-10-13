@@ -18,6 +18,43 @@
         <module>se</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>with-deps</id>
+            <properties>
+                <metrics.aspectj.lib>metrics-aspectj-deps</metrics.aspectj.lib>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>com.codahale.metrics</groupId>
+                    <artifactId>metrics-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>fr.stefanutti</groupId>
+                    <artifactId>metrics-aspectj-deps</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>with-lib</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <metrics.aspectj.lib>metrics-aspectj</metrics.aspectj.lib>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>fr.stefanutti</groupId>
+                    <artifactId>metrics-aspectj</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -30,7 +67,7 @@
                     <aspectLibraries>
                         <aspectLibrary>
                             <groupId>fr.stefanutti</groupId>
-                            <artifactId>metrics-aspectj</artifactId>
+                            <artifactId>${metrics.aspectj.lib}</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
                     <!-- Do not inline the around advise to ease debugging -->
@@ -48,14 +85,6 @@
     </build>
 
     <dependencies>
-
-        <!-- compile dependencies -->
-
-        <dependency>
-            <groupId>fr.stefanutti</groupId>
-            <artifactId>metrics-aspectj</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- test dependencies -->
 
