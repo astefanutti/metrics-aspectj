@@ -42,6 +42,13 @@ final aspect MetricStaticAspect extends AbstractMetricAspect {
         final MetricStrategy strategy = MetricStrategyFactory.newInstance(clazz);
         for (final Method method : clazz.getDeclaredMethods()) {
             if (Modifier.isStatic(method.getModifiers()) && !method.isSynthetic()) {
+                metricAnnotation(clazz, method, strategy, ExceptionMetered.class, new MetricFactory() {
+                    @Override
+                    public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                        String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : strategy.resolveMetricName(name);
+                        return registry.meter(absolute ? finalName : MetricRegistry.name(clazz, finalName));
+                    }
+                });
                 metricAnnotation(clazz, method, strategy, Metered.class, new MetricFactory() {
                     @Override
                     public Metric metric(MetricRegistry registry, String name, boolean absolute) {

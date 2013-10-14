@@ -38,7 +38,7 @@ public class MeteredStaticMethodWithRegistryFromStringTest {
 
         assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat("Timer is not registered", registry.getMeters(), hasKey(METER_NAME));
+        assertThat("Timer is not registered correctly", registry.getMeters(), hasKey(METER_NAME));
         Meter meter = registry.getMeters().get(METER_NAME);
         assertThat("Meter count is incorrect", meter.getCount(), is(equalTo(1L)));
     }
