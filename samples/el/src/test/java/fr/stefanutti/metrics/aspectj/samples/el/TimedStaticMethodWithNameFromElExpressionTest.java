@@ -37,7 +37,7 @@ public class TimedStaticMethodWithNameFromElExpressionTest {
         assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
-        assertThat("Timer is not registered", registry.getTimers(), hasKey(TIMER_NAME));
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(TIMER_NAME));
         Timer timer = registry.getTimers().get(TIMER_NAME);
 
         assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(1L)));

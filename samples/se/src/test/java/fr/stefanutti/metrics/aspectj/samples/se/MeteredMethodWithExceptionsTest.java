@@ -57,18 +57,19 @@ public class MeteredMethodWithExceptionsTest {
 
     @Test
     public void exceptionMeteredMethodsNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getMeters().keySet(), is(equalTo(absoluteMetricNames())));
+        assertThat("Meters are not registered correctly", registry.getMeters().keySet(), is(equalTo(absoluteMetricNames())));
 
         // Make sure that all the meters haven't been called yet
-        assertThat(registry.getMeters().values(), everyItem(Matchers.<Meter>hasProperty("count", equalTo(0L))));
+        assertThat("Meter counts are incorrect", registry.getMeters().values(), everyItem(Matchers.<Meter>hasProperty("count", equalTo(0L))));
     }
 
     @Test
-    public void callExceptionMeteredMethodsOnceWithoutThrowing() throws Exception {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+    public void callExceptionMeteredMethodsOnceWithoutThrowing() {
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat("Meters are not registered correctly", registry.getMeters().keySet(), is(equalTo(absoluteMetricNames())));
 
         Runnable runnableThatDoesNoThrowExceptions = new Runnable() {
             @Override
@@ -79,13 +80,14 @@ public class MeteredMethodWithExceptionsTest {
         // Call the metered methods and assert they haven't been marked
         instance.illegalArgumentExceptionMeteredMethod(runnableThatDoesNoThrowExceptions);
         instance.exceptionMeteredMethod(runnableThatDoesNoThrowExceptions);
-        assertThat(registry.getMeters().values(), everyItem(Matchers.<Meter>hasProperty("count", equalTo(0L))));
+        assertThat("Meter counts are incorrect", registry.getMeters().values(), everyItem(Matchers.<Meter>hasProperty("count", equalTo(0L))));
     }
 
     @Test
     public void callExceptionMeteredMethodOnceWithThrowingExpectedException() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat("Meters are not registered correctly", registry.getMeters().keySet(), is(equalTo(absoluteMetricNames())));
 
         final RuntimeException exception = new IllegalArgumentException("message");
         Runnable runnableThatThrowsIllegalArgumentException = new Runnable() {
@@ -99,9 +101,9 @@ public class MeteredMethodWithExceptionsTest {
         try {
             instance.illegalArgumentExceptionMeteredMethod(runnableThatThrowsIllegalArgumentException);
         } catch (RuntimeException cause) {
-            assertThat(registry.getMeters().get(absoluteMetricName(0)).getCount(), is(equalTo(1L)));
-            assertThat(registry.getMeters().get(absoluteMetricName(1)).getCount(), is(equalTo(0L)));
-            assertSame(cause, exception);
+            assertThat("Meter count is incorrect", registry.getMeters().get(absoluteMetricName(0)).getCount(), is(equalTo(1L)));
+            assertThat("Meter count is incorrect", registry.getMeters().get(absoluteMetricName(1)).getCount(), is(equalTo(0L)));
+            assertSame("Exception thrown is incorrect", cause, exception);
             return;
         }
 
@@ -110,8 +112,9 @@ public class MeteredMethodWithExceptionsTest {
 
     @Test
     public void callExceptionMeteredMethodOnceWithThrowingNonExpectedException() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat("Meters are not registered correctly", registry.getMeters().keySet(), is(equalTo(absoluteMetricNames())));
 
         final RuntimeException exception = new IllegalStateException("message");
         Runnable runnableThatThrowsIllegalStateException = new Runnable() {
@@ -125,9 +128,8 @@ public class MeteredMethodWithExceptionsTest {
         try {
             instance.illegalArgumentExceptionMeteredMethod(runnableThatThrowsIllegalStateException);
         } catch (RuntimeException cause) {
-            assertThat(registry.getMeters().get(absoluteMetricName(0)).getCount(), is(equalTo(0L)));
-            assertThat(registry.getMeters().get(absoluteMetricName(1)).getCount(), is(equalTo(0L)));
-            assertSame(cause, exception);
+            assertThat("Meter counts are incorrect", registry.getMeters().values(), everyItem(Matchers.<Meter>hasProperty("count", equalTo(0L))));
+            assertSame("Exception thrown is incorrect", cause, exception);
             return;
         }
 
@@ -136,8 +138,9 @@ public class MeteredMethodWithExceptionsTest {
 
     @Test
     public void callExceptionMeteredMethodOnceWithThrowingInstanceOfExpectedException() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat("Meters are not registered correctly", registry.getMeters().keySet(), is(equalTo(absoluteMetricNames())));
 
         final RuntimeException exception = new IllegalStateException("message");
         Runnable runnableThatThrowsIllegalStateException = new Runnable() {
@@ -151,9 +154,9 @@ public class MeteredMethodWithExceptionsTest {
         try {
             instance.exceptionMeteredMethod(runnableThatThrowsIllegalStateException);
         } catch (RuntimeException cause) {
-            assertThat(registry.getMeters().get(absoluteMetricName(0)).getCount(), is(equalTo(0L)));
-            assertThat(registry.getMeters().get(absoluteMetricName(1)).getCount(), is(equalTo(1L)));
-            assertSame(cause, exception);
+            assertThat("Meter count is incorrect", registry.getMeters().get(absoluteMetricName(0)).getCount(), is(equalTo(0L)));
+            assertThat("Meter count is incorrect", registry.getMeters().get(absoluteMetricName(1)).getCount(), is(equalTo(1L)));
+            assertSame("Exception thrown is incorrect", cause, exception);
             return;
         }
 

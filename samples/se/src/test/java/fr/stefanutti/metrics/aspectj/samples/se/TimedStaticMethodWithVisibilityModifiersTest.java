@@ -35,7 +35,7 @@ public class TimedStaticMethodWithVisibilityModifiersTest {
 
     private final static String[] TIMER_NAMES = {"publicTimedStaticMethod", "packagePrivateTimedStaticMethod", "protectedTimedStaticMethod", "privateTimedStaticMethod"};
 
-    private Set<String> absoluteMetricNames() {
+    private static Set<String> absoluteMetricNames() {
         return MetricsUtil.absoluteMetricNameSet(TimedStaticMethodWithVisibilityModifiers.class, TIMER_NAMES);
     }
 
@@ -50,7 +50,7 @@ public class TimedStaticMethodWithVisibilityModifiersTest {
         assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
 
-        assertThat("Timers are not registered", registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
+        assertThat("Timers are not registered correctly", registry.getTimers().keySet(), is(equalTo(absoluteMetricNames())));
 
         assertThat("Timer counts are incorrect", registry.getTimers().values(), everyItem(Matchers.<Timer>hasProperty("count", equalTo(1L))));
     }

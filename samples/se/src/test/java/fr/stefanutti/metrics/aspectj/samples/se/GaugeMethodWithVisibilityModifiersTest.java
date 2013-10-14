@@ -54,18 +54,19 @@ public class GaugeMethodWithVisibilityModifiersTest {
 
     @Test
     public void gaugesCalledWithDefaultValues() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
+        assertThat("Gauges are not registered correctly", registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
 
         // Make sure that the gauges have the expected values
-        assertThat(registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(0))));
+        assertThat("Gauge values are incorrect", registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(0))));
     }
 
     @Test
     public void callGaugesAfterSetterCalls() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+        assertThat("Gauges are not registered correctly", registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
 
         // Call the setter methods
         instance.setPublicGauge(1);
@@ -74,6 +75,6 @@ public class GaugeMethodWithVisibilityModifiersTest {
         method("setPrivateGauge").withParameterTypes(int.class).in(instance).invoke(1);
 
         // And assert the gauges are up-to-date
-        assertThat(registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(1))));
+        assertThat("Gauge values are incorrect", registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(1))));
     }
 }
