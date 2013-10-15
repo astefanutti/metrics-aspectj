@@ -22,14 +22,14 @@ import fr.stefanutti.metrics.aspectj.Registry;
 @Metrics @Registry("singleGaugeRegistry")
 public class GaugeMethodWithRegistryFromString {
 
-    private int singleGauge;
+    private long singleGauge;
 
     @Gauge(name = "singleGaugeMethod")
-    public int getSingleGauge() {
+    public long getSingleGauge() {
         return singleGauge;
     }
 
-    public void setSingleGauge(int gauge) {
+    public void setSingleGauge(long gauge) {
         this.singleGauge = gauge;
     }
 }

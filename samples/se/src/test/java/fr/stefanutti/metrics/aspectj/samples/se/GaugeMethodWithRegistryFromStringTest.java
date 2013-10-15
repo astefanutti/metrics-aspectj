@@ -45,26 +45,27 @@ public class GaugeMethodWithRegistryFromStringTest {
 
     @Test
     public void gaugeCalledWithDefaultValue() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getGauges(), hasKey(GAUGE_NAME));
+        assertThat("Gauge is not registered correctly", registry.getGauges(), hasKey(GAUGE_NAME));
         @SuppressWarnings("unchecked")
-        Gauge<Integer> gauge = registry.getGauges().get(GAUGE_NAME);
+        Gauge<Long> gauge = registry.getGauges().get(GAUGE_NAME);
 
         // Make sure that the gauge has the expected value
-        assertThat(gauge.getValue(), is(equalTo(0)));
+        assertThat("Gauge value is incorrect", gauge.getValue(), is(equalTo(0L)));
     }
 
     @Test
     public void callGaugeAfterSetterCall() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getGauges(), hasKey(GAUGE_NAME));
+        assertThat("Gauge is not registered correctly", registry.getGauges(), hasKey(GAUGE_NAME));
         @SuppressWarnings("unchecked")
-        Gauge<Integer> gauge = registry.getGauges().get(GAUGE_NAME);
+        Gauge<Long> gauge = registry.getGauges().get(GAUGE_NAME);
 
         // Call the setter method and assert the gauge is up-to-date
-        instance.setSingleGauge(1);
-        assertThat(gauge.getValue(), is(equalTo(1)));
+        long value = Math.round(Math.random() * Long.MAX_VALUE);
+        instance.setSingleGauge(value);
+        assertThat("Gauge value is incorrect", gauge.getValue(), is(equalTo(value)));
     }
 }
