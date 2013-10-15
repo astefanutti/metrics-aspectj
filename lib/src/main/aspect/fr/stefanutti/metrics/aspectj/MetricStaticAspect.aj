@@ -49,6 +49,13 @@ final aspect MetricStaticAspect extends AbstractMetricAspect {
                         return registry.meter(absolute ? finalName : MetricRegistry.name(clazz, finalName));
                     }
                 });
+                metricAnnotation(clazz, method, strategy, Gauge.class, new MetricFactory() {
+                    @Override
+                    public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                        String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
+                        return registry.register(absolute ? finalName : MetricRegistry.name(clazz, finalName), new ForwardingGauge(method, clazz));
+                    }
+                });
                 metricAnnotation(clazz, method, strategy, Metered.class, new MetricFactory() {
                     @Override
                     public Metric metric(MetricRegistry registry, String name, boolean absolute) {

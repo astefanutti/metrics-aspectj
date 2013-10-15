@@ -24,6 +24,8 @@ import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 abstract aspect AbstractMetricAspect {
 
@@ -55,5 +57,34 @@ abstract aspect AbstractMetricAspect {
             return ((Timed) annotation).absolute();
         else
             throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
+    }
+
+    // TODO: should be made private (impact unit tests that use reflection to call the getValue() method)
+    public static class ForwardingGauge implements com.codahale.metrics.Gauge<Object> {
+
+        final Method method;
+        final Object object;
+
+        protected ForwardingGauge(Method method, Object object) {
+            this.method = method;
+            this.object = object;
+            method.setAccessible(true);
+        }
+
+        @Override
+        public Object getValue() {
+            // TODO: use more efficient technique than reflection
+            return invokeMethod(method, object);
+        }
+    }
+
+    private static Object invokeMethod(Method method, Object object) {
+        try {
+            return method.invoke(object);
+        } catch (IllegalAccessException cause) {
+            throw new IllegalStateException("Error while calling method [" + method + "]", cause);
+        } catch (InvocationTargetException cause) {
+            throw new IllegalStateException("Error while calling method [" + method + "]", cause);
+        }
     }
 }

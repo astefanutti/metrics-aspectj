@@ -86,33 +86,4 @@ final aspect MetricAspect extends AbstractMetricAspect {
             object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));
         }
     }
-
-    // TODO: should be made private (impact unit tests that use reflection to call the getValue() method)
-    public static class ForwardingGauge implements com.codahale.metrics.Gauge<Object> {
-
-        final Method method;
-        final Object object;
-
-        private ForwardingGauge(Method method, Object object) {
-            this.method = method;
-            this.object = object;
-            method.setAccessible(true);
-        }
-
-        @Override
-        public Object getValue() {
-            // TODO: use more efficient technique than reflection
-            return invokeMethod(method, object);
-        }
-    }
-
-    private static Object invokeMethod(Method method, Object object) {
-        try {
-            return method.invoke(object);
-        } catch (IllegalAccessException cause) {
-            throw new IllegalStateException("Error while calling method [" + method + "]", cause);
-        } catch (InvocationTargetException cause) {
-            throw new IllegalStateException("Error while calling method [" + method + "]", cause);
-        }
-    }
 }
