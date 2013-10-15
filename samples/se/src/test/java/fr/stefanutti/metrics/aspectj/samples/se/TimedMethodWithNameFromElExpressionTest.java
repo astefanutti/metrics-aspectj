@@ -16,12 +16,22 @@
 package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.annotation.Timed;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class TimedMethodWithNameFromElExpressionTest {
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void throwExceptionOnInitialization() {
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @Test
+    public void throwExceptionOnInitialization() throws NoSuchMethodException {
+        exception.expect(UnsupportedOperationException.class);
+        String name = TimedMethodWithNameFromElExpression.class.getMethod("expressionTimedMethod").getAnnotation(Timed.class).name();
+        exception.expectMessage("Unsupported EL expression [" + name + "] evaluation as no EL implementation is available");
+
         TimedMethodWithNameFromElExpression instance = new TimedMethodWithNameFromElExpression("timer");
     }
 }

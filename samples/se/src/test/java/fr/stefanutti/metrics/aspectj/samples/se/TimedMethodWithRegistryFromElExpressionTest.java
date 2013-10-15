@@ -17,16 +17,27 @@ package fr.stefanutti.metrics.aspectj.samples.se;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.codahale.metrics.annotation.Timed;
+import fr.stefanutti.metrics.aspectj.Registry;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class TimedMethodWithRegistryFromElExpressionTest {
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
+    @Test
     public void throwExceptionOnInitialization() {
+        exception.expect(UnsupportedOperationException.class);
+        String name = TimedMethodWithRegistryFromElExpression.class.getAnnotation(Registry.class).value();
+        exception.expectMessage("Unsupported EL expression [" + name + "] evaluation as no EL implementation is available");
+
         MetricRegistry registry = new MetricRegistry();
         TimedMethodWithRegistryFromElExpression instance = new TimedMethodWithRegistryFromElExpression(registry);
     }
