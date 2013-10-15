@@ -59,8 +59,7 @@ abstract aspect AbstractMetricAspect {
             throw new IllegalArgumentException("Unsupported Metrics annotation [" + annotation.getClass().getName() + "]");
     }
 
-    // TODO: should be made private (impact unit tests that use reflection to call the getValue() method)
-    public static class ForwardingGauge implements com.codahale.metrics.Gauge<Object> {
+    protected static class ForwardingGauge implements com.codahale.metrics.Gauge<Object> {
 
         final Method method;
         final Object object;
