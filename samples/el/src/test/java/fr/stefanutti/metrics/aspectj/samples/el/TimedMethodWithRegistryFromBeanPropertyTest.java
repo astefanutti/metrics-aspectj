@@ -38,21 +38,21 @@ public class TimedMethodWithRegistryFromBeanPropertyTest {
     @Test
     public void timedMethodNotCalledYet() {
         MetricRegistry registry = instance.getRegistry();
-        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(TIMER_NAME));
         Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Make sure that the timer hasn't been called yet
-        assertThat(timer.getCount(), is(equalTo(0L)));
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(0L)));
     }
 
     @Test
     public void callTimedMethodOnce() {
         MetricRegistry registry = instance.getRegistry();
-        assertThat(registry.getTimers(), hasKey(TIMER_NAME));
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(TIMER_NAME));
         Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Call the timed method and assert it's been timed
         instance.singleTimedMethod();
-        assertThat(timer.getCount(), is(equalTo(1L)));
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(1L)));
     }
 }

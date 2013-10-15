@@ -48,24 +48,24 @@ public class TimedMethodWithNameFromElExpressionTest {
 
     @Test
     public void timedMethodNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getTimers(), hasKey(timerName));
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(timerName));
         Timer timer = registry.getTimers().get(timerName);
 
         // Make sure that the timer hasn't been called yet
-        assertThat(timer.getCount(), is(equalTo(0L)));
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(0L)));
     }
 
     @Test
     public void callTimedMethodOnce() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getTimers(), hasKey(timerName));
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(timerName));
         Timer timer = registry.getTimers().get(timerName);
 
         // Call the timed method and assert it's been timed
         instance.expressionTimedMethod();
-        assertThat(timer.getCount(), is(equalTo(1L)));
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(1L)));
     }
 }

@@ -56,8 +56,8 @@ public class MetricMethodWithDefaultNamesTest {
 
     @Test
     public void metricMethodsWithDefaultNamingConvention() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getMetrics().keySet(), is(equalTo(metricNames())));
+        assertThat("Metrics are not registered correctly", registry.getMetrics().keySet(), is(equalTo(metricNames())));
     }
 }

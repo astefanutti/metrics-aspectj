@@ -45,24 +45,24 @@ public class MeteredMethodWithRegistryFromStringTest {
 
     @Test
     public void meteredMethodNotCalledYet() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getMeters(), hasKey(METER_NAME));
+        assertThat("Meter is not registered correctly", registry.getMeters(), hasKey(METER_NAME));
         Meter meter = registry.getMeters().get(METER_NAME);
 
         // Make sure that the meter hasn't been called yet
-        assertThat(meter.getCount(), is(equalTo(0L)));
+        assertThat("Meter count is incorrect", meter.getCount(), is(equalTo(0L)));
     }
 
     @Test
     public void callMeteredMethodOnce() {
-        assertThat(SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
-        assertThat(registry.getMeters(), hasKey(METER_NAME));
+        assertThat("Meter is not registered correctly", registry.getMeters(), hasKey(METER_NAME));
         Meter meter = registry.getMeters().get(METER_NAME);
 
         // Call the metered method and assert it's been marked
         instance.singleMeteredMethod();
-        assertThat(meter.getCount(), is(equalTo(1L)));
+        assertThat("Meter count is incorrect", meter.getCount(), is(equalTo(1L)));
     }
 }
