@@ -59,7 +59,7 @@ public class GaugeMethodWithVisibilityModifiersTest {
         assertThat("Gauges are not registered correctly", registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
 
         // Make sure that the gauges have the expected values
-        assertThat("Gauge values are incorrect", registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(0))));
+        assertThat("Gauge values are incorrect", registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(0L))));
     }
 
     @Test
@@ -68,13 +68,14 @@ public class GaugeMethodWithVisibilityModifiersTest {
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
         assertThat("Gauges are not registered correctly", registry.getGauges().keySet(), is(equalTo(absoluteMetricNames())));
 
+        long value = Math.round(Math.random() * Long.MAX_VALUE);
         // Call the setter methods
-        instance.setPublicGauge(1);
-        instance.setPackagePrivateGauge(1);
-        instance.setProtectedGauge(1);
-        method("setPrivateGauge").withParameterTypes(int.class).in(instance).invoke(1);
+        instance.setPublicGauge(value);
+        instance.setPackagePrivateGauge(value);
+        instance.setProtectedGauge(value);
+        method("setPrivateGauge").withParameterTypes(long.class).in(instance).invoke(value);
 
         // And assert the gauges are up-to-date
-        assertThat("Gauge values are incorrect", registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(1))));
+        assertThat("Gauge values are incorrect", registry.getGauges().values(), everyItem(Matchers.<Gauge>hasProperty("value", equalTo(value))));
     }
 }

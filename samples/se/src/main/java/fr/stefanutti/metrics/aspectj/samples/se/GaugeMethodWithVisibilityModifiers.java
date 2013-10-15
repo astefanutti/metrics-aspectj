@@ -22,47 +22,47 @@ import fr.stefanutti.metrics.aspectj.Registry;
 @Metrics @Registry("visibilityGaugeRegistry")
 public class GaugeMethodWithVisibilityModifiers {
 
-    private int publicGauge;
+    private long publicGauge;
 
-    private int packagePrivateGauge;
+    private long packagePrivateGauge;
 
-    private int protectedGauge;
+    private long protectedGauge;
 
-    private int privateGauge;
+    private long privateGauge;
 
     @Gauge(name = "publicGaugeMethod")
-    public int getPublicGaugeMethod() {
+    public long getPublicGaugeMethod() {
         return publicGauge;
     }
 
-    public void setPublicGauge(int gauge) {
+    public void setPublicGauge(long gauge) {
         publicGauge = gauge;
     }
 
     @Gauge(name = "packagePrivateGaugeMethod")
-    int getPackagePrivateGauge() {
+    long getPackagePrivateGauge() {
         return packagePrivateGauge;
     }
 
-    void setPackagePrivateGauge(int gauge) {
+    void setPackagePrivateGauge(long gauge) {
         packagePrivateGauge = gauge;
     }
 
     @Gauge(name = "protectedGaugeMethod")
-    protected int getProtectedGauge() {
+    protected long getProtectedGauge() {
         return protectedGauge;
     }
 
-    protected void setProtectedGauge(int gauge) {
+    protected void setProtectedGauge(long gauge) {
         protectedGauge = gauge;
     }
 
     @Gauge(name = "privateGaugeMethod")
-    private int getPrivateGauge() {
+    private long getPrivateGauge() {
         return privateGauge;
     }
 
-    private void setPrivateGauge(int gauge) {
+    private void setPrivateGauge(long gauge) {
         privateGauge = gauge;
     }
 }
