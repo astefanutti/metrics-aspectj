@@ -51,10 +51,12 @@ More information can be found in the [Maven AspectJ plugin](http://mojo.codehaus
 Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html) `iajc` Ant task:
 ```xml
 <target name="{target}" >
-    <iajc {attributes..} >
+    <iajc sourceroots="${basedir}/src"
+          classpath="${basedir}/lib/aspectjrt.jar"
+          outjar="${basedir}/build/${ant.project.name}.jar">
         ...
         <aspectpath>
-            <pathelement location="${home.dir}/metrics-aspectj.jar"/>
+            <pathelement location="${basedir}/lib/metrics-aspectj.jar"/>
         </aspectpath>
         ...
     </iajc>
@@ -309,6 +311,7 @@ There would have been ways of working around that though:
   which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation
 
 Further details can be found in [Choosing which AOP declaration style to use][] from the Spring framework documentation.
+The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights as well.
 
 [Spring AOP]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html
 [AspectJ]: http://eclipse.org/aspectj/
@@ -318,6 +321,7 @@ Further details can be found in [Choosing which AOP declaration style to use][] 
 [Spring proxying mechanisms]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-proxying
 [Deprecated CGLIB support]: http://relation.to/16658.lace
 [Choosing which AOP declaration style to use]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-choosing
+[Spring AOP vs AspectJ]: http://stackoverflow.com/questions/1606559/spring-aop-vs-aspectj
 
 License
 -------
