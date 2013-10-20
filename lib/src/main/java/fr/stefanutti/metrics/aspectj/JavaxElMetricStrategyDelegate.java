@@ -28,7 +28,6 @@ import javax.el.ELProcessor;
     JavaxElMetricStrategyDelegate(Object object) {
         processor = new ELProcessor();
         processor.defineBean("this", object);
-        processor.getELManager().importClass(SharedMetricRegistries.class.getName());
     }
 
     JavaxElMetricStrategyDelegate(Class<?> clazz) {
