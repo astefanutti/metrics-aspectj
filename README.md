@@ -2,7 +2,7 @@ AspectJ for Metrics [![Build Status](https://secure.travis-ci.org/astefanutti/me
 ===============
 
 [AspectJ](http://eclipse.org/aspectj/) integration for [Yammer's Metrics](http://metrics.codahale.com/)
-with [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) support.
+with optional [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) support.
 
 ## Getting Started
 
