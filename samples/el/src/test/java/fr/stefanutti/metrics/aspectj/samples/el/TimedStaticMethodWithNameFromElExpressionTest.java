@@ -27,7 +27,7 @@ public class TimedStaticMethodWithNameFromElExpressionTest {
 
     private final static String REGISTRY_NAME = "timerStaticWithElRegistry";
 
-    private final static String TIMER_NAME = TimedStaticMethodWithNameFromElExpression.class.getName() + "." + "timer" + TimedStaticMethodWithNameFromElExpression.ID;
+    private final static String TIMER_NAME = MetricRegistry.name(TimedStaticMethodWithNameFromElExpression.class, "timer" + TimedStaticMethodWithNameFromElExpression.ID);
 
     @Test
     public void callTimedStaticMethodOnce() {

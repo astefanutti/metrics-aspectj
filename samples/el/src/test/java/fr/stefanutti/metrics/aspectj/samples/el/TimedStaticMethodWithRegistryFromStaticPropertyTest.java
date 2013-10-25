@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 
 public class TimedStaticMethodWithRegistryFromStaticPropertyTest {
 
-    private final static String TIMER_NAME = TimedStaticMethodWithRegistryFromStaticProperty.class.getName() + "." + "singleTimedStaticMethod";
+    private final static String TIMER_NAME = MetricRegistry.name(TimedStaticMethodWithRegistryFromStaticProperty.class, "singleTimedStaticMethod");
 
     @Test
     public void callTimedStaticMethodOnce() {

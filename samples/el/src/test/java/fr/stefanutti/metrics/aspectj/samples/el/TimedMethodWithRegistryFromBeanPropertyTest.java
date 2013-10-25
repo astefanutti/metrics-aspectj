@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
 
 public class TimedMethodWithRegistryFromBeanPropertyTest {
 
-    private final static String TIMER_NAME = TimedMethodWithRegistryFromBeanProperty.class.getName() + "." + "singleTimedMethod";
+    private final static String TIMER_NAME = MetricRegistry.name(TimedMethodWithRegistryFromBeanProperty.class, "singleTimedMethod");
 
     private TimedMethodWithRegistryFromBeanProperty instance;
 

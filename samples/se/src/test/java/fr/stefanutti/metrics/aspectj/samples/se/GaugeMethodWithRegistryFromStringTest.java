@@ -29,7 +29,7 @@ public class GaugeMethodWithRegistryFromStringTest {
 
     private final static String REGISTRY_NAME = "singleGaugeRegistry";
 
-    private final static String GAUGE_NAME = GaugeMethodWithRegistryFromString.class.getName() + "." + "singleGaugeMethod";
+    private final static String GAUGE_NAME = MetricRegistry.name(GaugeMethodWithRegistryFromString.class, "singleGaugeMethod");
 
     private GaugeMethodWithRegistryFromString instance;
 

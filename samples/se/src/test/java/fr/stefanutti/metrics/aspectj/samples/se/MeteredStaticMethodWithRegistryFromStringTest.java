@@ -29,7 +29,7 @@ public class MeteredStaticMethodWithRegistryFromStringTest {
 
     private final static String REGISTRY_NAME = "singleMeterStaticRegistry";
 
-    private final static String METER_NAME = MeteredStaticMethodWithRegistryFromString.class.getName() + "." + "singleMeteredStaticMethod";
+    private final static String METER_NAME = MetricRegistry.name(MeteredStaticMethodWithRegistryFromString.class, "singleMeteredStaticMethod");
 
     @Test
     public void callMeteredStaticMethodOnce() {

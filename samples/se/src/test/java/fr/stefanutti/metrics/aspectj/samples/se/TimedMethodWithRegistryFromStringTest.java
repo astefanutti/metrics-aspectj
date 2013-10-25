@@ -29,7 +29,7 @@ public class TimedMethodWithRegistryFromStringTest {
 
     private final static String REGISTRY_NAME = "singleTimerRegistry";
 
-    private final static String TIMER_NAME = TimedMethodWithRegistryFromString.class.getName() + "." + "singleTimedMethod";
+    private final static String TIMER_NAME = MetricRegistry.name(TimedMethodWithRegistryFromString.class, "singleTimedMethod");
 
     private TimedMethodWithRegistryFromString instance;
 
