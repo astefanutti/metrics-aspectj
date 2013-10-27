@@ -33,6 +33,32 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <property>
+                    <name>env.TRAVIS</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <configuration>
+                            <sourceDirectories>
+                                <sourceDirectory>src/main/java</sourceDirectory>
+                                <sourceDirectory>src/main/aspectj</sourceDirectory>
+                            </sourceDirectories>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
 
         <!-- compile dependencies -->
