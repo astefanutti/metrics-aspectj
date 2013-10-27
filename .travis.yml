@@ -1,6 +1,6 @@
 language: java
 
-script: mvn clean install
+script: mvn clean verify -Pwith-lib,travis
 
 jdk:
     - oraclejdk7
@@ -12,6 +12,5 @@ notifications:
       - antonin.stefanutti@gmail.com
 
 after_success:
-  - mvn verify -Ptravis,with-lib
-  - mvn jacoco:report -Ptravis
-  - mvn -N coveralls:jacoco -Ptravis
+  - mvn jacoco:report
+  - mvn -N coveralls:jacoco
