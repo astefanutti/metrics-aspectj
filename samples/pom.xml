@@ -41,6 +41,10 @@
             <id>with-lib</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.TRAVIS</name>
+                    <value>true</value>
+                </property>
             </activation>
             <properties>
                 <metrics.aspectj.lib>metrics-aspectj</metrics.aspectj.lib>
