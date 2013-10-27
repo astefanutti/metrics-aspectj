@@ -1,6 +1,6 @@
 language: java
 
-script: mvn verify
+script: mvn clean verify
 
 jdk:
     - oraclejdk7
@@ -10,3 +10,6 @@ notifications:
   email:
     recipients:
       - antonin.stefanutti@gmail.com
+
+after_success:
+  - mvn cobertura:cobertura coveralls:cobertura

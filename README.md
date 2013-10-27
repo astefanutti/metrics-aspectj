@@ -1,4 +1,4 @@
-AspectJ for Metrics [![Build Status](https://secure.travis-ci.org/astefanutti/metrics-aspectj.png)](http://travis-ci.org/astefanutti/metrics-aspectj)
+AspectJ for Metrics [![Build Status](https://secure.travis-ci.org/astefanutti/metrics-aspectj.png)](http://travis-ci.org/astefanutti/metrics-aspectj) [![Coverage Status](https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.png?branch=master)](https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master)
 ===============
 
 [AspectJ](http://eclipse.org/aspectj/) integration for [Yammer's Metrics](http://metrics.codahale.com/)
