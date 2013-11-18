@@ -1,10 +1,11 @@
 language: java
 
-script: mvn clean verify -Pwith-lib,travis
+script:
+  - mvn clean package -Pwith-lib,jacoco
 
 jdk:
-    - oraclejdk7
-    - openjdk7
+  - oraclejdk7
+  - openjdk7
 
 notifications:
   email:
@@ -12,5 +13,5 @@ notifications:
       - antonin.stefanutti@gmail.com
 
 after_success:
-  - mvn jacoco:report
+  - mvn jacoco:report -pl lib
   - mvn -N coveralls:jacoco
