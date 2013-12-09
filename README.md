@@ -1,7 +1,9 @@
-AspectJ for Metrics [![Build Status](https://secure.travis-ci.org/astefanutti/metrics-aspectj.png)](http://travis-ci.org/astefanutti/metrics-aspectj) [![Coverage Status](https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.png?branch=master)](https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master)
+AspectJ for Metrics
 ===============
 
-[AspectJ](http://eclipse.org/aspectj/) integration for [Yammer's Metrics](http://metrics.codahale.com/)
+[![Build Status](https://secure.travis-ci.org/astefanutti/metrics-aspectj.png)](http://travis-ci.org/astefanutti/metrics-aspectj) [![Coverage Status](https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.png?branch=master)](https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.png)](https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024)
+
+[AspectJ](http://eclipse.org/aspectj/) integration for [Metrics](http://metrics.codahale.com/)
 with optional [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) support.
 
 ## Getting Started
@@ -270,9 +272,9 @@ In that case the registry is resolved using the [`SharedMetricRegistries.getOrCr
 
 The _Metrics_ annotations are not inherited whether these are declared on a parent class or on an implemented
 interface. The root causes of that limitation, according to the Java language specification, are:
-+ Non-type annotations are not inherited
-+ Annotations on types are only inherited if they have the `@Inherited` meta-annotation
-+ Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation
++ Non-type annotations are not inherited,
++ Annotations on types are only inherited if they have the `@Inherited` meta-annotation,
++ Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation.
 
 See the [`@Inherited`](http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html) Javadoc
 and [Annotation types](http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6) from the
@@ -281,13 +283,13 @@ Java language specification for more details.
 AspectJ is following the Java language specification and has documented to what extent it's impacted
 in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][].
 There would have been ways of working around that though:
-+ That would have been working around the Java language specification in the first place
++ That would have been working around the Java language specification in the first place,
 + Plus that would have required to rely on a combination of [Expression-based pointcuts][], [Runtime type matching][]
   and [Reflective access][] to define conditional pointcut expressions which:
-    + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient
+    + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient,
     + Would have been evaluated at runtime for each candidate join point relying on the Java Reflection API
       thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP
-      in a larger sense
+      in a larger sense.
 
 [Annotation inheritance]: http://eclipse.org/aspectj/doc/next/adk15notebook/printable.html#annotation-inheritance
 [Annotation inheritance and pointcut matching]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#annotation-inheritance-and-pointcut-matching
@@ -299,16 +301,16 @@ There would have been ways of working around that though:
 
 [Spring AOP][] and [AspectJ][] provides Aspect Oriented Programming (AOP) in two very different ways:
 + AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW)
-  and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation)
-+ Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving
+  and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation),
++ Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving,
 + Spring AOP implements AOP either using (see [Spring proxying mechanisms][]):
-    + JDK dynamic proxies, which add little runtime overhead, clutter stack traces,
-      and can be incompatible with other Spring functionality like Spring JMX (for dynamic MBean export for example)
+    + JDK dynamic proxies, which add little runtime overhead, clutter stack traces
+      and can be incompatible with other Spring functionality like Spring JMX (for dynamic MBean export for example),
     + Or [CGLIB][] (byte code manipulation), that has to be added as a runtime dependency:
-        + It dynamically extends classes thus it is incompatible with `final` classes or methods
-        + CGLIB development isn't active, Hibernate has been deprecating it in favor of [Javassist][] (see [Deprecated CGLIB support][])
+        + It dynamically extends classes thus it is incompatible with `final` classes or methods,
+        + CGLIB development isn't active, Hibernate has been deprecating it in favor of [Javassist][] (see [Deprecated CGLIB support][]),
 + [AJDT (AspectJ Development Tools)][AJDT] provides deep integration between AspectJ and the Eclipse platform
-  which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation
+  which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation.
 
 Further details can be found in [Choosing which AOP declaration style to use][] from the Spring framework documentation.
 The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights as well.
