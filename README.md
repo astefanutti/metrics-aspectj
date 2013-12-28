@@ -1,10 +1,20 @@
 AspectJ for Metrics
 ===============
 
-[![Build Status](https://secure.travis-ci.org/astefanutti/metrics-aspectj.png)](http://travis-ci.org/astefanutti/metrics-aspectj) [![Coverage Status](https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.png?branch=master)](https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.png)](https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024)
+[![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Dependency Status][VersionEye badge]][VersionEye build]
 
-[AspectJ](http://eclipse.org/aspectj/) integration for [Metrics](http://metrics.codahale.com/)
-with optional [Expression Language 3.0 (JSR-341)](http://jcp.org/en/jsr/detail?id=341) support.
+[Travis badge]: https://secure.travis-ci.org/astefanutti/metrics-aspectj.png
+[Travis build]: https://travis-ci.org/astefanutti/metrics-aspectj
+[Coveralls badge]: https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.png?branch=master
+[Coveralls build]: https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master
+[VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.png
+[VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
+
+[AspectJ][] integration for [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
+
+[AspectJ]: http://eclipse.org/aspectj/
+[Metrics]: http://metrics.codahale.com/
+[Expression Language 3.0 (JSR-341)]: http://jcp.org/en/jsr/detail?id=341
 
 ## Getting Started
 
@@ -46,11 +56,13 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     </plugins>
 </build>
 ```
-More information can be found in the [Maven AspectJ plugin](http://mojo.codehaus.org/aspectj-maven-plugin/) documentation.
+More information can be found in the [Maven AspectJ plugin][] documentation.
+
+[Maven AspectJ plugin]: http://mojo.codehaus.org/aspectj-maven-plugin/
 
 ### Using Ant
 
-Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html) `iajc` Ant task:
+Use the [AjcTask][] `iajc` Ant task:
 ```xml
 <target name="{target}" >
     <iajc sourceroots="${basedir}/src"
@@ -64,7 +76,11 @@ Use the [AjcTask](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc
     </iajc>
 </target>
 ```
-Other options are detailed in the [AspectJ Ant tasks](http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html) documentation.
+
+Other options are detailed in the [AspectJ Ant tasks][] documentation.
+
+[AjcTask]: http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html
+[AspectJ Ant tasks]: http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html
 
 ### Using the AspectJ Compiler
 
@@ -72,7 +88,9 @@ The AspectJ compiler can be used directly by executing the following command:
 ```
 ajc -aspectpath metrics-aspectj.jar [Options] [file...]
 ```
-More information can be found in the [AspectJ compiler / weaver](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) documentation.
+More information can be found in the [AspectJ compiler / weaver][] documentation.
+
+[AspectJ compiler / weaver]: http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html
 
 ### Required Dependencies
 
@@ -87,8 +105,8 @@ the AspectJ `aspectjrt` module:
 ```
 These three modules are transitive dependencies of the `metrics-aspectj` Maven module.
 
-Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation` and the `aspectjrt` modules
-can be used so that the only required dependency is `metrics-core`:
+Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation`
+and the `aspectjrt` modules can be used so that the only required dependency is `metrics-core`:
 ```xml
 <dependencies>
     <dependency>
@@ -101,10 +119,10 @@ can be used so that the only required dependency is `metrics-core`:
 
 ### Optional Dependencies
 
-In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` and `Metric` name evaluation
-requires an implementation of the [Expression Language 3.0 API (JSR-341)](http://jcp.org/en/jsr/detail?id=341)
-to be present at runtime. For example, the [`metrics-aspectj-el-samples`](https://github.com/astefanutti/metrics-aspectj/tree/master/samples/el)
-module is using the [GlassFish reference implementation](https://glassfish.java.net/downloads/ri/) as `test` dependency for its unit tests execution:
+In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` and `Metric` name
+evaluation requires an implementation of the [Expression Language 3.0 API (JSR-341)][] to be present at runtime.
+For example, the [`metrics-aspectj-el-samples`][] module is using the [GlassFish reference implementation][]
+as `test` dependency for its unit tests execution:
 ```xml
 <dependency>
     <groupId>org.glassfish</groupId>
@@ -113,17 +131,22 @@ module is using the [GlassFish reference implementation](https://glassfish.java.
 </dependency>
 ```
 
+[`metrics-aspectj-el-samples`]: https://github.com/astefanutti/metrics-aspectj/tree/master/samples/el
+[GlassFish reference implementation]: https://glassfish.java.net/downloads/ri/
+
 ## Usage
 
 ### The _Metrics_ Annotations
 
-_Metrics_ comes with the [`metrics-annotation`](https://github.com/codahale/metrics/tree/master/metrics-annotation)
-module that contains a series of annotations (
-[`@ExceptionMetered`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html),
-[`@Gauge`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html),
-[`@Metered`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html) and
-[`@Timed`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html)).
+_Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][],
+[`@Gauge`][], [`@Metered`][] and [`@Timed`][]).
 These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
+
+[`metrics-annotation`]: https://github.com/codahale/metrics/tree/master/metrics-annotation
+[`@ExceptionMetered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
+[`@Gauge`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Metered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Timed`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 ```java
@@ -222,7 +245,7 @@ The `@Registry.value` mandatory `String` attribute can either be the registry na
 the registry name or the registry instance. The resultant `MetricRegistry` is used to register the `Metric` instantiated into
 each time a _Metrics_ annotation is present on that class methods.
 
-The `MetricRegistry` can be resolved based on the registry name using the [`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29) method:
+The `MetricRegistry` can be resolved based on the registry name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
 ```java
 import com.codahale.metrics.annotation.Timed;
 import fr.stefanutti.metrics.aspectj.Metrics;
@@ -266,7 +289,9 @@ public class TimedMethodWithRegistryFromProperty {
 ```
 
 The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
-In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29) method.
+In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
+
+[`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29)
 
 ## Limitations
 
@@ -276,9 +301,7 @@ interface. The root causes of that limitation, according to the Java language sp
 + Annotations on types are only inherited if they have the `@Inherited` meta-annotation,
 + Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation.
 
-See the [`@Inherited`](http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html) Javadoc
-and [Annotation types](http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6) from the
-Java language specification for more details.
+See the [`@Inherited`][] Javadoc and [Annotation types][] from the Java language specification for more details.
 
 AspectJ is following the Java language specification and has documented to what extent it's impacted
 in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][].
@@ -291,6 +314,8 @@ There would have been ways of working around that though:
       thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP
       in a larger sense.
 
+[`@Inherited`]: http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html
+[Annotation types]: http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6
 [Annotation inheritance]: http://eclipse.org/aspectj/doc/next/adk15notebook/printable.html#annotation-inheritance
 [Annotation inheritance and pointcut matching]: http://eclipse.org/aspectj/doc/released/adk15notebook/annotations-pointcuts-and-advice.html#annotation-inheritance-and-pointcut-matching
 [Expression-based pointcuts]: http://eclipse.org/aspectj/doc/released/progguide/semantics-pointcuts.html#d0e5549
