@@ -18,9 +18,13 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
                 <configuration>
-                    <complianceLevel>1.7</complianceLevel>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <complianceLevel>1.6</complianceLevel>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <!-- https://bugs.eclipse.org/bugs/show_bug.cgi?id=418367 -->
+                    <Xset>
+                        <generateStackMaps>true</generateStackMaps>
+                    </Xset>
                 </configuration>
                 <executions>
                     <execution>
