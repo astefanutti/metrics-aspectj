@@ -120,7 +120,7 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 ### Optional Dependencies
 
 In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` and `Metric` name
-evaluation requires an implementation of the [Expression Language 3.0 API (JSR-341)][] to be present at runtime.
+evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime.
 For example, the [`metrics-aspectj-el-samples`][] module is using the [GlassFish reference implementation][]
 as `test` dependency for its unit tests execution:
 ```xml
@@ -131,7 +131,6 @@ as `test` dependency for its unit tests execution:
 </dependency>
 ```
 
-[Expression Language 3.0 API (JSR-341)]: http://jcp.org/en/jsr/detail?id=341
 [`metrics-aspectj-el-samples`]: https://github.com/astefanutti/metrics-aspectj/tree/master/samples/el
 [GlassFish reference implementation]: https://glassfish.java.net/downloads/ri/
 
