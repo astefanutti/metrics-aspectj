@@ -62,7 +62,7 @@ More information can be found in the [Maven AspectJ plugin][] documentation.
 
 ### Using Ant
 
-Use the [AjcTask][] `iajc` Ant task:
+Use the [AjcTask][] (`iajc`) Ant task:
 ```xml
 <target name="{target}" >
     <iajc sourceroots="${basedir}/src"
@@ -131,6 +131,7 @@ as `test` dependency for its unit tests execution:
 </dependency>
 ```
 
+[Expression Language 3.0 API (JSR-341)]: http://jcp.org/en/jsr/detail?id=341
 [`metrics-aspectj-el-samples`]: https://github.com/astefanutti/metrics-aspectj/tree/master/samples/el
 [GlassFish reference implementation]: https://glassfish.java.net/downloads/ri/
 
@@ -289,7 +290,7 @@ public class TimedMethodWithRegistryFromProperty {
 The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
 In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
 
-[`SharedMetricRegistries.getOrCreate(String name)`](http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29)
+[`SharedMetricRegistries.getOrCreate(String name)`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
 
 ## Limitations
 
