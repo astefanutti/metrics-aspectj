@@ -152,7 +152,6 @@ For example, a method can be annotated with the `@Timed` annotation so that its 
 ```java
 import com.codahale.metrics.annotation.Timed;
 
-...
 public class TimedMethod {
 
     @Timed(name = "timerName")
@@ -168,7 +167,8 @@ and inline the method invocation around with the needed code to time the method 
 
 A `static` method can also be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 ```java
-...
+import com.codahale.metrics.annotation.Timed;
+
 public class TimedMethod {
 
     @Timed(name = "timerName")
@@ -179,15 +179,13 @@ public class TimedMethod {
 
 In that example, _Metrics AspectJ_ will instrument the `TimedMethod` class so that, when it's loaded,
 a `Timer` instance with the provided `name` will be created (or an existing `Timer` with the same `name`
-already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around with the needed code
-to time the method execution using that `Timer` instance.
+already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around
+with the needed code to time the method execution using that `Timer` instance.
 
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
 ```java
 import com.codahale.metrics.annotation.Timed;
-import fr.stefanutti.metrics.aspectj.Metrics;
 
-...
 public class TimedMethod {
 
     private long id;
@@ -212,7 +210,7 @@ Note that these annotations won't be inherited if they are placed on interfaces 
 Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
 in more details in the [Limitations](#limitations) section.
 
-### _Metrics_ Activation and the `@Metrics` Annotation
+### _Metrics AspectJ_ Activation and the `@Metrics` Annotation
 
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
 ```java
@@ -357,5 +355,7 @@ Copyright (c) 2013 Antonin Stefanutti
 
 Published under Apache Software License 2.0, see LICENSE
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/astefanutti/metrics-aspectj/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Trend][Bitdeli Badge]][Bitdeli link]
 
+[Bitdeli badge]: https://d2weczhvl823v0.cloudfront.net/astefanutti/metrics-aspectj/trend.png
+[Bitdeli link]: https://bitdeli.com/free "Bitdeli Badge"
