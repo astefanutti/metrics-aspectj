@@ -18,13 +18,11 @@ package fr.stefanutti.metrics.aspectj;
 import com.codahale.metrics.MetricRegistry;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class JavaxElMetricStrategy implements MetricStrategy {
-
-    private static final Pattern expression = Pattern.compile("[#|$]\\{(.*)\\}");
+/* packaged-protected */ final class JavaxElMetricStrategy implements MetricStrategy {
 
     private final MetricStrategy seDelegate;
+
     private final MetricStrategy elDelegate;
 
     JavaxElMetricStrategy(Object object) {
@@ -39,7 +37,7 @@ public class JavaxElMetricStrategy implements MetricStrategy {
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
-        Matcher matcher = expression.matcher(registry);
+        Matcher matcher = EL.matcher(registry);
         if (matcher.matches())
             return elDelegate.resolveMetricRegistry(matcher.group(1));
         else
@@ -48,7 +46,7 @@ public class JavaxElMetricStrategy implements MetricStrategy {
 
     @Override
     public String resolveMetricName(String name) {
-        Matcher matcher = expression.matcher(name);
+        Matcher matcher = EL.matcher(name);
         if (matcher.matches())
             return elDelegate.resolveMetricName(matcher.group(1));
         else

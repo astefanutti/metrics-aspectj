@@ -17,7 +17,11 @@ package fr.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.MetricRegistry;
 
+import java.util.regex.Pattern;
+
 /* packaged-protected */ interface MetricStrategy {
+
+    static final Pattern EL = Pattern.compile("[#|$]\\{(.*)\\}");
 
     MetricRegistry resolveMetricRegistry(String registry);
 

@@ -15,7 +15,6 @@
  */
 package fr.stefanutti.metrics.aspectj;
 
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 

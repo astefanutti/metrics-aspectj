@@ -18,17 +18,14 @@ package fr.stefanutti.metrics.aspectj;
 import com.codahale.metrics.MetricRegistry;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class JavaSeMetricStrategy implements MetricStrategy {
-
-    private static final Pattern expression = Pattern.compile("[#|$]\\{(.*)\\}");
+/* packaged-protected */ final class JavaSeMetricStrategy implements MetricStrategy {
 
     private final MetricStrategy seDelegate = new JavaSeMetricStrategyDelegate();
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
-        Matcher matcher = expression.matcher(registry);
+        Matcher matcher = EL.matcher(registry);
         if (matcher.matches())
             throw new UnsupportedOperationException("Unsupported EL expression [" + registry + "] evaluation as no EL implementation is available");
         else
@@ -37,7 +34,7 @@ public class JavaSeMetricStrategy implements MetricStrategy {
 
     @Override
     public String resolveMetricName(String name) {
-        Matcher matcher = expression.matcher(name);
+        Matcher matcher = EL.matcher(name);
         if (matcher.matches())
             throw new UnsupportedOperationException("Unsupported EL expression [" + name + "] evaluation as no EL implementation is available");
         else
