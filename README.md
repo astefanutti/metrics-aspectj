@@ -351,11 +351,6 @@ The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights 
 License
 -------
 
-Copyright (c) 2013 Antonin Stefanutti
+Copyright © 2013-2014 Antonin Stefanutti
 
 Published under Apache Software License 2.0, see LICENSE
-
-[![Trend][Bitdeli Badge]][Bitdeli link]
-
-[Bitdeli badge]: https://d2weczhvl823v0.cloudfront.net/astefanutti/metrics-aspectj/trend.png
-[Bitdeli link]: https://bitdeli.com/free "Bitdeli Badge"
