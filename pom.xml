@@ -93,8 +93,6 @@
                         <sourceDirectories>
                             <sourceDirectory>${project.basedir}/lib/src/main/java</sourceDirectory>
                             <sourceDirectory>${project.basedir}/lib/src/main/aspect</sourceDirectory>
-                            <sourceDirectory>${project.basedir}/samples/se/src/main/java</sourceDirectory>
-                            <sourceDirectory>${project.basedir}/samples/el/src/main/java</sourceDirectory>
                         </sourceDirectories>
                     </configuration>
                 </plugin>

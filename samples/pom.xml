@@ -71,6 +71,9 @@
                                     <propertyName>jacoco.agent.arg</propertyName>
                                     <destFile>${project.basedir}/../../lib/target/jacoco.exec</destFile>
                                     <append>true</append>
+                                    <includes>
+                                        <include>fr.stefanutti.metrics.aspectj.*</include>
+                                    </includes>
                                 </configuration>
                             </execution>
                         </executions>
