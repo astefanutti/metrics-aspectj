@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries;
 
 import javax.el.ELProcessor;
 
-/* packaged-protected */ class JavaxElMetricStrategyDelegate implements MetricStrategy {
+/* packaged-private */ class JavaxElMetricStrategyDelegate implements MetricStrategy {
 
     private final ELProcessor processor;
 

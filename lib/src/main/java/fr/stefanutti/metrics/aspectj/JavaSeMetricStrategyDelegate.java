@@ -18,7 +18,7 @@ package fr.stefanutti.metrics.aspectj;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 
-/* packaged-protected */ class JavaSeMetricStrategyDelegate implements MetricStrategy {
+/* packaged-private */ class JavaSeMetricStrategyDelegate implements MetricStrategy {
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {

@@ -34,7 +34,7 @@ final aspect MetricAspect extends AbstractMetricAspect {
 
     declare parents : (@Metrics *) implements Profiled;
 
-    /* packaged-protected */
+    /* packaged-private */
     final Map<String, AnnotatedMetric> Profiled.metrics = new ConcurrentHashMap<String, AnnotatedMetric>();
 
     pointcut profiled(Profiled object) : execution((@Metrics Profiled+).new(..)) && this(object);

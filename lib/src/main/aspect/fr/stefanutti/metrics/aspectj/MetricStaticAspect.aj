@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentMap;
 
 final aspect MetricStaticAspect extends AbstractMetricAspect {
 
-    /* packaged-protected */
+    /* packaged-private */
     final static ConcurrentMap<String, AnnotatedMetric> metrics = new ConcurrentHashMap<String, AnnotatedMetric>();
 
     pointcut profiled() : staticinitialization(@Metrics *);

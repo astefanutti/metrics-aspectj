@@ -19,7 +19,7 @@ import com.codahale.metrics.MetricRegistry;
 
 import java.util.regex.Matcher;
 
-/* packaged-protected */ final class JavaSeMetricStrategy implements MetricStrategy {
+/* packaged-private */ final class JavaSeMetricStrategy implements MetricStrategy {
 
     private final MetricStrategy seDelegate = new JavaSeMetricStrategyDelegate();
 

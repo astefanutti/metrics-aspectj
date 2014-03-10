@@ -19,7 +19,7 @@ import com.codahale.metrics.Metric;
 
 import java.lang.annotation.Annotation;
 
-/* packaged-protected */ class AnnotatedMetric {
+/* packaged-private */ class AnnotatedMetric {
 
     private final Metric metric;
 

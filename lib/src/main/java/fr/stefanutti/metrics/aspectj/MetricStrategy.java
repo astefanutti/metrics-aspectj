@@ -19,7 +19,7 @@ import com.codahale.metrics.MetricRegistry;
 
 import java.util.regex.Pattern;
 
-/* packaged-protected */ interface MetricStrategy {
+/* packaged-private */ interface MetricStrategy {
 
     static final Pattern EL = Pattern.compile("[#|$]\\{(.*)\\}");
 
