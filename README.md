@@ -351,6 +351,6 @@ The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights 
 License
 -------
 
-Copyright © 2013-2014 Antonin Stefanutti
+Copyright © 2013-2014, Antonin Stefanutti
 
 Published under Apache Software License 2.0, see LICENSE
