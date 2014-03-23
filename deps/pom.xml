@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>fr.stefanutti.metrics</groupId>
+        <groupId>org.stefanutti.metrics</groupId>
         <artifactId>metrics-aspectj-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>metrics-aspectj-deps</artifactId>
-    <name>Metrics AspectJ Deps</name>
+    <name>Metrics AspectJ Dependencies</name>
 
     <build>
         <plugins>
@@ -51,7 +51,7 @@
         <!-- shaded dependencies -->
 
         <dependency>
-            <groupId>fr.stefanutti.metrics</groupId>
+            <groupId>org.stefanutti.metrics</groupId>
             <artifactId>metrics-aspectj</artifactId>
             <version>${project.version}</version>
         </dependency>

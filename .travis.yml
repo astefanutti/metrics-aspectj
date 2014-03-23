@@ -14,5 +14,5 @@ notifications:
       - antonin.stefanutti@gmail.com
 
 after_success:
-  - mvn jacoco:report -pl lib
+  - mvn jacoco:report -pl impl
   - mvn -N coveralls:jacoco

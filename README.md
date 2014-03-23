@@ -24,7 +24,7 @@ Add the `metrics-aspectj` library as a dependency:
 ```xml
 <dependencies>
     <dependency>
-        <groupId>fr.stefanutti.metrics</groupId>
+        <groupId>org.stefanutti.metrics</groupId>
         <artifactId>metrics-aspectj</artifactId>
         <version>${metrics.aspectj.version}</version>
     </dependency>
@@ -40,7 +40,7 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
             <configuration>
                 <aspectLibraries>
                     <aspectLibrary>
-                        <groupId>fr.stefanutti.metrics</groupId>
+                        <groupId>org.stefanutti.metrics</groupId>
                         <artifactId>metrics-aspectj</artifactId>
                     </aspectLibrary>
                 </aspectLibraries>
@@ -110,7 +110,7 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 ```xml
 <dependencies>
     <dependency>
-        <groupId>fr.stefanutti.metrics</groupId>
+        <groupId>org.stefanutti.metrics</groupId>
         <artifactId>metrics-aspectj-deps</artifactId>
         <version>${metrics.aspectj.version}</version>
     </dependency>
@@ -121,7 +121,7 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 
 In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` and `Metric` name
 evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime.
-For example, the [`metrics-aspectj-el-samples`][] module is using the [GlassFish reference implementation][]
+For example, the [`metrics-aspectj-el`][] module is using the [GlassFish reference implementation][]
 as `test` dependency for its unit tests execution:
 ```xml
 <dependency>
@@ -131,7 +131,7 @@ as `test` dependency for its unit tests execution:
 </dependency>
 ```
 
-[`metrics-aspectj-el-samples`]: https://github.com/astefanutti/metrics-aspectj/tree/master/samples/el
+[`metrics-aspectj-el`]: https://github.com/astefanutti/metrics-aspectj/tree/master/envs/el
 [GlassFish reference implementation]: https://glassfish.java.net/downloads/ri/
 
 ## Usage
@@ -215,7 +215,7 @@ in more details in the [Limitations](#limitations) section.
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
 ```java
 import com.codahale.metrics.annotation.Timed;
-import fr.stefanutti.metrics.aspectj.Metrics;
+import org.stefanutti.metrics.aspectj.Metrics;
 
 @Metrics
 public class TimedMethod {
@@ -246,8 +246,8 @@ each time a _Metrics_ annotation is present on that class methods.
 The `MetricRegistry` can be resolved based on the registry name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
 ```java
 import com.codahale.metrics.annotation.Timed;
-import fr.stefanutti.metrics.aspectj.Metrics;
-import fr.stefanutti.metrics.aspectj.Registry;
+import org.stefanutti.metrics.aspectj.Metrics;
+import org.stefanutti.metrics.aspectj.Registry;
 
 @Metrics
 @Registry("registryName")
@@ -263,8 +263,8 @@ The `MetricRegistry` can be resolved with an EL expression that evaluates to a b
 ```java
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
-import fr.stefanutti.metrics.aspectj.Metrics;
-import fr.stefanutti.metrics.aspectj.Registry;
+import org.stefanutti.metrics.aspectj.Metrics;
+import org.stefanutti.metrics.aspectj.Registry;
 
 @Metrics
 @Registry("${this.registry}")
