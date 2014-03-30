@@ -215,6 +215,7 @@ in more details in the [Limitations](#limitations) section.
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
 ```java
 import com.codahale.metrics.annotation.Timed;
+
 import org.stefanutti.metrics.aspectj.Metrics;
 
 @Metrics
@@ -246,6 +247,7 @@ each time a _Metrics_ annotation is present on that class methods.
 The `MetricRegistry` can be resolved based on the registry name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
 ```java
 import com.codahale.metrics.annotation.Timed;
+
 import org.stefanutti.metrics.aspectj.Metrics;
 import org.stefanutti.metrics.aspectj.Registry;
 
@@ -263,6 +265,7 @@ The `MetricRegistry` can be resolved with an EL expression that evaluates to a b
 ```java
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
+
 import org.stefanutti.metrics.aspectj.Metrics;
 import org.stefanutti.metrics.aspectj.Registry;
 
