@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.stefanutti.metrics</groupId>
+        <groupId>org.stefanutti.metrics.aspectj</groupId>
         <artifactId>metrics-aspectj-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -30,7 +30,7 @@
                     <artifactId>metrics-core</artifactId>
                 </dependency>
                 <dependency>
-                    <groupId>org.stefanutti.metrics</groupId>
+                    <groupId>org.stefanutti.metrics.aspectj</groupId>
                     <artifactId>metrics-aspectj-deps</artifactId>
                     <version>${project.version}</version>
                 </dependency>
@@ -47,7 +47,7 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>org.stefanutti.metrics</groupId>
+                    <groupId>org.stefanutti.metrics.aspectj</groupId>
                     <artifactId>metrics-aspectj</artifactId>
                     <version>${project.version}</version>
                 </dependency>
@@ -102,7 +102,7 @@
                     <target>1.6</target>
                     <aspectLibraries>
                         <aspectLibrary>
-                            <groupId>org.stefanutti.metrics</groupId>
+                            <groupId>org.stefanutti.metrics.aspectj</groupId>
                             <artifactId>${metrics.aspectj.lib}</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>

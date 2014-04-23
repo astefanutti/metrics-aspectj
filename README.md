@@ -24,7 +24,7 @@ Add the `metrics-aspectj` library as a dependency:
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.stefanutti.metrics</groupId>
+        <groupId>org.stefanutti.metrics.aspectj</groupId>
         <artifactId>metrics-aspectj</artifactId>
         <version>${metrics.aspectj.version}</version>
     </dependency>
@@ -40,7 +40,7 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
             <configuration>
                 <aspectLibraries>
                     <aspectLibrary>
-                        <groupId>org.stefanutti.metrics</groupId>
+                        <groupId>org.stefanutti.metrics.aspectj</groupId>
                         <artifactId>metrics-aspectj</artifactId>
                     </aspectLibrary>
                 </aspectLibraries>
@@ -110,7 +110,7 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 ```xml
 <dependencies>
     <dependency>
-        <groupId>org.stefanutti.metrics</groupId>
+        <groupId>org.stefanutti.metrics.aspectj</groupId>
         <artifactId>metrics-aspectj-deps</artifactId>
         <version>${metrics.aspectj.version}</version>
     </dependency>
