@@ -51,7 +51,7 @@
         <!-- shaded dependencies -->
 
         <dependency>
-            <groupId>org.stefanutti.metrics</groupId>
+            <groupId>org.stefanutti.metrics.aspectj</groupId>
             <artifactId>metrics-aspectj</artifactId>
             <version>${project.version}</version>
         </dependency>
