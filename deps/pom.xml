@@ -17,6 +17,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <configuration>
+                    <createSourcesJar>true</createSourcesJar>
                     <artifactSet>
                         <excludes>
                             <exclude>com.codahale.metrics:metrics-core</exclude>
