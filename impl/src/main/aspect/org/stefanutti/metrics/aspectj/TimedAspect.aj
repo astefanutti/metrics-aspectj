@@ -17,13 +17,15 @@ package org.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.Timed;
+import org.aspectj.lang.reflect.MethodSignature;
 
 final aspect TimedAspect {
 
     pointcut timed(Profiled object) : execution(@Timed !static * (@Metrics Profiled+).*(..)) && this(object);
 
     Object around(Profiled object) : timed(object) {
-        Timer timer = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Timer.class);
+        String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
+        Timer timer = object.metrics.get(methodSignature).getMetric(Timer.class);
         Timer.Context context = timer.time();
         try {
             return proceed(object);

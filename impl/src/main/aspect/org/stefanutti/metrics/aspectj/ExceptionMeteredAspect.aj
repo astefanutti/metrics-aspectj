@@ -17,13 +17,15 @@ package org.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.annotation.ExceptionMetered;
+import org.aspectj.lang.reflect.MethodSignature;
 
 final aspect ExceptionMeteredAspect {
 
     pointcut exceptionMetered(Profiled object) : execution(@ExceptionMetered !static * (@Metrics Profiled+).*(..)) && this(object);
 
     after(Profiled object) throwing (Throwable throwable) : exceptionMetered(object) {
-        AnnotatedMetric metric = object.metrics.get(thisJoinPointStaticPart.getSignature().toLongString());
+        String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
+        AnnotatedMetric metric = object.metrics.get(methodSignature);
         if (metric.getAnnotation(ExceptionMetered.class).cause().isInstance(throwable)) {
             metric.getMetric(Meter.class).mark();
         }
