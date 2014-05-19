@@ -3,11 +3,11 @@ AspectJ for Metrics
 
 [![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Dependency Status][VersionEye badge]][VersionEye build]
 
-[Travis badge]: https://secure.travis-ci.org/astefanutti/metrics-aspectj.png
+[Travis badge]: https://travis-ci.org/astefanutti/metrics-aspectj.svg?branch=master
 [Travis build]: https://travis-ci.org/astefanutti/metrics-aspectj
-[Coveralls badge]: https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.png?branch=master
+[Coveralls badge]: https://img.shields.io/coveralls/astefanutti/metrics-aspectj.svg
 [Coveralls build]: https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master
-[VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.png
+[VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg
 [VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
 
 [AspectJ][] integration for [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
