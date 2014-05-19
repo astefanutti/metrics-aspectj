@@ -17,13 +17,15 @@ package org.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.annotation.Metered;
+import org.aspectj.lang.reflect.MethodSignature;
 
 final aspect MeteredStaticAspect {
 
     pointcut metered() : execution(@Metered static * (@Metrics *).*(..));
 
     before() : metered() {
-        Meter meter = MetricStaticAspect.metrics.get(thisJoinPointStaticPart.getSignature().toLongString()).getMetric(Meter.class);
+        String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
+        Meter meter = MetricStaticAspect.metrics.get(methodSignature).getMetric(Meter.class);
         meter.mark();
     }
 }
