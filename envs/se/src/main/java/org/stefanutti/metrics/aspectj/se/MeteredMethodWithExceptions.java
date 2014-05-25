@@ -17,10 +17,8 @@ package org.stefanutti.metrics.aspectj.se;
 
 import com.codahale.metrics.annotation.ExceptionMetered;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("exceptionMeterRegistry")
+@Metrics(registry = "exceptionMeterRegistry")
 public class MeteredMethodWithExceptions {
 
     @ExceptionMetered(name = "illegalArgumentExceptionMeteredMethod", cause = IllegalArgumentException.class)

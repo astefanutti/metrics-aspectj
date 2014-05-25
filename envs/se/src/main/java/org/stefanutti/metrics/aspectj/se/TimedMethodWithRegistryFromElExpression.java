@@ -18,10 +18,8 @@ package org.stefanutti.metrics.aspectj.se;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("${this.registry}")
+@Metrics(registry = "${this.registry}")
 public class TimedMethodWithRegistryFromElExpression {
 
     private final MetricRegistry registry;

@@ -19,12 +19,10 @@ import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
 import java.util.List;
 
-@Metrics
-@Registry("complexSignatureRegistry")
+@Metrics(registry = "complexSignatureRegistry")
 public class ComplexSignatureMethod {
 
     @Timed

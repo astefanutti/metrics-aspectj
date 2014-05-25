@@ -17,10 +17,8 @@ package org.stefanutti.metrics.aspectj.el;
 
 import com.codahale.metrics.annotation.Timed;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("timerWithElRegistry")
+@Metrics(registry = "timerWithElRegistry")
 public class TimedMethodWithNameFromElExpression {
 
     private final long id;

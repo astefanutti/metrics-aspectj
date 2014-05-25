@@ -17,10 +17,8 @@ package org.stefanutti.metrics.aspectj.se;
 
 import com.codahale.metrics.annotation.Timed;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("singleTimerRegistry")
+@Metrics(registry = "singleTimerRegistry")
 public class TimedMethodWithRegistryFromString {
 
     @Timed(name = "singleTimedMethod")

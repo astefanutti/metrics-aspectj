@@ -74,7 +74,7 @@ final aspect MetricStaticAspect extends AbstractMetricAspect {
 
     private void metricAnnotation(Class<?> annotated, Method method, MetricStrategy strategy, Class<? extends Annotation> clazz, MetricFactory factory) {
         if (method.isAnnotationPresent(clazz)) {
-            MetricRegistry registry = strategy.resolveMetricRegistry(annotated.getAnnotation(Registry.class).value());
+            MetricRegistry registry = strategy.resolveMetricRegistry(annotated.getAnnotation(Metrics.class).registry());
             Annotation annotation = method.getAnnotation(clazz);
             Metric metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
             metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));

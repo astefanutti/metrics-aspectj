@@ -79,7 +79,7 @@ final aspect MetricAspect extends AbstractMetricAspect {
 
     private void metricAnnotation(Profiled object, Method method, MetricStrategy strategy, Class<? extends Annotation> clazz, MetricFactory factory) {
         if (method.isAnnotationPresent(clazz)) {
-            MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Registry.class).value());
+            MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
             Annotation annotation = method.getAnnotation(clazz);
             Metric metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
             object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));

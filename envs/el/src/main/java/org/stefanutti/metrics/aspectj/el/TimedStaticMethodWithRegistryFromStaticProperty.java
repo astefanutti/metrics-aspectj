@@ -18,10 +18,8 @@ package org.stefanutti.metrics.aspectj.el;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("${TimedStaticMethodWithRegistryFromStaticProperty.REGISTRY}")
+@Metrics(registry = "${TimedStaticMethodWithRegistryFromStaticProperty.REGISTRY}")
 public class TimedStaticMethodWithRegistryFromStaticProperty {
 
     public static final MetricRegistry REGISTRY = new MetricRegistry();

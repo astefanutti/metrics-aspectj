@@ -17,10 +17,8 @@ package org.stefanutti.metrics.aspectj.se;
 
 import com.codahale.metrics.annotation.Gauge;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("singleGaugeStaticRegistry")
+@Metrics(registry = "singleGaugeStaticRegistry")
 public class GaugeStaticMethodWithRegistryFromString {
 
     private static long singleStaticGauge;

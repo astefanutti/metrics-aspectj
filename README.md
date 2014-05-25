@@ -119,8 +119,8 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 
 ### Optional Dependencies
 
-In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` and `Metric` name
-evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime.
+In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` resolution
+and `Metric` name evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime.
 For example, the [`metrics-aspectj-el`][] module is using the [GlassFish reference implementation][]
 as `test` dependency for its unit tests execution:
 ```xml
@@ -136,81 +136,7 @@ as `test` dependency for its unit tests execution:
 
 ## Usage
 
-### The _Metrics_ Annotations
-
-_Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][],
-[`@Gauge`][], [`@Metered`][] and [`@Timed`][]).
-These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
-
-[`metrics-annotation`]: https://github.com/codahale/metrics/tree/master/metrics-annotation
-[`@ExceptionMetered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
-[`@Gauge`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Metered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Timed`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html
-
-For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
-```java
-import com.codahale.metrics.annotation.Timed;
-
-public class TimedMethod {
-
-    @Timed(name = "timerName")
-    public void timedMethod() {
-    }
-}
-```
-
-In that example, _Metrics AspectJ_ will instrument all the constructors of the `TimedMethod` class by injecting
-Java bytecode that will automatically create a `Timer` instance with the provided `name` (or retrieve an existing `Timer`
-with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
-and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
-
-A `static` method can also be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
-```java
-import com.codahale.metrics.annotation.Timed;
-
-public class TimedMethod {
-
-    @Timed(name = "timerName")
-    public static void timedStaticMethod() {
-    }
-}
-```
-
-In that example, _Metrics AspectJ_ will instrument the `TimedMethod` class so that, when it's loaded,
-a `Timer` instance with the provided `name` will be created (or an existing `Timer` with the same `name`
-already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around
-with the needed code to time the method execution using that `Timer` instance.
-
-Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
-```java
-import com.codahale.metrics.annotation.Timed;
-
-public class TimedMethod {
-
-    private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    @Timed(name = "${'timerName' += this.id}")
-    public void timedMethod() {
-    }
-}
-```
-
-In that example, _Metrics AspectJ_ will automatically create a `Timer` instance (respectively retrieve an existing `Timer` instance
-with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
-and evaluate the EL expression based on the value of the `id` attribute of that newly created `TimedMethod` instance
-to name the `Timer` instance (respectively resolve the `Timer` instance registered in the `MetricRegistry`).
-If the value of the `id` attribute changes over time, the `name` of the `Timer` instance won't be re-evaluated.
-
-Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
-Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
-in more details in the [Limitations](#limitations) section.
-
-### _Metrics AspectJ_ Activation and the `@Metrics` Annotation
+### _Metrics AspectJ_ Activation
 
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
 ```java
@@ -235,24 +161,104 @@ to the _Metrics_ annotations specification.
 Note that this annotation won't be inherited if it's placed on an interface or a parent class.
 More details are available in the [Limitations](#limitations) section.
 
-### _Metrics_ Registry Resolution and the `@Registry` Annotation
+### The _Metrics_ Annotations
 
-The `@Registry` annotation provides the way to declare the `MetricRegistry` to register the generated `Metric` instances into.
-It targets classes and is ultimately used to create the `Metric` instances and weave the _Metrics AspectJ_ aspects into the annotated class.
+_Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][],
+[`@Gauge`][], [`@Metered`][] and [`@Timed`][]).
+These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
 
-The `@Registry.value` mandatory `String` attribute can either be the registry name or a valid EL expression that evaluates to
-the registry name or the registry instance. The resultant `MetricRegistry` is used to register the `Metric` instantiated into
-each time a _Metrics_ annotation is present on that class methods.
+[`metrics-annotation`]: https://github.com/codahale/metrics/tree/master/metrics-annotation
+[`@ExceptionMetered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
+[`@Gauge`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Metered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Timed`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html
 
-The `MetricRegistry` can be resolved based on the registry name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
+For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 ```java
 import com.codahale.metrics.annotation.Timed;
 
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
 @Metrics
-@Registry("registryName")
+public class TimedMethod {
+
+    @Timed(name = "timerName")
+    public void timedMethod() {
+    }
+}
+```
+
+In that example, _Metrics AspectJ_ will instrument all the constructors of the `TimedMethod` class by injecting
+Java bytecode that will automatically create a `Timer` instance with the provided `name` (or retrieve an existing `Timer`
+with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
+and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
+
+A `static` method can also be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
+```java
+import com.codahale.metrics.annotation.Timed;
+
+import org.stefanutti.metrics.aspectj.Metrics;
+
+@Metrics
+public class TimedMethod {
+
+    @Timed(name = "timerName")
+    public static void timedStaticMethod() {
+    }
+}
+```
+
+In that example, _Metrics AspectJ_ will instrument the `TimedMethod` class so that, when it's loaded,
+a `Timer` instance with the provided `name` will be created (or an existing `Timer` with the same `name`
+already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around
+with the needed code to time the method execution using that `Timer` instance.
+
+Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
+```java
+import com.codahale.metrics.annotation.Timed;
+
+import org.stefanutti.metrics.aspectj.Metrics;
+
+@Metrics
+public class TimedMethod {
+
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    @Timed(name = "${'timerName' += this.id}")
+    public void timedMethod() {
+    }
+}
+```
+
+In that example, _Metrics AspectJ_ will automatically create a `Timer` instance (respectively retrieve an existing `Timer` instance
+with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
+and evaluate the EL expression based on the value of the `id` attribute of that newly created `TimedMethod` instance
+to name the `Timer` instance (respectively resolve the `Timer` instance registered in the `MetricRegistry`).
+If the value of the `id` attribute changes over time, the `name` of the `Timer` instance won't be re-evaluated.
+
+Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
+Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
+in more details in the [Limitations](#limitations) section.
+
+### _Metrics_ Registry Resolution
+
+The `Metrics.registry` annotation attribute provides the way to declare the `MetricRegistry` to register the generated `Metric` instances into.
+Its value can either be a string literal that identifies a `MetricRegistry` accessible by name from the [`SharedMetricRegistries`][] class
+or a valid EL expression that evaluates to the registry name or the registry instance. The resultant `MetricRegistry` is used
+to register the `Metric` instantiated into each time a _Metrics_ annotation is present on that class methods.
+It defaults to the string literal `metrics-registry`.
+
+The `MetricRegistry` can thus be resolved by name relying on the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
+```java
+import com.codahale.metrics.annotation.Timed;
+
+import org.stefanutti.metrics.aspectj.Metrics;
+
+@Metrics(registry = "registryName")
 public class TimedMethodWithRegistryByName {
 
     @Timed(name = "timerName")
@@ -261,16 +267,14 @@ public class TimedMethodWithRegistryByName {
 }
 ```
 
-The `MetricRegistry` can be resolved with an EL expression that evaluates to a bean property of type `MetricRegistry`:
+Or with an EL expression that evaluates to a bean property of type `MetricRegistry`:
 ```java
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
 
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("${this.registry}")
+@Metrics(registry = "${this.registry}")
 public class TimedMethodWithRegistryFromProperty {
 
     private final MetricRegistry registry;
@@ -289,9 +293,10 @@ public class TimedMethodWithRegistryFromProperty {
 }
 ```
 
-The `MetricRegistry` can be resolved with an EL expression that evaluates to a `String`.
-In that case the registry is resolved using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
+Or with an EL expression that evaluates to a `String`. In that case the registry is resolved by name
+using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
 
+[`SharedMetricRegistries`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html
 [`SharedMetricRegistries.getOrCreate(String name)`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
 
 ## Limitations

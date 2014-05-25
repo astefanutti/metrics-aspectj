@@ -17,10 +17,8 @@ package org.stefanutti.metrics.aspectj.el;
 
 import com.codahale.metrics.annotation.Timed;
 import org.stefanutti.metrics.aspectj.Metrics;
-import org.stefanutti.metrics.aspectj.Registry;
 
-@Metrics
-@Registry("timerStaticWithElRegistry")
+@Metrics(registry = "timerStaticWithElRegistry")
 public class TimedStaticMethodWithNameFromElExpression {
 
     public final static long ID = Math.round(Math.random() * Long.MAX_VALUE);
