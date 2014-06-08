@@ -228,7 +228,7 @@ public class TimedMethod {
         return id;
     }
 
-    @Timed(name = "${'timerName' += this.id}")
+    @Timed(name = "timerName ${this.id}")
     public void timedMethod() {
     }
 }

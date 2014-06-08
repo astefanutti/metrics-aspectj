@@ -16,7 +16,9 @@
 package org.stefanutti.metrics.aspectj.el;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
@@ -25,6 +27,11 @@ import static org.junit.Assert.assertThat;
 public class TimedStaticMethodWithRegistryFromStaticPropertyTest {
 
     private final static String TIMER_NAME = MetricRegistry.name(TimedStaticMethodWithRegistryFromStaticProperty.class, "singleTimedStaticMethod");
+
+    @AfterClass
+    public static void clearSharedMetricRegistries() {
+        SharedMetricRegistries.clear();
+    }
 
     @Test
     public void callTimedStaticMethodOnce() {

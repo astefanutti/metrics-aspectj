@@ -16,28 +16,27 @@
 package org.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.SharedMetricRegistries;
 
 import java.util.regex.Matcher;
 
 /* packaged-private */ final class JavaSeMetricStrategy implements MetricStrategy {
 
-    private final MetricStrategy seDelegate = new JavaSeMetricStrategyDelegate();
-
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
-        Matcher matcher = EL.matcher(registry);
-        if (matcher.matches())
+        Matcher matcher = EL_PATTERN.matcher(registry);
+        if (matcher.find())
             throw new UnsupportedOperationException("Unsupported EL expression [" + registry + "] evaluation as no EL implementation is available");
         else
-            return seDelegate.resolveMetricRegistry(registry);
+            return SharedMetricRegistries.getOrCreate(registry);
     }
 
     @Override
     public String resolveMetricName(String name) {
-        Matcher matcher = EL.matcher(name);
+        Matcher matcher = EL_PATTERN.matcher(name);
         if (matcher.matches())
             throw new UnsupportedOperationException("Unsupported EL expression [" + name + "] evaluation as no EL implementation is available");
         else
-            return seDelegate.resolveMetricName(name);
+            return name;
     }
 }

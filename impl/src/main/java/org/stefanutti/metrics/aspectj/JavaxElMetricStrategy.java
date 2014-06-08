@@ -16,40 +16,60 @@
 package org.stefanutti.metrics.aspectj;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.SharedMetricRegistries;
 
+import javax.el.ELProcessor;
 import java.util.regex.Matcher;
 
 /* packaged-private */ final class JavaxElMetricStrategy implements MetricStrategy {
 
-    private final MetricStrategy seDelegate;
-
-    private final MetricStrategy elDelegate;
+    private final ELProcessor processor;
 
     JavaxElMetricStrategy(Object object) {
-        seDelegate = new JavaSeMetricStrategyDelegate();
-        elDelegate = new JavaxElMetricStrategyDelegate(object);
+        processor = new ELProcessor();
+        processor.defineBean("this", object);
     }
 
     JavaxElMetricStrategy(Class<?> clazz) {
-        seDelegate = new JavaSeMetricStrategyDelegate();
-        elDelegate = new JavaxElMetricStrategyDelegate(clazz);
+        processor = new ELProcessor();
+        processor.getELManager().importClass(clazz.getName());
     }
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {
-        Matcher matcher = EL.matcher(registry);
-        if (matcher.matches())
-            return elDelegate.resolveMetricRegistry(matcher.group(1));
-        else
-            return seDelegate.resolveMetricRegistry(registry);
+        Matcher matcher = EL_PATTERN.matcher(registry);
+        if (matcher.matches()) {
+            Object evaluation = processor.eval(matcher.group(1));
+            if (evaluation instanceof String)
+                return SharedMetricRegistries.getOrCreate((String) evaluation);
+            else if (evaluation instanceof MetricRegistry)
+                return (MetricRegistry) evaluation;
+            else
+                throw new IllegalStateException("Unable to resolve metrics registry from expression [" + registry + "]");
+        } else if (!matcher.find()) {
+            return SharedMetricRegistries.getOrCreate(registry);
+        } else {
+            return SharedMetricRegistries.getOrCreate(evaluateCompositeExpression(matcher));
+        }
     }
 
     @Override
     public String resolveMetricName(String name) {
-        Matcher matcher = EL.matcher(name);
-        if (matcher.matches())
-            return elDelegate.resolveMetricName(matcher.group(1));
+        Matcher matcher = EL_PATTERN.matcher(name);
+        if (!matcher.find())
+            return name;
         else
-            return seDelegate.resolveMetricName(name);
+            return evaluateCompositeExpression(matcher);
+    }
+
+    private String evaluateCompositeExpression(Matcher matcher) {
+        StringBuffer buffer = new StringBuffer();
+        do {
+            Object result = processor.eval(matcher.group(1));
+            matcher.appendReplacement(buffer, result != null ? String.valueOf(result) : "");
+        } while (matcher.find());
+
+        matcher.appendTail(buffer);
+        return buffer.toString();
     }
 }

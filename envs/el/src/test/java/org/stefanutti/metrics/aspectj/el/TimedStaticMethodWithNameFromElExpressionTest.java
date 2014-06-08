@@ -18,7 +18,11 @@ package org.stefanutti.metrics.aspectj.el;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.SharedMetricRegistries;
 import com.codahale.metrics.Timer;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -27,10 +31,17 @@ public class TimedStaticMethodWithNameFromElExpressionTest {
 
     private final static String REGISTRY_NAME = "timerStaticWithElRegistry";
 
-    private final static String TIMER_NAME = MetricRegistry.name(TimedStaticMethodWithNameFromElExpression.class, "timer" + TimedStaticMethodWithNameFromElExpression.ID);
+    private final static String TIMER_NAME = MetricRegistry.name(TimedStaticMethodWithNameFromElExpression.class, "timer " + TimedStaticMethodWithNameFromElExpression.ID);
+
+    private final static AtomicLong TIMER_COUNT = new AtomicLong();
+
+    @AfterClass
+    public static void clearSharedMetricRegistries() {
+        SharedMetricRegistries.clear();
+    }
 
     @Test
-    public void callTimedStaticMethodOnce() {
+    public void callExpressionTimedStaticMethodOnce() {
         // Call the timed static method and assert it's been timed once
         TimedStaticMethodWithNameFromElExpression.expressionStaticTimedMethod();
 
@@ -40,6 +51,34 @@ public class TimedStaticMethodWithNameFromElExpressionTest {
         assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(TIMER_NAME));
         Timer timer = registry.getTimers().get(TIMER_NAME);
 
-        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(1L)));
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(TIMER_COUNT.incrementAndGet())));
+    }
+
+    @Test
+    public void callCompositeExpressionTimedStaticMethodOnce() {
+        // Call the timed static method and assert it's been timed once
+        TimedStaticMethodWithNameFromElExpression.compositeExpressionStaticTimedMethod();
+
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
+
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(TIMER_COUNT.incrementAndGet())));
+    }
+
+    @Test
+    public void callLambdaExpressionTimedStaticMethodOnce() {
+        // Call the timed static method and assert it's been timed once
+        TimedStaticMethodWithNameFromElExpression.lambdaExpressionStaticTimedMethod();
+
+        assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
+        MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
+
+        assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(TIMER_NAME));
+        Timer timer = registry.getTimers().get(TIMER_NAME);
+
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(TIMER_COUNT.incrementAndGet())));
     }
 }

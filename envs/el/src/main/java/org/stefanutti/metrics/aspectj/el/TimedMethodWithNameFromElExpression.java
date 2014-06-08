@@ -31,7 +31,15 @@ public class TimedMethodWithNameFromElExpression {
         return id;
     }
 
-    @Timed(name = "${'timer' += this.id}")
+    @Timed(name = "${'timer ' += this.id}")
     public void expressionTimedMethod() {
+    }
+
+    @Timed(name = "timer ${this.id}")
+    public void compositeExpressionTimedMethod() {
+    }
+
+    @Timed(name = "${(id -> 'timer ' += id)(this['id'])}")
+    public void lambdaExpressionTimedMethod() {
     }
 }

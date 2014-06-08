@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
@@ -38,7 +39,7 @@ public class TimedMethodWithNameFromElExpressionTest {
     public void createTimedInstance() {
         long id = Math.round(Math.random() * Long.MAX_VALUE);
         instance = new TimedMethodWithNameFromElExpression(id);
-        timerName = MetricRegistry.name(TimedMethodWithNameFromElExpression.class, "timer" + id);
+        timerName = MetricRegistry.name(TimedMethodWithNameFromElExpression.class, "timer " + id);
     }
 
     @After
@@ -58,14 +59,16 @@ public class TimedMethodWithNameFromElExpressionTest {
     }
 
     @Test
-    public void callTimedMethodOnce() {
+    public void callExpressionTimedMethodOnce() {
         assertThat("Shared metric registry is not created", SharedMetricRegistries.names(), hasItem(REGISTRY_NAME));
         MetricRegistry registry = SharedMetricRegistries.getOrCreate(REGISTRY_NAME);
         assertThat("Timer is not registered correctly", registry.getTimers(), hasKey(timerName));
         Timer timer = registry.getTimers().get(timerName);
 
-        // Call the timed method and assert it's been timed
+        // Call the timed methods and assert they've been timed
         instance.expressionTimedMethod();
-        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(1L)));
+        instance.compositeExpressionTimedMethod();
+        instance.lambdaExpressionTimedMethod();
+        assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(3L)));
     }
 }

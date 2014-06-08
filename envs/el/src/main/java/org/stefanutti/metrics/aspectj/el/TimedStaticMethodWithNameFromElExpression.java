@@ -23,7 +23,15 @@ public class TimedStaticMethodWithNameFromElExpression {
 
     public final static long ID = Math.round(Math.random() * Long.MAX_VALUE);
 
-    @Timed(name = "${'timer' += TimedStaticMethodWithNameFromElExpression.ID}")
+    @Timed(name = "${'timer ' += TimedStaticMethodWithNameFromElExpression.ID}")
     public static void expressionStaticTimedMethod() {
+    }
+
+    @Timed(name = "timer ${TimedStaticMethodWithNameFromElExpression.ID}")
+    public static void compositeExpressionStaticTimedMethod() {
+    }
+
+    @Timed(name = "${(id -> 'timer ' += id)(TimedStaticMethodWithNameFromElExpression['ID'])}")
+    public static void lambdaExpressionStaticTimedMethod() {
     }
 }

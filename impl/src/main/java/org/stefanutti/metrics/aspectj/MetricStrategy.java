@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 /* packaged-private */ interface MetricStrategy {
 
-    static final Pattern EL = Pattern.compile("[#|$]\\{(.*)\\}");
+    static final Pattern EL_PATTERN = Pattern.compile("[#|$]\\{(.*)\\}");
 
     MetricRegistry resolveMetricRegistry(String registry);
 
