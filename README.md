@@ -1,5 +1,4 @@
-AspectJ for Metrics
-===============
+# AspectJ for Metrics
 
 [![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Dependency Status][VersionEye badge]][VersionEye build]
 
@@ -18,9 +17,10 @@ AspectJ for Metrics
 
 ## Getting Started
 
-### Using Maven
+#### Using Maven
 
 Add the `metrics-aspectj` library as a dependency:
+
 ```xml
 <dependencies>
     <dependency>
@@ -30,7 +30,9 @@ Add the `metrics-aspectj` library as a dependency:
     </dependency>
 </dependencies>
 ```
+
 And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metrics-aspectj` aspects into your project:
+
 ```xml
 <build>
     <plugins>
@@ -56,13 +58,15 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     </plugins>
 </build>
 ```
+
 More information can be found in the [Maven AspectJ plugin][] documentation.
 
 [Maven AspectJ plugin]: http://mojo.codehaus.org/aspectj-maven-plugin/
 
-### Using Ant
+#### Using Ant
 
 Use the [AjcTask][] (`iajc`) Ant task:
+
 ```xml
 <target name="{target}" >
     <iajc sourceroots="${basedir}/src"
@@ -82,20 +86,23 @@ Other options are detailed in the [AspectJ Ant tasks][] documentation.
 [AjcTask]: http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html
 [AspectJ Ant tasks]: http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html
 
-### Using the AspectJ Compiler
+#### Using the AspectJ Compiler
 
 The AspectJ compiler can be used directly by executing the following command:
+
 ```
 ajc -aspectpath metrics-aspectj.jar [Options] [file...]
 ```
+
 More information can be found in the [AspectJ compiler / weaver][] documentation.
 
 [AspectJ compiler / weaver]: http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html
 
-### Required Dependencies
+#### Required Dependencies
 
 Besides depending on _Metrics_ (`metrics-core` and `metrics-annotation` modules), _Metrics AspectJ_ requires
 the AspectJ `aspectjrt` module:
+
 ```xml
 <dependency>
     <groupId>org.aspectj</groupId>
@@ -103,10 +110,12 @@ the AspectJ `aspectjrt` module:
     <version>${aspectj.version}</version>
 </dependency>
 ```
+
 These three modules are transitive dependencies of the `metrics-aspectj` Maven module.
 
 Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation`
 and the `aspectjrt` modules can be used so that the only required dependency is `metrics-core`:
+
 ```xml
 <dependencies>
     <dependency>
@@ -117,12 +126,13 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 </dependencies>
 ```
 
-### Optional Dependencies
+#### Optional Dependencies
 
 In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` resolution
 and `Metric` name evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime.
 For example, the [`metrics-aspectj-el`][] module is using the [GlassFish reference implementation][]
 as `test` dependency for its unit tests execution:
+
 ```xml
 <dependency>
     <groupId>org.glassfish</groupId>
@@ -136,9 +146,10 @@ as `test` dependency for its unit tests execution:
 
 ## Usage
 
-### _Metrics AspectJ_ Activation
+#### _Metrics AspectJ_ Activation
 
 In order to activate _Metrics AspectJ_ for a particular class, it must be annotated with the `@Metrics` annotation:
+
 ```java
 import com.codahale.metrics.annotation.Timed;
 
@@ -161,7 +172,7 @@ to the _Metrics_ annotations specification.
 Note that this annotation won't be inherited if it's placed on an interface or a parent class.
 More details are available in the [Limitations](#limitations) section.
 
-### The _Metrics_ Annotations
+#### The _Metrics_ Annotations
 
 _Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][],
 [`@Gauge`][], [`@Metered`][] and [`@Timed`][]).
@@ -174,6 +185,7 @@ These annotations are supported by _Metrics AspectJ_ that fulfills the contract 
 [`@Timed`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
+
 ```java
 import com.codahale.metrics.annotation.Timed;
 
@@ -194,6 +206,7 @@ with the same `name` already registered in the `MetricRegistry`) right after the
 and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
 A `static` method can also be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
+
 ```java
 import com.codahale.metrics.annotation.Timed;
 
@@ -214,6 +227,7 @@ already registered in the `MetricRegistry` will be retrieved) and inline the met
 with the needed code to time the method execution using that `Timer` instance.
 
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
+
 ```java
 import com.codahale.metrics.annotation.Timed;
 
@@ -244,7 +258,7 @@ Note that these annotations won't be inherited if they are placed on interfaces 
 Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
 in more details in the [Limitations](#limitations) section.
 
-### _Metrics_ Registry Resolution
+#### _Metrics_ Registry Resolution
 
 The `Metrics.registry` annotation attribute provides the way to declare the `MetricRegistry` to register the generated `Metric` instances into.
 Its value can either be a string literal that identifies a `MetricRegistry` accessible by name from the [`SharedMetricRegistries`][] class
@@ -253,6 +267,7 @@ to register the `Metric` instantiated into each time a _Metrics_ annotation is p
 It defaults to the string literal `metrics-registry`.
 
 The `MetricRegistry` can thus be resolved by name relying on the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
+
 ```java
 import com.codahale.metrics.annotation.Timed;
 
@@ -267,7 +282,8 @@ public class TimedMethodWithRegistryByName {
 }
 ```
 
-Or with an EL expression that evaluates to a bean property of type `MetricRegistry`:
+or with an EL expression that evaluates to a bean property of type `MetricRegistry`:
+
 ```java
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.Timed;
@@ -356,8 +372,7 @@ The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights 
 [Choosing which AOP declaration style to use]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html#aop-choosing
 [Spring AOP vs AspectJ]: http://stackoverflow.com/questions/1606559/spring-aop-vs-aspectj
 
-License
--------
+## License
 
 Copyright © 2013-2014, Antonin Stefanutti
 
