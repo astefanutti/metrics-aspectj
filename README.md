@@ -100,8 +100,7 @@ More information can be found in the [AspectJ compiler / weaver][] documentation
 
 #### Required Dependencies
 
-Besides depending on _Metrics_ (`metrics-core` and `metrics-annotation` modules), _Metrics AspectJ_ requires
-the AspectJ `aspectjrt` module:
+Besides depending on _Metrics_ (`metrics-core` and `metrics-annotation` modules), _Metrics AspectJ_ requires the AspectJ `aspectjrt` module:
 
 ```xml
 <dependency>
@@ -113,8 +112,7 @@ the AspectJ `aspectjrt` module:
 
 These three modules are transitive dependencies of the `metrics-aspectj` Maven module.
 
-Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation`
-and the `aspectjrt` modules can be used so that the only required dependency is `metrics-core`:
+Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation` and the `aspectjrt` modules can be used so that the only required dependency is `metrics-core`:
 
 ```xml
 <dependencies>
@@ -128,10 +126,7 @@ and the `aspectjrt` modules can be used so that the only required dependency is 
 
 #### Optional Dependencies
 
-In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` resolution
-and `Metric` name evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime.
-For example, the [`metrics-aspectj-el`][] module is using the [GlassFish reference implementation][]
-as `test` dependency for its unit tests execution:
+In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for `MetricRegistry` resolution and `Metric` name evaluation requires an implementation of [Expression Language 3.0 (JSR-341)][] to be present at runtime. For example, the [`metrics-aspectj-el`][] module is using the [GlassFish reference implementation][] as `test` dependency for its unit tests execution:
 
 ```xml
 <dependency>
@@ -164,19 +159,13 @@ public class TimedMethod {
 }
 ```
 
-At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan all the declared methods of the target class
-that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric` instances and finally
-weave its aspects around these methods, so that at runtime, these `Metric` instances get called according
-to the _Metrics_ annotations specification.
+At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan all the declared methods of the target class that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric` instances and finally weave its aspects around these methods, so that at runtime, these `Metric` instances get called according to the _Metrics_ annotations specification.
 
-Note that this annotation won't be inherited if it's placed on an interface or a parent class.
-More details are available in the [Limitations](#limitations) section.
+Note that this annotation won't be inherited if it's placed on an interface or a parent class. More details are available in the [Limitations](#limitations) section.
 
 #### The _Metrics_ Annotations
 
-_Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][],
-[`@Gauge`][], [`@Metered`][] and [`@Timed`][]).
-These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
+_Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][], [`@Gauge`][], [`@Metered`][] and [`@Timed`][]). These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
 
 [`metrics-annotation`]: https://github.com/codahale/metrics/tree/master/metrics-annotation
 [`@ExceptionMetered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
@@ -200,10 +189,7 @@ public class TimedMethod {
 }
 ```
 
-In that example, _Metrics AspectJ_ will instrument all the constructors of the `TimedMethod` class by injecting
-Java bytecode that will automatically create a `Timer` instance with the provided `name` (or retrieve an existing `Timer`
-with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
-and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
+In that example, _Metrics AspectJ_ will instrument all the constructors of the `TimedMethod` class by injecting Java bytecode that will automatically create a `Timer` instance with the provided `name` (or retrieve an existing `Timer` with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
 A `static` method can also be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 
@@ -221,10 +207,7 @@ public class TimedMethod {
 }
 ```
 
-In that example, _Metrics AspectJ_ will instrument the `TimedMethod` class so that, when it's loaded,
-a `Timer` instance with the provided `name` will be created (or an existing `Timer` with the same `name`
-already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around
-with the needed code to time the method execution using that `Timer` instance.
+In that example, _Metrics AspectJ_ will instrument the `TimedMethod` class so that, when it's loaded, a `Timer` instance with the provided `name` will be created (or an existing `Timer` with the same `name` already registered in the `MetricRegistry` will be retrieved) and inline the method invocation around with the needed code to time the method execution using that `Timer` instance.
 
 Optionally, the `Metric` name can be resolved with an EL expression that evaluates to a `String`:
 
@@ -248,23 +231,13 @@ public class TimedMethod {
 }
 ```
 
-In that example, _Metrics AspectJ_ will automatically create a `Timer` instance (respectively retrieve an existing `Timer` instance
-with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class
-and evaluate the EL expression based on the value of the `id` attribute of that newly created `TimedMethod` instance
-to name the `Timer` instance (respectively resolve the `Timer` instance registered in the `MetricRegistry`).
-If the value of the `id` attribute changes over time, the `name` of the `Timer` instance won't be re-evaluated.
+In that example, _Metrics AspectJ_ will automatically create a `Timer` instance (respectively retrieve an existing `Timer` instance with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class and evaluate the EL expression based on the value of the `id` attribute of that newly created `TimedMethod` instance to name the `Timer` instance (respectively resolve the `Timer` instance registered in the `MetricRegistry`). If the value of the `id` attribute changes over time, the `name` of the `Timer` instance won't be re-evaluated.
 
-Note that these annotations won't be inherited if they are placed on interfaces or parent classes.
-Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed
-in more details in the [Limitations](#limitations) section.
+Note that these annotations won't be inherited if they are placed on interfaces or parent classes. Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed in more details in the [Limitations](#limitations) section.
 
 #### _Metrics_ Registry Resolution
 
-The `Metrics.registry` annotation attribute provides the way to declare the `MetricRegistry` to register the generated `Metric` instances into.
-Its value can either be a string literal that identifies a `MetricRegistry` accessible by name from the [`SharedMetricRegistries`][] class
-or a valid EL expression that evaluates to the registry name or the registry instance. The resultant `MetricRegistry` is used
-to register the `Metric` instantiated into each time a _Metrics_ annotation is present on that class methods.
-It defaults to the string literal `metrics-registry`.
+The `Metrics.registry` annotation attribute provides the way to declare the `MetricRegistry` to register the generated `Metric` instances into. Its value can either be a string literal that identifies a `MetricRegistry` accessible by name from the [`SharedMetricRegistries`][] class or a valid EL expression that evaluates to the registry name or the registry instance. The resultant `MetricRegistry` is used to register the `Metric` instantiated into each time a _Metrics_ annotation is present on that class methods. It defaults to the string literal `metrics-registry`.
 
 The `MetricRegistry` can thus be resolved by name relying on the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
 
@@ -309,32 +282,25 @@ public class TimedMethodWithRegistryFromProperty {
 }
 ```
 
-Or with an EL expression that evaluates to a `String`. In that case the registry is resolved by name
-using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
+Or with an EL expression that evaluates to a `String`. In that case the registry is resolved by name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
 
 [`SharedMetricRegistries`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html
 [`SharedMetricRegistries.getOrCreate(String name)`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
 
 ## Limitations
 
-The _Metrics_ annotations are not inherited whether these are declared on a parent class or on an implemented
-interface. The root causes of that limitation, according to the Java language specification, are:
+The _Metrics_ annotations are not inherited whether these are declared on a parent class or on an implemented interface. The root causes of that limitation, according to the Java language specification, are:
 + Non-type annotations are not inherited,
 + Annotations on types are only inherited if they have the `@Inherited` meta-annotation,
 + Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation.
 
 See the [`@Inherited`][] Javadoc and [Annotation types][] from the Java language specification for more details.
 
-AspectJ is following the Java language specification and has documented to what extent it's impacted
-in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][].
-There would have been ways of working around that though:
+AspectJ is following the Java language specification and has documented to what extent it's impacted in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][]. There would have been ways of working around that though:
 + That would have been working around the Java language specification in the first place,
-+ Plus that would have required to rely on a combination of [Expression-based pointcuts][], [Runtime type matching][]
-  and [Reflective access][] to define conditional pointcut expressions which:
++ Plus that would have required to rely on a combination of [Expression-based pointcuts][], [Runtime type matching][] and [Reflective access][] to define conditional pointcut expressions which:
     + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient,
-    + Would have been evaluated at runtime for each candidate join point relying on the Java Reflection API
-      thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP
-      in a larger sense.
+    + Would have been evaluated at runtime for each candidate join point relying on the Java Reflection API thus impacting the application performance and incidentally voiding the non-intrusive benefit of AOP in a larger sense.
 
 [`@Inherited`]: http://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Inherited.html
 [Annotation types]: http://docs.oracle.com/javase/specs/jls/se7/html/jls-9.html#jls-9.6
@@ -347,20 +313,16 @@ There would have been ways of working around that though:
 ## Spring AOP vs. AspectJ
 
 [Spring AOP][] and [AspectJ][] provides Aspect Oriented Programming (AOP) in two very different ways:
-+ AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW)
-  and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation),
++ AspectJ provides a full-fledged aspect definition and support both Compile Time Weaving (CTW) and Load Time Weaving (LTW) (with a Java agent) and implements AOP with class instrumentation (byte code manipulation),
 + Spring AOP does not support the whole AspectJ aspect definition and does not support Compile Time Weaving,
 + Spring AOP implements AOP either using (see [Spring proxying mechanisms][]):
-    + JDK dynamic proxies, which add little runtime overhead, clutter stack traces
-      and can be incompatible with other Spring functionality like Spring JMX (for dynamic MBean export for example),
+    + JDK dynamic proxies, which add little runtime overhead, clutter stack traces and can be incompatible with other Spring functionality like Spring JMX (for dynamic MBean export for example),
     + Or [CGLIB][] (byte code manipulation), that has to be added as a runtime dependency:
         + It dynamically extends classes thus it is incompatible with `final` classes or methods,
         + CGLIB development isn't active, Hibernate has been deprecating it in favor of [Javassist][] (see [Deprecated CGLIB support][]),
-+ [AJDT (AspectJ Development Tools)][AJDT] provides deep integration between AspectJ and the Eclipse platform
-  which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation.
++ [AJDT (AspectJ Development Tools)][AJDT] provides deep integration between AspectJ and the Eclipse platform which is not possible with Spring AOP due to the runtime / dynamic nature of its AOP implementation.
 
-Further details can be found in [Choosing which AOP declaration style to use][] from the Spring framework documentation.
-The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights as well.
+Further details can be found in [Choosing which AOP declaration style to use][] from the Spring framework documentation. The [Spring AOP vs AspectJ][] question on Stack Overflow provides some insights as well.
 
 [Spring AOP]: http://docs.spring.io/spring/docs/4.0.x/spring-framework-reference/html/aop.html
 [AspectJ]: http://eclipse.org/aspectj/
