@@ -9,7 +9,7 @@
 [VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg
 [VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
 
-[AspectJ][] integration for [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
+[AspectJ][] integration for Dropwizard [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
 
 [AspectJ]: http://eclipse.org/aspectj/
 [Metrics]: http://metrics.codahale.com/
@@ -165,9 +165,9 @@ Note that this annotation won't be inherited if it's placed on an interface or a
 
 #### The _Metrics_ Annotations
 
-_Metrics_ comes with the [`metrics-annotation`][] module that contains a series of annotations ([`@ExceptionMetered`][], [`@Gauge`][], [`@Metered`][] and [`@Timed`][]). These annotations are supported by _Metrics AspectJ_ that fulfills the contract documented in their Javadoc.
+_Metrics_ comes with the [`metrics-annotation`][] module that contains a set of annotations ([`@ExceptionMetered`][], [`@Gauge`][], [`@Metered`][] and [`@Timed`][]) and provides a standard way to integrate _Metrics_ with frameworks supporting Aspect Oriented Programming (AOP). These annotations are supported by _Metrics AspectJ_ that implements their contract as documented in their Javadoc.
 
-[`metrics-annotation`]: https://github.com/codahale/metrics/tree/master/metrics-annotation
+[`metrics-annotation`]: https://github.com/dropwizard/metrics/tree/master/metrics-annotation
 [`@ExceptionMetered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
 [`@Gauge`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
 [`@Metered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
