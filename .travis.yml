@@ -1,7 +1,10 @@
 language: java
 
+install:
+  - mvn clean install -Dmaven.test.skip.exec
+
 script:
-  - mvn clean package -Pwith-lib,jacoco
+  - mvn test -Pwith-lib,jacoco
 
 jdk:
   - oraclejdk7
