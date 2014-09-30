@@ -22,41 +22,35 @@
 Add the `metrics-aspectj` library as a dependency:
 
 ```xml
-<dependencies>
-    <dependency>
-        <groupId>org.stefanutti.metrics.aspectj</groupId>
-        <artifactId>metrics-aspectj</artifactId>
-        <version>${metrics.aspectj.version}</version>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>org.stefanutti.metrics.aspectj</groupId>
+    <artifactId>metrics-aspectj</artifactId>
+    <version>1.0.0-rc.3</version>
+</dependency>
 ```
 
 And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metrics-aspectj` aspects into your project:
 
 ```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>aspectj-maven-plugin</artifactId>
-            <configuration>
-                <aspectLibraries>
-                    <aspectLibrary>
-                        <groupId>org.stefanutti.metrics.aspectj</groupId>
-                        <artifactId>metrics-aspectj</artifactId>
-                    </aspectLibrary>
-                </aspectLibraries>
-            </configuration>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>compile</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-</build>
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>aspectj-maven-plugin</artifactId>
+    <configuration>
+        <aspectLibraries>
+            <aspectLibrary>
+                <groupId>org.stefanutti.metrics.aspectj</groupId>
+                <artifactId>metrics-aspectj</artifactId>
+            </aspectLibrary>
+        </aspectLibraries>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>compile</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
 ```
 
 More information can be found in the [Maven AspectJ plugin][] documentation.
@@ -115,13 +109,11 @@ These three modules are transitive dependencies of the `metrics-aspectj` Maven m
 Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics-annotation` and the `aspectjrt` modules can be used so that the only required dependency is `metrics-core`:
 
 ```xml
-<dependencies>
-    <dependency>
-        <groupId>org.stefanutti.metrics.aspectj</groupId>
-        <artifactId>metrics-aspectj-deps</artifactId>
-        <version>${metrics.aspectj.version}</version>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>org.stefanutti.metrics.aspectj</groupId>
+    <artifactId>metrics-aspectj-deps</artifactId>
+    <version>${metrics.aspectj.version}</version>
+</dependency>
 ```
 
 #### Optional Dependencies
@@ -277,8 +269,7 @@ public class TimedMethodWithRegistryFromProperty {
     }
 
     @Timed(name = "timerName")
-    public void timedMethod() {
-    }
+    public void timedMethod() {}
 }
 ```
 
