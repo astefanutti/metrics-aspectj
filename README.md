@@ -100,7 +100,6 @@ Besides depending on _Metrics_ (`metrics-core` and `metrics-annotation` modules)
 <dependency>
     <groupId>org.aspectj</groupId>
     <artifactId>aspectjrt</artifactId>
-    <version>${aspectj.version}</version>
 </dependency>
 ```
 
@@ -112,7 +111,6 @@ Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics
 <dependency>
     <groupId>org.stefanutti.metrics.aspectj</groupId>
     <artifactId>metrics-aspectj-deps</artifactId>
-    <version>${metrics.aspectj.version}</version>
 </dependency>
 ```
 
@@ -124,7 +122,6 @@ In addition to that, _Metrics AspectJ_ optional support of EL 3.0 expression for
 <dependency>
     <groupId>org.glassfish</groupId>
     <artifactId>javax.el</artifactId>
-    <version>${el.version}</version>
 </dependency>
 ```
 
