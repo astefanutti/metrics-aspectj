@@ -146,8 +146,7 @@ import org.stefanutti.metrics.aspectj.Metrics;
 public class TimedMethod {
 
     @Timed(name = "timerName")
-    public void timedMethod() {
-    }
+    public void timedMethod() {}
 }
 ```
 
@@ -176,8 +175,7 @@ import org.stefanutti.metrics.aspectj.Metrics;
 public class TimedMethod {
 
     @Timed(name = "timerName")
-    public void timedMethod() {
-    }
+    public void timedMethod() {}
 }
 ```
 
@@ -194,8 +192,7 @@ import org.stefanutti.metrics.aspectj.Metrics;
 public class TimedMethod {
 
     @Timed(name = "timerName")
-    public static void timedStaticMethod() {
-    }
+    public static void timedStaticMethod() {}
 }
 ```
 
@@ -218,8 +215,7 @@ public class TimedMethod {
     }
 
     @Timed(name = "timerName ${this.id}")
-    public void timedMethod() {
-    }
+    public void timedMethod() {}
 }
 ```
 
@@ -242,8 +238,7 @@ import org.stefanutti.metrics.aspectj.Metrics;
 public class TimedMethodWithRegistryByName {
 
     @Timed(name = "timerName")
-    public void timedMethod() {
-    }
+    public void timedMethod() {}
 }
 ```
 
