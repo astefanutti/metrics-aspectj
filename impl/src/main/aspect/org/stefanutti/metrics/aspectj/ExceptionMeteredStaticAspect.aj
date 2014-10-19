@@ -25,9 +25,8 @@ final aspect ExceptionMeteredStaticAspect {
 
     after() throwing (Throwable throwable) : exceptionMetered() {
         String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
-        AnnotatedMetric metric = MetricStaticAspect.metrics.get(methodSignature);
-        if (metric.getAnnotation(ExceptionMetered.class).cause().isInstance(throwable)) {
-            metric.getMetric(Meter.class).mark();
-        }
+        AnnotatedMetric<Meter> metric = MetricStaticAspect.METERS.get(methodSignature);
+        if (metric.getAnnotation(ExceptionMetered.class).cause().isInstance(throwable))
+            metric.getMetric().mark();
     }
 }

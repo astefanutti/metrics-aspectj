@@ -25,7 +25,7 @@ final aspect TimedStaticAspect {
 
     Object around() : timed() {
         String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
-        Timer timer = MetricStaticAspect.metrics.get(methodSignature).getMetric(Timer.class);
+        Timer timer = MetricStaticAspect.TIMERS.get(methodSignature).getMetric();
         Timer.Context context = timer.time();
         try {
             return proceed();

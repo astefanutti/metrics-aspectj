@@ -19,24 +19,58 @@ import com.codahale.metrics.Metric;
 
 import java.lang.annotation.Annotation;
 
-/* packaged-private */ class AnnotatedMetric {
+/* packaged-private */ interface AnnotatedMetric<T extends Metric> {
 
-    private final Metric metric;
+    boolean isPresent();
 
-    private final Annotation annotation;
+    T getMetric();
 
-    AnnotatedMetric(Metric metric, Annotation annotation) {
-        this.metric = metric;
-        this.annotation = annotation;
+    <A extends Annotation> A getAnnotation(Class<A> clazz);
+
+    static final class IsPresent<T extends Metric> implements AnnotatedMetric<T> {
+
+        private final T metric;
+
+        private final Annotation annotation;
+
+        IsPresent(T metric, Annotation annotation) {
+            this.metric = metric;
+            this.annotation = annotation;
+        }
+
+        @Override
+        public boolean isPresent() {
+            return true;
+        }
+
+        @Override
+        public T getMetric() {
+            return metric;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <A extends Annotation> A getAnnotation(Class<A> clazz) {
+            return (A) annotation;
+        }
     }
 
-    @SuppressWarnings("unchecked")
-    <T extends Metric> T getMetric(Class<T> clazz) {
-        return (T) metric;
-    }
+    static final class IsNotPresent<T extends Metric> implements AnnotatedMetric<T> {
 
-    @SuppressWarnings("unchecked")
-    <A extends Annotation> A getAnnotation(Class<A> clazz) {
-        return (A) annotation;
+        @Override
+        public boolean isPresent() {
+            return false;
+        }
+
+        @Override
+        public T getMetric() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <A extends Annotation> A getAnnotation(Class<A> clazz) {
+            throw new UnsupportedOperationException();
+        }
     }
 }

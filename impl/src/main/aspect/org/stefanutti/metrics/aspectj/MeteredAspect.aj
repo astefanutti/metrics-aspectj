@@ -25,7 +25,7 @@ final aspect MeteredAspect {
 
     before(Profiled object) : metered(object) {
         String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
-        Meter meter = object.metrics.get(methodSignature).getMetric(Meter.class);
+        Meter meter = object.meters.get(methodSignature).getMetric();
         meter.mark();
     }
 }

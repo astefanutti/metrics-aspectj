@@ -39,7 +39,7 @@ public class MetricMethodWithDefaultNamesTest {
     private MetricMethodWithDefaultNames instance;
 
     private Set<String> metricNames() {
-        Set<String> names = MetricsUtil.absoluteMetricNameSet(MetricMethodWithDefaultNames.class, METRIC_NAMES);
+        Set<String> names = MetricsUtil.absoluteMetricNames(MetricMethodWithDefaultNames.class, METRIC_NAMES);
         names.addAll(Arrays.asList(ABSOLUTE_METRIC_NAMES));
         return names;
     }

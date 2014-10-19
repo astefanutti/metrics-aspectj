@@ -25,7 +25,7 @@ final aspect MeteredStaticAspect {
 
     before() : metered() {
         String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
-        Meter meter = MetricStaticAspect.metrics.get(methodSignature).getMetric(Meter.class);
+        Meter meter = MetricStaticAspect.METERS.get(methodSignature).getMetric();
         meter.mark();
     }
 }

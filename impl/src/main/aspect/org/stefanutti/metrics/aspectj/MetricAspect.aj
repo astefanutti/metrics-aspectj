@@ -15,14 +15,14 @@
  */
 package org.stefanutti.metrics.aspectj;
 
-import com.codahale.metrics.Metric;
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Gauge;
+import com.codahale.metrics.Timer;
 import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -34,55 +34,63 @@ final aspect MetricAspect extends AbstractMetricAspect {
 
     declare parents : (@Metrics *) implements Profiled;
 
-    /* packaged-private */
-    final Map<String, AnnotatedMetric> Profiled.metrics = new ConcurrentHashMap<String, AnnotatedMetric>();
+    final Map<String, AnnotatedMetric<com.codahale.metrics.Gauge>> Profiled.gauges = new ConcurrentHashMap<String, AnnotatedMetric<com.codahale.metrics.Gauge>>();
+
+    final Map<String, AnnotatedMetric<Meter>> Profiled.meters = new ConcurrentHashMap<String, AnnotatedMetric<Meter>>();
+
+    final Map<String, AnnotatedMetric<Timer>> Profiled.timers = new ConcurrentHashMap<String, AnnotatedMetric<Timer>>();
 
     pointcut profiled(Profiled object) : execution((@Metrics Profiled+).new(..)) && this(object);
 
     after(final Profiled object) : profiled(object) {
         final MetricStrategy strategy = MetricStrategyFactory.newInstance(object);
+
         for (final Method method : object.getClass().getDeclaredMethods()) {
             // Skip advising static methods
             if (Modifier.isStatic(method.getModifiers()))
                 continue;
 
-            metricAnnotation(object, method, strategy, ExceptionMetered.class, new MetricFactory() {
+            final MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
+
+            AnnotatedMetric<Meter> exception = metricAnnotation(method, ExceptionMetered.class, registry, new MetricFactory<Meter>() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                public Meter metric(MetricRegistry registry, String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : strategy.resolveMetricName(name);
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
-            metricAnnotation(object, method, strategy, Gauge.class, new MetricFactory() {
+            if (exception.isPresent())
+                object.meters.put(method.toString(), exception);
+
+            AnnotatedMetric<com.codahale.metrics.Gauge> gauge = metricAnnotation(method, Gauge.class, registry, new MetricFactory<com.codahale.metrics.Gauge>() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                public com.codahale.metrics.Gauge metric(MetricRegistry registry, String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
                     return registry.register(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName), new ForwardingGauge(method, object));
                 }
             });
-            metricAnnotation(object, method, strategy, Metered.class, new MetricFactory() {
+            if (gauge.isPresent())
+                object.gauges.put(method.toString(), gauge);
+
+            AnnotatedMetric<Meter> meter = metricAnnotation(method, Metered.class, registry, new MetricFactory<Meter>() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                public Meter metric(MetricRegistry registry, String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
-            metricAnnotation(object, method, strategy, Timed.class, new MetricFactory() {
+            if (meter.isPresent())
+                object.meters.put(method.toString(), meter);
+
+            AnnotatedMetric<Timer> timer = metricAnnotation(method, Timed.class, registry, new MetricFactory<Timer>() {
                 @Override
-                public Metric metric(MetricRegistry registry, String name, boolean absolute) {
+                public Timer metric(MetricRegistry registry, String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
                     return registry.timer(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
-        }
-    }
-
-    private void metricAnnotation(Profiled object, Method method, MetricStrategy strategy, Class<? extends Annotation> clazz, MetricFactory factory) {
-        if (method.isAnnotationPresent(clazz)) {
-            MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
-            Annotation annotation = method.getAnnotation(clazz);
-            Metric metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
-            object.metrics.put(method.toString(), new AnnotatedMetric(metric, annotation));
+            if (timer.isPresent())
+                object.timers.put(method.toString(), timer);
         }
     }
 }

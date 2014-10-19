@@ -29,7 +29,7 @@ public class TimedMethodWithAbsoluteNameTest {
 
     private final static String REGISTRY_NAME = "timerRegistryForAbsoluteNamedTimer";
 
-    private final static String TIMER_NAME = "absolutelyTimedMethod";
+    private final static String TIMER_NAME = "absoluteTimedMethod";
 
     private TimedMethodWithAbsoluteName instance;
 
@@ -62,7 +62,7 @@ public class TimedMethodWithAbsoluteNameTest {
         Timer timer = registry.getTimers().get(TIMER_NAME);
 
         // Call the timed method and assert it's been timed
-        instance.absolutelyTimedMethod();
+        instance.absoluteTimedMethod();
         assertThat("Timer count is incorrect", timer.getCount(), is(equalTo(1L)));
     }
 }

@@ -21,7 +21,7 @@ import org.stefanutti.metrics.aspectj.Metrics;
 @Metrics(registry = "timerRegistryForAbsoluteNamedTimer")
 public class TimedMethodWithAbsoluteName {
 
-    @Timed(name = "absolutelyTimedMethod", absolute = true)
-    public void absolutelyTimedMethod() {
+    @Timed(name = "absoluteTimedMethod", absolute = true)
+    public void absoluteTimedMethod() {
     }
 }

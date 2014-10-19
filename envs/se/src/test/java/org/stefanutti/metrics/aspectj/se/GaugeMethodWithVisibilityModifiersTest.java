@@ -39,7 +39,7 @@ public class GaugeMethodWithVisibilityModifiersTest {
     private GaugeMethodWithVisibilityModifiers instance;
 
     private Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(GaugeMethodWithVisibilityModifiers.class, GAUGE_NAMES);
+        return MetricsUtil.absoluteMetricNames(GaugeMethodWithVisibilityModifiers.class, GAUGE_NAMES);
     }
 
     @Before

@@ -39,7 +39,7 @@ public class TimedMethodWithVisibilityModifiersTest {
     private TimedMethodWithVisibilityModifiers instance;
 
     private Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES);
+        return MetricsUtil.absoluteMetricNames(TimedMethodWithVisibilityModifiers.class, TIMER_NAMES);
     }
 
     @Before

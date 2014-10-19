@@ -39,7 +39,7 @@ public class TimedMethodOverloadedTest {
     private TimedMethodOverloaded instance;
 
     private Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(TimedMethodOverloaded.class, TIMER_NAMES);
+        return MetricsUtil.absoluteMetricNames(TimedMethodOverloaded.class, TIMER_NAMES);
     }
 
     @Before

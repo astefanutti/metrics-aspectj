@@ -13,24 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.stefanutti.metrics.aspectj;
+package org.stefanutti.metrics.aspectj.se;
 
-import com.codahale.metrics.Timer;
+import com.codahale.metrics.annotation.ExceptionMetered;
+import com.codahale.metrics.annotation.Gauge;
+import com.codahale.metrics.annotation.Metered;
 import com.codahale.metrics.annotation.Timed;
-import org.aspectj.lang.reflect.MethodSignature;
+import org.stefanutti.metrics.aspectj.Metrics;
 
-final aspect TimedAspect {
+@Metrics(registry = "multipleMetricsRegistry")
+public class MultipleMetricsMethod {
 
-    pointcut timed(Profiled object) : execution(@Timed !static * (@Metrics Profiled+).*(..)) && this(object);
-
-    Object around(Profiled object) : timed(object) {
-        String methodSignature = ((MethodSignature) thisJoinPointStaticPart.getSignature()).getMethod().toString();
-        Timer timer = object.timers.get(methodSignature).getMetric();
-        Timer.Context context = timer.time();
-        try {
-            return proceed(object);
-        } finally {
-            context.stop();
-        }
+    @ExceptionMetered(name = "exception")
+    @Gauge(name = "gauge")
+    @Metered(name = "meter")
+    @Timed(name = "timer")
+    public String metricsMethod() {
+        return "value";
     }
 }

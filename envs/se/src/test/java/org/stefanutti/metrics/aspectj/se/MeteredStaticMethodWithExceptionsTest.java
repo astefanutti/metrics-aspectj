@@ -35,7 +35,7 @@ public class MeteredStaticMethodWithExceptionsTest {
     private final static AtomicLong[] METER_COUNTS = {new AtomicLong(), new AtomicLong()};
 
     private static Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(MeteredStaticMethodWithExceptions.class, METER_NAMES);
+        return MetricsUtil.absoluteMetricNames(MeteredStaticMethodWithExceptions.class, METER_NAMES);
     }
 
     private static String absoluteMetricName(int index) {

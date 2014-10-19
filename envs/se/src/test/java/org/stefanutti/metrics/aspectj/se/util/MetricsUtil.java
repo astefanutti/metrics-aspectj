@@ -25,11 +25,10 @@ public final class MetricsUtil {
     private MetricsUtil() {
     }
 
-    public static Set<String> absoluteMetricNameSet(Class<?> clazz, String... names) {
+    public static Set<String> absoluteMetricNames(Class<?> clazz, String... names) {
         Set<String> set = new HashSet<String>(names.length);
-        for (String name : names) {
+        for (String name : names)
             set.add(absoluteMetricName(clazz, name));
-        }
 
         return set;
     }

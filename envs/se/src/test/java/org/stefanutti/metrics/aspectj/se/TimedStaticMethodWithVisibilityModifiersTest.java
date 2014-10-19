@@ -35,7 +35,7 @@ public class TimedStaticMethodWithVisibilityModifiersTest {
     private final static String[] TIMER_NAMES = {"publicTimedStaticMethod", "packagePrivateTimedStaticMethod", "protectedTimedStaticMethod", "privateTimedStaticMethod"};
 
     private static Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(TimedStaticMethodWithVisibilityModifiers.class, TIMER_NAMES);
+        return MetricsUtil.absoluteMetricNames(TimedStaticMethodWithVisibilityModifiers.class, TIMER_NAMES);
     }
 
     @Test

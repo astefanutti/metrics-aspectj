@@ -38,7 +38,7 @@ public class MeteredMethodWithExceptionsTest {
     private MeteredMethodWithExceptions instance;
 
     private Set<String> absoluteMetricNames() {
-        return MetricsUtil.absoluteMetricNameSet(MeteredMethodWithExceptions.class, METER_NAMES);
+        return MetricsUtil.absoluteMetricNames(MeteredMethodWithExceptions.class, METER_NAMES);
     }
 
     private String absoluteMetricName(int index) {

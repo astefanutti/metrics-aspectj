@@ -29,8 +29,18 @@ import java.lang.reflect.Method;
 
 abstract aspect AbstractMetricAspect {
 
-    protected interface MetricFactory {
-        Metric metric(MetricRegistry registry, String name, boolean absolute);
+    protected interface MetricFactory<T extends Metric> {
+        T metric(MetricRegistry registry, String name, boolean absolute);
+    }
+
+    protected <T extends Metric> AnnotatedMetric<T> metricAnnotation(Method method, Class<? extends Annotation> clazz, MetricRegistry registry, MetricFactory<T> factory) {
+        if (method.isAnnotationPresent(clazz)) {
+            Annotation annotation = method.getAnnotation(clazz);
+            T metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
+            return new AnnotatedMetric.IsPresent<T>(metric, annotation);
+        } else {
+            return new AnnotatedMetric.IsNotPresent<T>();
+        }
     }
 
     protected static String metricAnnotationName(Annotation annotation) {
