@@ -1,6 +1,6 @@
 # AspectJ for Metrics
 
-[![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Dependency Status][VersionEye badge]][VersionEye build]
+[![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Dependency Status][VersionEye badge]][VersionEye build] [![Maven Central][Maven Central badge]][Maven Central build]
 
 [Travis badge]: https://travis-ci.org/astefanutti/metrics-aspectj.svg?branch=master
 [Travis build]: https://travis-ci.org/astefanutti/metrics-aspectj
@@ -8,6 +8,8 @@
 [Coveralls build]: https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master
 [VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg
 [VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
+[Maven Central badge]: http://img.shields.io/maven-central/v/org.stefanutti.metrics.aspectj/metrics-aspectj.svg
+[Maven Central build]: http://central.maven.org/maven2/org/stefanutti/metrics/aspectj/metrics-aspectj/1.0.0-rc.5/
 
 [AspectJ][] integration for Dropwizard [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
 
