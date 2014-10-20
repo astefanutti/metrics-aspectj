@@ -20,5 +20,12 @@
             <artifactId>javax.el</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.stefanutti.metrics.aspectj</groupId>
+            <artifactId>metrics-aspectj-se</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+        </dependency>
+
     </dependencies>
 </project>
