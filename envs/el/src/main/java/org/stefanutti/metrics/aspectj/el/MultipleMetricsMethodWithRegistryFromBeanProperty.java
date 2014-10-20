@@ -42,4 +42,8 @@ public class MultipleMetricsMethodWithRegistryFromBeanProperty {
     public String metricsMethod() {
         return "value";
     }
+
+    // Add a static method that does not declare any Metrics annotation to make sure the static aspect doesn't try to evaluate any expression
+    public static void staticMethod() {
+    }
 }

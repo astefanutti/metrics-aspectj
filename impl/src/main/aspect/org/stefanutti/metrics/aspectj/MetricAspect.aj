@@ -50,42 +50,44 @@ final aspect MetricAspect extends AbstractMetricAspect {
             if (Modifier.isStatic(method.getModifiers()))
                 continue;
 
-            final MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
-
-            AnnotatedMetric<Meter> exception = metricAnnotation(method, ExceptionMetered.class, registry, new MetricFactory<Meter>() {
+            AnnotatedMetric<Meter> exception = metricAnnotation(method, ExceptionMetered.class, new MetricFactory<Meter>() {
                 @Override
-                public Meter metric(MetricRegistry registry, String name, boolean absolute) {
+                public Meter metric(String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() + "." + ExceptionMetered.DEFAULT_NAME_SUFFIX : strategy.resolveMetricName(name);
+                    MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
             if (exception.isPresent())
                 object.meters.put(method.toString(), exception);
 
-            AnnotatedMetric<com.codahale.metrics.Gauge> gauge = metricAnnotation(method, Gauge.class, registry, new MetricFactory<com.codahale.metrics.Gauge>() {
+            AnnotatedMetric<com.codahale.metrics.Gauge> gauge = metricAnnotation(method, Gauge.class, new MetricFactory<com.codahale.metrics.Gauge>() {
                 @Override
-                public com.codahale.metrics.Gauge metric(MetricRegistry registry, String name, boolean absolute) {
+                public com.codahale.metrics.Gauge metric(String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
+                    MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
                     return registry.register(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName), new ForwardingGauge(method, object));
                 }
             });
             if (gauge.isPresent())
                 object.gauges.put(method.toString(), gauge);
 
-            AnnotatedMetric<Meter> meter = metricAnnotation(method, Metered.class, registry, new MetricFactory<Meter>() {
+            AnnotatedMetric<Meter> meter = metricAnnotation(method, Metered.class, new MetricFactory<Meter>() {
                 @Override
-                public Meter metric(MetricRegistry registry, String name, boolean absolute) {
+                public Meter metric(String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
+                    MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
                     return registry.meter(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });
             if (meter.isPresent())
                 object.meters.put(method.toString(), meter);
 
-            AnnotatedMetric<Timer> timer = metricAnnotation(method, Timed.class, registry, new MetricFactory<Timer>() {
+            AnnotatedMetric<Timer> timer = metricAnnotation(method, Timed.class, new MetricFactory<Timer>() {
                 @Override
-                public Timer metric(MetricRegistry registry, String name, boolean absolute) {
+                public Timer metric(String name, boolean absolute) {
                     String finalName = name.isEmpty() ? method.getName() : strategy.resolveMetricName(name);
+                    MetricRegistry registry = strategy.resolveMetricRegistry(object.getClass().getAnnotation(Metrics.class).registry());
                     return registry.timer(absolute ? finalName : MetricRegistry.name(object.getClass(), finalName));
                 }
             });

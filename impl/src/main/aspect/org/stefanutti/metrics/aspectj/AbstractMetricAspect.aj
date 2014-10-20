@@ -17,7 +17,6 @@ package org.stefanutti.metrics.aspectj;
 
 
 import com.codahale.metrics.Metric;
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.annotation.ExceptionMetered;
 import com.codahale.metrics.annotation.Gauge;
 import com.codahale.metrics.annotation.Metered;
@@ -30,13 +29,13 @@ import java.lang.reflect.Method;
 abstract aspect AbstractMetricAspect {
 
     protected interface MetricFactory<T extends Metric> {
-        T metric(MetricRegistry registry, String name, boolean absolute);
+        T metric(String name, boolean absolute);
     }
 
-    protected <T extends Metric> AnnotatedMetric<T> metricAnnotation(Method method, Class<? extends Annotation> clazz, MetricRegistry registry, MetricFactory<T> factory) {
+    protected <T extends Metric> AnnotatedMetric<T> metricAnnotation(Method method, Class<? extends Annotation> clazz, MetricFactory<T> factory) {
         if (method.isAnnotationPresent(clazz)) {
             Annotation annotation = method.getAnnotation(clazz);
-            T metric = factory.metric(registry, metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
+            T metric = factory.metric(metricAnnotationName(annotation), metricAnnotationAbsolute(annotation));
             return new AnnotatedMetric.IsPresent<T>(metric, annotation);
         } else {
             return new AnnotatedMetric.IsNotPresent<T>();
