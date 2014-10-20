@@ -25,7 +25,7 @@ Add the `metrics-aspectj` library as a dependency:
 <dependency>
     <groupId>org.stefanutti.metrics.aspectj</groupId>
     <artifactId>metrics-aspectj</artifactId>
-    <version>1.0.0-rc.4</version>
+    <version>1.0.0-rc.5</version>
 </dependency>
 ```
 
