@@ -17,6 +17,10 @@
         <module>se</module>
     </modules>
 
+    <properties>
+        <XnoInline>false</XnoInline>
+    </properties>
+
     <profiles>
         <profile>
             <id>with-deps</id>
@@ -55,6 +59,9 @@
 
         <profile>
             <id>jacoco</id>
+            <properties>
+                <XnoInline>true</XnoInline>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -96,8 +103,8 @@
                             <artifactId>${metrics.aspectj.lib}</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
-                    <!-- Do not inline the around advise to ease debugging -->
-                    <!--<XnoInline>false</XnoInline>-->
+                    <!-- Do not inline the around advise for code coverage -->
+                    <XnoInline>${XnoInline}</XnoInline>
                     <!-- https://bugs.eclipse.org/bugs/show_bug.cgi?id=418367 -->
                     <Xset>
                         <generateStackMaps>true</generateStackMaps>
