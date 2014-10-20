@@ -97,7 +97,7 @@
                         </aspectLibrary>
                     </aspectLibraries>
                     <!-- Do not inline the around advise to ease debugging -->
-                    <XnoInline>true</XnoInline>
+                    <!--<XnoInline>false</XnoInline>-->
                     <!-- https://bugs.eclipse.org/bugs/show_bug.cgi?id=418367 -->
                     <Xset>
                         <generateStackMaps>true</generateStackMaps>
