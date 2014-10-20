@@ -19,7 +19,7 @@ import com.codahale.metrics.Metric;
 
 import java.lang.annotation.Annotation;
 
-/* packaged-private */ interface AnnotatedMetric<T extends Metric> {
+public interface AnnotatedMetric<T extends Metric> {
 
     boolean isPresent();
 
