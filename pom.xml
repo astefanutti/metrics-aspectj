@@ -114,9 +114,11 @@
                 <plugin>
                     <groupId>org.eluder.coveralls</groupId>
                     <artifactId>coveralls-maven-plugin</artifactId>
-                    <version>2.2.0</version>
+                    <version>3.0.1</version>
                     <configuration>
-                        <coverageFile>${project.basedir}/impl/target/site/jacoco/jacoco.xml</coverageFile>
+                        <jacocoReports>
+                            <jacocoReport>${project.basedir}/impl/target/site/jacoco/jacoco.xml</jacocoReport>
+                        </jacocoReports>
                         <coverallsFile>${project.basedir}/impl/target/coveralls.json</coverallsFile>
                         <sourceDirectories>
                             <sourceDirectory>${project.basedir}/impl/src/main/java</sourceDirectory>
