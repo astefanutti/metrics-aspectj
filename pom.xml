@@ -48,7 +48,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <metrics.version>3.0.2</metrics.version>
-        <aspectj.version>1.8.3</aspectj.version>
+        <aspectj.version>1.8.4</aspectj.version>
     </properties>
 
     <modules>
