@@ -17,6 +17,26 @@
 [Metrics]: http://metrics.codahale.com/
 [Expression Language 3.0 (JSR-341)]: http://jcp.org/en/jsr/detail?id=341
 
+## About
+
+_Metrics AspectJ_ provides support for the [_Metrics_ annotations][Metrics annotations] in Java SE environments using _AspectJ_ to perform AOP instrumentation. It implements the contract specified by these annotations with the following level of functionality:
++ Intercept invocations of instance and class methods annotated with [`@ExceptionMetered`][], [`@Metered`][] and [`@Timed`][],
++ Create [`Gauge`][] metrics for instance and class methods annotated with [`@Gauge`][],
++ Register / retrieve the [`Metric`][] instances in the resolved [`MetricRegistry`][] instance,
++ Resolve the [`MetricRegistry`][] instance by looking up into the [`SharedMetricRegistries`][] class or optionally by dynamically evaluating EL expressions.
+
+_Metrics AspectJ_ is compatible with _Metrics_ version `3.0.0`+ and requires Java 6 or higher.
+
+[Metrics annotations]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/package-summary.html
+[`@ExceptionMetered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
+[`@Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Metered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Timed`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Timed.html
+[`Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/Gauge.html
+[`Metric`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/Metric.html
+[`MetricRegistry`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/MetricRegistry.html
+[`SharedMetricRegistries`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html
+
 ## Getting Started
 
 #### Using Maven
@@ -25,7 +45,7 @@ Add the `metrics-aspectj` library as a dependency:
 
 ```xml
 <dependency>
-    <groupId>org.stefanutti.metrics.aspectj</groupId>
+    <groupId>io.astefanutti.metrics.aspectj</groupId>
     <artifactId>metrics-aspectj</artifactId>
     <version>1.0.0-rc.5</version>
 </dependency>
@@ -40,7 +60,7 @@ And configure the `maven-aspectj-plugin` to compile-time weave (CTW) the `metric
     <configuration>
         <aspectLibraries>
             <aspectLibrary>
-                <groupId>org.stefanutti.metrics.aspectj</groupId>
+                <groupId>io.astefanutti.metrics.aspectj</groupId>
                 <artifactId>metrics-aspectj</artifactId>
             </aspectLibrary>
         </aspectLibraries>
@@ -111,7 +131,7 @@ Alternatively, the `metrics-aspectj-deps` artifact that re-packages the `metrics
 
 ```xml
 <dependency>
-    <groupId>org.stefanutti.metrics.aspectj</groupId>
+    <groupId>io.astefanutti.metrics.aspectj</groupId>
     <artifactId>metrics-aspectj-deps</artifactId>
 </dependency>
 ```
@@ -139,42 +159,38 @@ In order to activate _Metrics AspectJ_ for a particular class, it must be annota
 ```java
 import com.codahale.metrics.annotation.Timed;
 
-import org.stefanutti.metrics.aspectj.Metrics;
+import io.astefanutti.metrics.aspectj.Metrics;
 
 @Metrics
-public class TimedMethod {
+class TimedMethod {
 
     @Timed(name = "timerName")
-    public void timedMethod() {}
+    void timedMethod() {} // Timer name => TimedMethod.timerName
 }
 ```
 
-At weaving time, _Metrics Aspects_ will detect the `@Metrics` annotation, scan all the declared methods of the target class that are annotated with some _Metrics_ annotations, then create and register the corresponding `Metric` instances and finally weave its aspects around these methods, so that at runtime, these `Metric` instances get called according to the _Metrics_ annotations specification.
+At weaving time, _Metrics AspectJ_ will detect the `@Metrics` annotation, scan all the declared methods of the target class that are annotated with _Metrics_ annotations, then create and register the corresponding `Metric` instances and weave its aspects around these methods. At runtime, these `Metric` instances will eventually get called according to the _Metrics_ annotations specification.
 
-Note that this annotation won't be inherited if it's placed on an interface or a parent class. More details are available in the [Limitations](#limitations) section.
+Note that _Metrics_ annotations won't be inherited if declared on an interface or a parent class method. More details are available in the [Limitations](#limitations) section.
 
 #### The _Metrics_ Annotations
 
-_Metrics_ comes with the [`metrics-annotation`][] module that contains a set of annotations ([`@ExceptionMetered`][], [`@Gauge`][], [`@Metered`][] and [`@Timed`][]) and provides a standard way to integrate _Metrics_ with frameworks supporting Aspect Oriented Programming (AOP). These annotations are supported by _Metrics AspectJ_ that implements their contract as documented in their Javadoc.
+_Metrics_ comes with the [`metrics-annotation`][] module that contains a set of annotations and provides a standard way to integrate _Metrics_ with frameworks supporting Aspect Oriented Programming (AOP). These annotations are supported by _Metrics AspectJ_ that implements their contract as documented in their Javadoc.
 
 [`metrics-annotation`]: https://github.com/dropwizard/metrics/tree/master/metrics-annotation
-[`@ExceptionMetered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
-[`@Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Metered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Timed`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Timed.html
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 
 ```java
 import com.codahale.metrics.annotation.Timed;
 
-import org.stefanutti.metrics.aspectj.Metrics;
+import io.astefanutti.metrics.aspectj.Metrics;
 
 @Metrics
-public class TimedMethod {
+class TimedMethod {
 
     @Timed(name = "timerName")
-    public void timedMethod() {}
+    void timedMethod() {} // Timer name => TimedMethod.timerName
 }
 ```
 
@@ -185,13 +201,13 @@ A `static` method can also be annotated with the `@Timed` annotation so that its
 ```java
 import com.codahale.metrics.annotation.Timed;
 
-import org.stefanutti.metrics.aspectj.Metrics;
+import io.astefanutti.metrics.aspectj.Metrics;
 
 @Metrics
-public class TimedMethod {
+class TimedMethod {
 
     @Timed(name = "timerName")
-    public static void timedStaticMethod() {}
+    static void timedStaticMethod() {} // Timer name => TimedMethod.timerName
 }
 ```
 
@@ -202,10 +218,10 @@ Optionally, the `Metric` name can be resolved with an EL expression that evaluat
 ```java
 import com.codahale.metrics.annotation.Timed;
 
-import org.stefanutti.metrics.aspectj.Metrics;
+import io.astefanutti.metrics.aspectj.Metrics;
 
 @Metrics
-public class TimedMethod {
+class TimedMethod {
 
     private long id;
 
@@ -214,13 +230,13 @@ public class TimedMethod {
     }
 
     @Timed(name = "timerName ${this.id}")
-    public void timedMethod() {}
+    void timedMethod() {} // Timer name => TimedMethod.timerName <id>
 }
 ```
 
 In that example, _Metrics AspectJ_ will automatically create a `Timer` instance (respectively retrieve an existing `Timer` instance with the same `name` already registered in the `MetricRegistry`) right after the instantiation of the `TimedMethod` class and evaluate the EL expression based on the value of the `id` attribute of that newly created `TimedMethod` instance to name the `Timer` instance (respectively resolve the `Timer` instance registered in the `MetricRegistry`). If the value of the `id` attribute changes over time, the `name` of the `Timer` instance won't be re-evaluated.
 
-Note that these annotations won't be inherited if they are placed on interfaces or parent classes. Indeed, according to the Java language specification, non-type annotations are not inherited. It's discussed in more details in the [Limitations](#limitations) section.
+Note that these annotations won't be inherited if they are placed on interface or parent class methods. Indeed, according to the Java language specification, non-type annotations are not inherited. It is discussed in more details in the [Limitations](#limitations) section.
 
 #### _Metrics_ Registry Resolution
 
@@ -229,52 +245,51 @@ The `Metrics.registry` annotation attribute provides the way to declare the `Met
 The `MetricRegistry` can thus be resolved by name relying on the [`SharedMetricRegistries.getOrCreate(String name)`][] method:
 
 ```java
-import com.codahale.metrics.annotation.Timed;
+import com.codahale.metrics.annotation.Metered;
 
-import org.stefanutti.metrics.aspectj.Metrics;
+import io.astefanutti.metrics.aspectj.Metrics;
 
 @Metrics(registry = "registryName")
-public class TimedMethodWithRegistryByName {
+class MeteredMethodWithRegistryByName {
 
-    @Timed(name = "timerName")
-    public void timedMethod() {}
+    @Metered(name = "meterName")
+    void meteredMethod() {} // Registry => SharedMetricRegistries.getOrCreate("registryName")
 }
 ```
 
-or with an EL expression that evaluates to a bean property of type `MetricRegistry`:
+Or with an EL expression that evaluates to a bean property of type `MetricRegistry`:
 
 ```java
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.annotation.Timed;
+import com.codahale.metrics.annotation.Metered;
 
-import org.stefanutti.metrics.aspectj.Metrics;
+import io.astefanutti.metrics.aspectj.Metrics;
 
 @Metrics(registry = "${this.registry}")
-public class TimedMethodWithRegistryFromProperty {
+class MeteredMethodWithRegistryFromProperty {
 
-    private final MetricRegistry registry;
+    final MetricRegistry registry;
 
-    public TimedMethodWithRegistryFromProperty(MetricRegistry registry) {
+    MeteredMethodWithRegistryFromProperty(MetricRegistry registry) {
         this.registry = registry;
     }
 
-    public MetricRegistry getRegistry() {
+    MetricRegistry getRegistry() {
         return registry;
     }
 
-    @Timed(name = "timerName")
-    public void timedMethod() {}
+    @Metered(name = "meterName")
+    void meteredMethod() {} // Registry => this.getRegistry()
 }
 ```
 
 Or with an EL expression that evaluates to a `String`. In that case the registry is resolved by name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
 
-[`SharedMetricRegistries`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html
 [`SharedMetricRegistries.getOrCreate(String name)`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
 
 ## Limitations
 
-The _Metrics_ annotations are not inherited whether these are declared on a parent class or on an implemented interface. The root causes of that limitation, according to the Java language specification, are:
+The _Metrics_ annotations are not inherited whether these are declared on a parent class or an implemented interface method. The root causes of that limitation, according to the Java language specification, are:
 + Non-type annotations are not inherited,
 + Annotations on types are only inherited if they have the `@Inherited` meta-annotation,
 + Annotations on interfaces are not inherited irrespective to having the `@Inherited` meta-annotation.
