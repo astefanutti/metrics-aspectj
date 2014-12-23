@@ -4,11 +4,11 @@
 
 [Travis badge]: https://travis-ci.org/astefanutti/metrics-aspectj.svg?branch=master
 [Travis build]: https://travis-ci.org/astefanutti/metrics-aspectj
-[Coveralls badge]: https://img.shields.io/coveralls/astefanutti/metrics-aspectj.svg
+[Coveralls badge]: https://img.shields.io/coveralls/astefanutti/metrics-aspectj.svg?style=flat
 [Coveralls build]: https://coveralls.io/r/astefanutti/metrics-aspectj?branch=master
-[VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg
+[VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg?style=flat
 [VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
-[Maven Central badge]: http://img.shields.io/maven-central/v/org.stefanutti.metrics.aspectj/metrics-aspectj.svg
+[Maven Central badge]: http://img.shields.io/maven-central/v/org.stefanutti.metrics.aspectj/metrics-aspectj.svg?style=flat
 [Maven Central build]: http://central.maven.org/maven2/org/stefanutti/metrics/aspectj/metrics-aspectj/1.0.0-rc.5/
 
 [AspectJ][] integration for Dropwizard [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
@@ -158,10 +158,10 @@ Note that this annotation won't be inherited if it's placed on an interface or a
 _Metrics_ comes with the [`metrics-annotation`][] module that contains a set of annotations ([`@ExceptionMetered`][], [`@Gauge`][], [`@Metered`][] and [`@Timed`][]) and provides a standard way to integrate _Metrics_ with frameworks supporting Aspect Oriented Programming (AOP). These annotations are supported by _Metrics AspectJ_ that implements their contract as documented in their Javadoc.
 
 [`metrics-annotation`]: https://github.com/dropwizard/metrics/tree/master/metrics-annotation
-[`@ExceptionMetered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
-[`@Gauge`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Metered`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Timed`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/annotation/Timed.html
+[`@ExceptionMetered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
+[`@Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Metered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Timed`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Timed.html
 
 For example, a method can be annotated with the `@Timed` annotation so that its execution can be monitored using _Metrics_:
 
@@ -269,8 +269,8 @@ public class TimedMethodWithRegistryFromProperty {
 
 Or with an EL expression that evaluates to a `String`. In that case the registry is resolved by name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
 
-[`SharedMetricRegistries`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html
-[`SharedMetricRegistries.getOrCreate(String name)`]: http://maginatics.github.io/metrics/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
+[`SharedMetricRegistries`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html
+[`SharedMetricRegistries.getOrCreate(String name)`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
 
 ## Limitations
 
@@ -321,6 +321,6 @@ Further details can be found in [Choosing which AOP declaration style to use][] 
 
 ## License
 
-Copyright © 2013-2014, Antonin Stefanutti
+Copyright © 2013-2015, Antonin Stefanutti
 
 Published under Apache Software License 2.0, see LICENSE
