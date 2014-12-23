@@ -9,7 +9,7 @@
 [VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg?style=flat
 [VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
 [Maven Central badge]: http://img.shields.io/maven-central/v/org.stefanutti.metrics.aspectj/metrics-aspectj.svg?style=flat
-[Maven Central build]: http://central.maven.org/maven2/org/stefanutti/metrics/aspectj/metrics-aspectj/1.0.0-rc.5/
+[Maven Central build]: http://central.maven.org/maven2/org/stefanutti/metrics/aspectj/metrics-aspectj/1.0.0/
 
 [AspectJ][] integration for Dropwizard [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
 
@@ -47,7 +47,7 @@ Add the `metrics-aspectj` library as a dependency:
 <dependency>
     <groupId>io.astefanutti.metrics.aspectj</groupId>
     <artifactId>metrics-aspectj</artifactId>
-    <version>1.0.0-rc.5</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -296,7 +296,7 @@ The _Metrics_ annotations are not inherited whether these are declared on a pare
 
 See the [`@Inherited`][] Javadoc and [Annotation types][] from the Java language specification for more details.
 
-AspectJ is following the Java language specification and has documented to what extent it's impacted in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][]. There would have been ways of working around that though:
+AspectJ follows the Java language specification and has documented to what extent it's impacted in [Annotation inheritance][] and [Annotation inheritance and pointcut matching][]. There would have been ways of working around that though:
 + That would have been working around the Java language specification in the first place,
 + Plus that would have required to rely on a combination of [Expression-based pointcuts][], [Runtime type matching][] and [Reflective access][] to define conditional pointcut expressions which:
     + Would have widen the scope of matching joint points thus introducing side-effects in addition to being inefficient,
