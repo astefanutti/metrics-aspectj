@@ -30,7 +30,7 @@ _Metrics AspectJ_ is compatible with _Metrics_ version `3.0.0`+ and requires Jav
 [Metrics annotations]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/package-summary.html
 [`@ExceptionMetered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
 [`@Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Metered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Metered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Metered.html
 [`@Timed`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Timed.html
 [`Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/Gauge.html
 [`Metric`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/Metric.html
