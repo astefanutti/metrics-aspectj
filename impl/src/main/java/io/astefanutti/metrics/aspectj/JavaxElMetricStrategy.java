@@ -21,7 +21,7 @@ import com.codahale.metrics.SharedMetricRegistries;
 import javax.el.ELProcessor;
 import java.util.regex.Matcher;
 
-/* packaged-private */ final class JavaxElMetricStrategy implements MetricStrategy {
+/* package-private */ final class JavaxElMetricStrategy implements MetricStrategy {
 
     private final ELProcessor processor;
 

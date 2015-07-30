@@ -20,7 +20,7 @@ import com.codahale.metrics.SharedMetricRegistries;
 
 import java.util.regex.Matcher;
 
-/* packaged-private */ final class JavaSeMetricStrategy implements MetricStrategy {
+/* package-private */ final class JavaSeMetricStrategy implements MetricStrategy {
 
     @Override
     public MetricRegistry resolveMetricRegistry(String registry) {

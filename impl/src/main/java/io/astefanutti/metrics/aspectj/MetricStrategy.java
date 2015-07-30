@@ -19,9 +19,9 @@ import com.codahale.metrics.MetricRegistry;
 
 import java.util.regex.Pattern;
 
-/* packaged-private */ interface MetricStrategy {
+/* package-private */ interface MetricStrategy {
 
-    static final Pattern EL_PATTERN = Pattern.compile("[#|$]\\{(.*)\\}");
+    Pattern EL_PATTERN = Pattern.compile("[#|$]\\{(.*)\\}");
 
     MetricRegistry resolveMetricRegistry(String registry);
 

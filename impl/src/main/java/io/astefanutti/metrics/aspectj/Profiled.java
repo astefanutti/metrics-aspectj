@@ -15,5 +15,5 @@
  */
 package io.astefanutti.metrics.aspectj;
 
-/* packaged-private */ interface Profiled {
+/* package-private */ interface Profiled {
 }

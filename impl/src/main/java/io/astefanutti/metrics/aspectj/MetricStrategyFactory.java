@@ -15,7 +15,7 @@
  */
 package io.astefanutti.metrics.aspectj;
 
-/* packaged-private */ final class MetricStrategyFactory {
+/* package-private */ final class MetricStrategyFactory {
 
     static MetricStrategy newInstance(Object object) {
         if (isElAvailable(object.getClass()))

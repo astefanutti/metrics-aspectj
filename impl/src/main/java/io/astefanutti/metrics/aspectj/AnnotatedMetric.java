@@ -27,7 +27,7 @@ public interface AnnotatedMetric<T extends Metric> {
 
     <A extends Annotation> A getAnnotation(Class<A> clazz);
 
-    static final class IsPresent<T extends Metric> implements AnnotatedMetric<T> {
+    final class IsPresent<T extends Metric> implements AnnotatedMetric<T> {
 
         private final T metric;
 
@@ -55,7 +55,7 @@ public interface AnnotatedMetric<T extends Metric> {
         }
     }
 
-    static final class IsNotPresent<T extends Metric> implements AnnotatedMetric<T> {
+    final class IsNotPresent<T extends Metric> implements AnnotatedMetric<T> {
 
         @Override
         public boolean isPresent() {
