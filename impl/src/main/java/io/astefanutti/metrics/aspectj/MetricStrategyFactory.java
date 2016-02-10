@@ -17,6 +17,8 @@ package io.astefanutti.metrics.aspectj;
 
 /* package-private */ final class MetricStrategyFactory {
 
+    static Boolean isElAvailableCached;
+
     static MetricStrategy newInstance(Object object) {
         if (isElAvailable(object.getClass()))
             return new JavaxElMetricStrategy(object);
@@ -41,10 +43,15 @@ package io.astefanutti.metrics.aspectj;
     }
 
     private static boolean isElAvailable(Class<?> clazz) {
+        if (isElAvailableCached != null) {
+            return isElAvailableCached;
+        }
         try {
             getClassLoader(clazz).loadClass("javax.el.ELProcessor");
+            isElAvailableCached = true;
             return true;
         } catch (ClassNotFoundException cause) {
+            isElAvailableCached = false;
             return false;
         }
     }
