@@ -23,13 +23,13 @@ import java.lang.annotation.Target;
 
 /**
  * An annotation that activates Metrics AspectJ weaving.
- * <p/>
+ * <p>
  * Metrics AspectJ will scan all the declared methods of the annotated class that are annotated with
  * some Metrics annotations, then create and register the corresponding Metric instances and finally weave
  * its aspects around these methods, so that at runtime, these Metric instances get called according
  * to the Metrics annotations specification.
  *
- * <p/>
+ * <p>
  * For example, given the following class declaration:
  * <pre><code>
  * {@literal @}Metrics(registry = "${this.registry}")
@@ -59,7 +59,7 @@ public @interface Metrics {
 
     /**
      * The expression that is used to resolve the {@code MetricRegistry} to be used to register metrics into.
-     *  <p/>
+     * <p>
      * Its value can either be:
      * <ul>
      *     <li>a string literal that identifies a {@code MetricRegistry} accessible
@@ -67,7 +67,7 @@ public @interface Metrics {
      *     <li>or a valid EL expression that evaluates
      *     to the registry name or the {@code MetricRegistry} instance.</li>
      * </ul>
-     * <p/>
+     * <p>
      * The resultant {@code MetricRegistry} is used to register the {@code Metric} instances into.
      */
     String registry() default "metrics-registry";
