@@ -27,15 +27,15 @@ _Metrics AspectJ_ provides support for the [_Metrics_ annotations][Metrics annot
 
 _Metrics AspectJ_ is compatible with _Metrics_ version `3.0.0`+ and requires Java 6 or higher.
 
-[Metrics annotations]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/package-summary.html
-[`@ExceptionMetered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
-[`@Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Gauge.html
-[`@Metered`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Metered.html
-[`@Timed`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/annotation/Timed.html
-[`Gauge`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/Gauge.html
-[`Metric`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/Metric.html
-[`MetricRegistry`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/MetricRegistry.html
-[`SharedMetricRegistries`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html
+[Metrics annotations]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/annotation/package-summary.html
+[`@ExceptionMetered`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/annotation/ExceptionMetered.html
+[`@Gauge`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/annotation/Gauge.html
+[`@Metered`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/annotation/Metered.html
+[`@Timed`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/annotation/Timed.html
+[`Gauge`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/Gauge.html
+[`Metric`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/Metric.html
+[`MetricRegistry`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/MetricRegistry.html
+[`SharedMetricRegistries`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/SharedMetricRegistries.html
 
 ## Getting Started
 
@@ -285,7 +285,7 @@ class MeteredMethodWithRegistryFromProperty {
 
 Or with an EL expression that evaluates to a `String`. In that case the registry is resolved by name using the [`SharedMetricRegistries.getOrCreate(String name)`][] method.
 
-[`SharedMetricRegistries.getOrCreate(String name)`]: https://dropwizard.github.io/metrics/3.0.2/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
+[`SharedMetricRegistries.getOrCreate(String name)`]: http://metrics.dropwizard.io/3.1.0/apidocs/com/codahale/metrics/SharedMetricRegistries.html#getOrCreate%28java.lang.String%29
 
 ## Limitations
 
