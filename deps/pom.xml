@@ -20,7 +20,7 @@
                     <createSourcesJar>true</createSourcesJar>
                     <artifactSet>
                         <excludes>
-                            <exclude>com.codahale.metrics:metrics-core</exclude>
+                            <exclude>io.dropwizard.metrics:metrics-core</exclude>
                             <exclude>org.slf4j:slf4j-api</exclude>
                         </excludes>
                     </artifactSet>

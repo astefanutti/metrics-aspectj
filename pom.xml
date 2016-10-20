@@ -47,7 +47,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <metrics.version>3.0.2</metrics.version>
+        <metrics.version>3.1.2</metrics.version>
         <aspectj.version>1.8.7</aspectj.version>
     </properties>
 
@@ -190,13 +190,13 @@
             <!-- compile dependencies -->
 
             <dependency>
-                <groupId>com.codahale.metrics</groupId>
+                <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-core</artifactId>
                 <version>${metrics.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.codahale.metrics</groupId>
+                <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-annotation</artifactId>
                 <version>${metrics.version}</version>
                 <exclusions>
