@@ -336,6 +336,6 @@ Further details can be found in [Choosing which AOP declaration style to use][] 
 
 ## License
 
-Copyright © 2013-2015, Antonin Stefanutti
+Copyright © 2013-2016, Antonin Stefanutti
 
 Published under Apache Software License 2.0, see LICENSE
