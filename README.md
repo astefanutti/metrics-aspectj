@@ -9,7 +9,7 @@
 [VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg
 [VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
 [Maven Central badge]: http://img.shields.io/maven-central/v/io.astefanutti.metrics.aspectj/metrics-aspectj.svg
-[Maven Central build]: http://central.maven.org/maven2/io/astefanutti/metrics/aspectj/metrics-aspectj/1.1.0/
+[Maven Central build]: http://central.maven.org/maven2/io/astefanutti/metrics/aspectj/metrics-aspectj/1.1.1/
 
 [AspectJ][] integration for Dropwizard [Metrics][] with optional [Expression Language 3.0 (JSR-341)][] support.
 
@@ -47,7 +47,7 @@ Add the `metrics-aspectj` library as a dependency:
 <dependency>
     <groupId>io.astefanutti.metrics.aspectj</groupId>
     <artifactId>metrics-aspectj</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
