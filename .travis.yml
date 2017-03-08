@@ -13,8 +13,6 @@ script:
   - mvn test -Pwith-lib,jacoco
 
 jdk:
-  - oraclejdk7
-  - openjdk7
   - oraclejdk8
 
 notifications:
