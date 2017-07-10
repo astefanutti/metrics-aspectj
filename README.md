@@ -102,6 +102,49 @@ Other options are detailed in the [AspectJ Ant tasks][] documentation.
 [AjcTask]: http://www.eclipse.org/aspectj/doc/next/devguide/antTasks-iajc.html
 [AspectJ Ant tasks]: http://www.eclipse.org/aspectj/doc/next/devguide/antTasks.html
 
+#### Using Gradle
+
+[gradle example]: https://github.com/paegun/metrics-aspectj-gradle-example
+A working [gradle example][] is available, but each integration point is described here.
+
+##### build.gradle snippets
+
+```java
+buildscript {
+    // ensure the gradle-aspectj integration is w/i the build classpath
+    dependencies {
+        classpath 'nl.eveoh:gradle-aspectj:1.6'
+    }
+}
+
+// specify the aspectjVersion, used by gradle-aspectj
+project.ext {
+    aspectjVersion = '1.8.10'
+}
+
+// specify the Dropwizard Metrics version (metricsVer)
+//  and the aspect-oriented metrics version (metricsAspectVer, this solution)
+ext {
+    metricsVer = '3.2.2'
+    metricsAspectVer = '1.2.0'
+}
+
+// via the gradle-aspectj integration, run "aspect weaving"
+apply plugin: 'aspectj'
+
+// ensure Dropwizard Metrics as well as the aspect-oriented metrics (astefanutti.metrics.aspectj)
+//  runtime dependencies of your solution are satisfied.
+dependencies {
+    compile "io.astefanutti.metrics.aspectj:metrics-aspectj:${metricsAspectVer}"
+    // add a path for the gradle-aspectj "aspect weaving" (AspectJ Compiler compile)
+    aspectpath "io.astefanutti.metrics.aspectj:metrics-aspectj:${metricsAspectVer}"
+
+    compile "io.dropwizard.metrics:metrics-core:${metricsVer}"
+    compile "io.dropwizard.metrics:metrics-annotation:${metricsVer}"
+    compile "io.dropwizard.metrics:metrics-jersey2:${metricsVer}"
+}
+```
+
 #### Using the AspectJ Compiler
 
 The AspectJ compiler can be used directly by executing the following command:
