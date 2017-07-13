@@ -109,7 +109,7 @@ A working [gradle example][] is available, but each integration point is describ
 
 ##### build.gradle snippets
 
-```java
+```groovy
 buildscript {
     // ensure the gradle-aspectj integration is w/i the build classpath
     dependencies {
@@ -141,7 +141,6 @@ dependencies {
 
     compile "io.dropwizard.metrics:metrics-core:${metricsVer}"
     compile "io.dropwizard.metrics:metrics-annotation:${metricsVer}"
-    compile "io.dropwizard.metrics:metrics-jersey2:${metricsVer}"
 }
 ```
 
