@@ -1,13 +1,11 @@
 # AspectJ for Metrics
 
-[![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Dependency Status][VersionEye badge]][VersionEye build] [![Maven Central][Maven Central badge]][Maven Central build]
+[![Build Status][Travis badge]][Travis build] [![Coverage Status][Coveralls badge]][Coveralls build] [![Maven Central][Maven Central badge]][Maven Central build]
 
 [Travis badge]: https://travis-ci.org/astefanutti/metrics-aspectj.svg?branch=master
 [Travis build]: https://travis-ci.org/astefanutti/metrics-aspectj
 [Coveralls badge]: https://coveralls.io/repos/astefanutti/metrics-aspectj/badge.svg
 [Coveralls build]: https://coveralls.io/github/astefanutti/metrics-aspectj
-[VersionEye badge]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024/badge.svg
-[VersionEye build]: https://www.versioneye.com/user/projects/52a63b6b632bacd22f000024
 [Maven Central badge]: http://img.shields.io/maven-central/v/io.astefanutti.metrics.aspectj/metrics-aspectj.svg
 [Maven Central build]: http://central.maven.org/maven2/io/astefanutti/metrics/aspectj/metrics-aspectj/1.2.0/
 
